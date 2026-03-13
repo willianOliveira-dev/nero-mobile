@@ -1,0 +1,11 @@
+import { z } from 'zod';
+
+const envSchema = z.object({
+    EXPO_PUBLIC_API_URL: z.string().url().default('http://localhost:8000'),
+    EXPO_PUBLIC_BETTER_AUTH_URL: z
+        .string()
+        .url()
+        .default('http://localhost:8000/api/v1/auth'),
+});
+
+export const env = envSchema.parse(process.env);
