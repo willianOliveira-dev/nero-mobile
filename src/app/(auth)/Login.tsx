@@ -1,3 +1,20 @@
+import { Button, ButtonText } from '@/src/components/gluestack/ui/button';
+import { Divider } from '@/src/components/gluestack/ui/divider';
+import {
+    FormControl,
+    FormControlError,
+    FormControlErrorText,
+} from '@/src/components/gluestack/ui/form-control';
+import { HStack } from '@/src/components/gluestack/ui/hstack';
+import { Image } from '@/src/components/gluestack/ui/image';
+import {
+    Input,
+    InputField,
+    InputSlot,
+} from '@/src/components/gluestack/ui/input';
+import { Pressable } from '@/src/components/gluestack/ui/pressable';
+import { Text } from '@/src/components/gluestack/ui/text';
+import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { iconsPath } from '@/src/constants/icons';
 import { imagesPath } from '@/src/constants/images';
 import { useAuth } from '@/src/hooks/auth/useAuth';
@@ -9,14 +26,9 @@ import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import {
     ActivityIndicator,
-    Image,
     KeyboardAvoidingView,
     Platform,
-    Pressable,
     ScrollView,
-    Text,
-    TextInput,
-    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -75,6 +87,7 @@ export default function LoginScreen() {
                             source={imagesPath.logoLight}
                             className="w-36 h-10 mb-6"
                             resizeMode="contain"
+                            alt="Nero logo"
                         />
                         <Text className="text-white text-3xl font-fredoka-bold text-center">
                             Login com sua conta
@@ -84,8 +97,8 @@ export default function LoginScreen() {
                         </Text>
                     </LinearGradient>
 
-                    <View className="px-6 -mt-20 pb-10">
-                        <View className="bg-white rounded-2xl p-6 gap-6 shadow-md">
+                    <VStack className="px-6 -mt-20 pb-10">
+                        <VStack className="bg-white rounded-2xl p-6 gap-6 shadow-md">
                             <Pressable
                                 onPress={handleGoogleLogin}
                                 disabled={isSignInSocialLoading}
@@ -97,39 +110,40 @@ export default function LoginScreen() {
                                         color="#6c7278"
                                     />
                                 ) : (
-                                    <>
+                                    <HStack className="items-center gap-2">
                                         <Image
                                             source={iconsPath.google}
                                             className="w-5 h-5"
                                             resizeMode="contain"
+                                            alt="Google"
                                         />
                                         <Text className="text-gray-900 text-sm font-fredoka-semibold">
                                             Continue com Google
                                         </Text>
-                                    </>
+                                    </HStack>
                                 )}
                             </Pressable>
 
-                            <View className="flex-row items-center gap-4">
-                                <View className="flex-1 h-px bg-gray-100" />
+                            <HStack className="items-center gap-4">
+                                <Divider className="flex-1 bg-gray-100" />
                                 <Text className="text-xs text-gray-400">
                                     ou login com
                                 </Text>
-                                <View className="flex-1 h-px bg-gray-100" />
-                            </View>
+                                <Divider className="flex-1 bg-gray-100" />
+                            </HStack>
 
-                            <View className="gap-4">
+                            <VStack className="gap-4">
                                 <Controller
                                     control={control}
                                     name="email"
                                     render={({
                                         field: { onChange, value, onBlur },
                                     }) => (
-                                        <View className="gap-1">
-                                            <View
-                                                className={`flex-row items-center h-12 border rounded-xl px-3.5 bg-white ${errors.email ? 'border-red-400' : 'border-gray-100'}`}
+                                        <FormControl isInvalid={!!errors.email}>
+                                            <Input
+                                                className={`h-12 rounded-xl border bg-white px-3.5 ${errors.email ? 'border-red-400' : 'border-gray-100'}`}
                                             >
-                                                <TextInput
+                                                <InputField
                                                     className="flex-1 text-sm text-gray-900 font-fredoka-medium"
                                                     placeholder="seu@email.com"
                                                     placeholderTextColor="#9ca3af"
@@ -140,13 +154,13 @@ export default function LoginScreen() {
                                                     keyboardType="email-address"
                                                     autoComplete="email"
                                                 />
-                                            </View>
-                                            {errors.email && (
-                                                <Text className="text-red-500 text-xs ml-1">
-                                                    {errors.email.message}
-                                                </Text>
-                                            )}
-                                        </View>
+                                            </Input>
+                                            <FormControlError>
+                                                <FormControlErrorText className="text-red-500 text-xs ml-1">
+                                                    {errors.email?.message}
+                                                </FormControlErrorText>
+                                            </FormControlError>
+                                        </FormControl>
                                     )}
                                 />
 
@@ -156,11 +170,13 @@ export default function LoginScreen() {
                                     render={({
                                         field: { onChange, value, onBlur },
                                     }) => (
-                                        <View className="gap-1">
-                                            <View
-                                                className={`flex-row items-center h-12 border rounded-xl px-3.5 bg-white ${errors.password ? 'border-red-400' : 'border-gray-100'}`}
+                                        <FormControl
+                                            isInvalid={!!errors.password}
+                                        >
+                                            <Input
+                                                className={`h-12 rounded-xl border bg-white px-3.5 ${errors.password ? 'border-red-400' : 'border-gray-100'}`}
                                             >
-                                                <TextInput
+                                                <InputField
                                                     className="flex-1 text-sm text-gray-900 font-fredoka-medium"
                                                     placeholder="••••••••"
                                                     placeholderTextColor="#9ca3af"
@@ -172,13 +188,13 @@ export default function LoginScreen() {
                                                     }
                                                     autoComplete="password"
                                                 />
-                                                <Pressable
+                                                <InputSlot
                                                     onPress={() =>
                                                         setShowPassword(
                                                             (p) => !p,
                                                         )
                                                     }
-                                                    hitSlop={8}
+                                                    className="pr-3"
                                                 >
                                                     {showPassword ? (
                                                         <Eye
@@ -191,14 +207,14 @@ export default function LoginScreen() {
                                                             color="#9ca3af"
                                                         />
                                                     )}
-                                                </Pressable>
-                                            </View>
-                                            {errors.password && (
-                                                <Text className="text-red-500 text-xs ml-1">
-                                                    {errors.password.message}
-                                                </Text>
-                                            )}
-                                        </View>
+                                                </InputSlot>
+                                            </Input>
+                                            <FormControlError>
+                                                <FormControlErrorText className="text-red-500 text-xs ml-1">
+                                                    {errors.password?.message}
+                                                </FormControlErrorText>
+                                            </FormControlError>
+                                        </FormControl>
                                     )}
                                 />
 
@@ -212,7 +228,7 @@ export default function LoginScreen() {
                                         Esqueceu a senha?
                                     </Text>
                                 </Pressable>
-                            </View>
+                            </VStack>
 
                             {serverError && (
                                 <Text className="text-red-500 text-xs text-center -mt-2">
@@ -220,21 +236,21 @@ export default function LoginScreen() {
                                 </Text>
                             )}
 
-                            <Pressable
+                            <Button
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={isSignInEmailLoading}
-                                className="h-12 bg-primary rounded-xl items-center justify-center active:opacity-90"
+                                className="h-12 bg-primary rounded-xl active:opacity-90"
                             >
                                 {isSignInEmailLoading ? (
                                     <ActivityIndicator color="white" />
                                 ) : (
-                                    <Text className="text-white text-sm font-fredoka-medium">
+                                    <ButtonText className="text-white text-sm font-fredoka-medium">
                                         Login
-                                    </Text>
+                                    </ButtonText>
                                 )}
-                            </Pressable>
+                            </Button>
 
-                            <View className="flex-row items-center justify-center gap-1.5">
+                            <HStack className="items-center justify-center gap-1.5">
                                 <Text className="text-gray-400 text-xs font-fredoka-medium">
                                     Não possui uma conta?
                                 </Text>
@@ -246,9 +262,9 @@ export default function LoginScreen() {
                                         Registre-se
                                     </Text>
                                 </Pressable>
-                            </View>
-                        </View>
-                    </View>
+                            </HStack>
+                        </VStack>
+                    </VStack>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

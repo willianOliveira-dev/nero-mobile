@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { GluestackUIProvider } from '../components/gluestack/gluestack-ui-provider';
+import { GluestackUIProvider } from '../components/gluestack/ui/gluestack-ui-provider';
 import NeroSplashScreen from '../components/ui/NeroSplashScreen';
 import '../global.css';
 import { AuthProvider } from './AuthProvider';
