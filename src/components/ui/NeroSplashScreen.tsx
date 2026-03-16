@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import AnimatedMaskedText from '../ui/molecules/animated-masked-text/AnimatedMaskedText';
+import AnimatedMaskedText from '../reacticx/ui/molecules/animated-masked-text/AnimatedMaskedText';
 
 interface Props {
     onFinish: () => void;

@@ -68,7 +68,7 @@ export default function LoginScreen() {
                     showsVerticalScrollIndicator={false}
                 >
                     <LinearGradient
-                        colors={['#d70040', '#BA0639']}
+                        colors={['#d70040', '#A2002A']}
                         className="pt-24 pb-36 items-center px-6"
                     >
                         <Image

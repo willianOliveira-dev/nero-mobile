@@ -8,7 +8,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { SplashScreen } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import NeroSplashScreen from '../components/common/NeroSplashScreen';
+import { GluestackUIProvider } from '../components/gluestack/gluestack-ui-provider';
+import NeroSplashScreen from '../components/ui/NeroSplashScreen';
 import '../global.css';
 import { AuthProvider } from './AuthProvider';
 
@@ -53,8 +54,10 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <AuthProvider>{children}</AuthProvider>
-        </QueryClientProvider>
+        <GluestackUIProvider>
+            <QueryClientProvider client={queryClient}>
+                <AuthProvider>{children}</AuthProvider>
+            </QueryClientProvider>
+        </GluestackUIProvider>
     );
 };
