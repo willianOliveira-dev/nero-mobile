@@ -1,13 +1,14 @@
-import { useAuthStore } from '@/src/store/useAuthStore';
 import { authClient } from '@/src/lib/auth-client';
-import { useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { googleSignIn } from '@/src/lib/google';
 import type {
     LoginFormData,
     RegisterFormData,
 } from '@/src/schemas/auth/auth.schema';
+import { useAuthStore } from '@/src/store/useAuthStore';
+import { useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
 
-type OAuthProvider = 'google' | 'github';
+type OAuthProvider = 'google';
 
 export const useAuth = () => {
     const router = useRouter();
@@ -20,68 +21,80 @@ export const useAuth = () => {
     const user = useAuthStore((state) => state.user);
     const setUser = useAuthStore((state) => state.setUser);
 
-    const signInEmail = useCallback(async (data: LoginFormData) => {
-        setIsSignInEmailLoading(true);
+    const signInEmail = useCallback(
+        async (data: LoginFormData) => {
+            setIsSignInEmailLoading(true);
 
-        const { data: session, error } = await authClient.signIn.email({
-            email: data.email,
-            password: data.password,
-            callbackURL: '/home',
-        });
-
-        setIsSignInEmailLoading(false);
-
-        if (error) {
-            return {
-                success: false,
-                error: error.message,
-            };
-        }
-
-        if (session?.user) {
-            setUser({
-                id: session.user.id,
-                name: session.user.name,
-                email: session.user.email,
+            const { data: session, error } = await authClient.signIn.email({
+                email: data.email,
+                password: data.password,
+                callbackURL: '/home',
             });
-        }
 
-        return {
-            success: true,
-            data: session,
-        };
-    }, []);
+            setIsSignInEmailLoading(false);
 
-    const signInSocial = useCallback(async (provider: OAuthProvider) => {
-        setIsSignInSocialLoading(true);
+            if (error) return { success: false, error: error.message };
 
-        const { data: session, error } = await authClient.signIn.social({
-            provider,
-            callbackURL: '/home',
-        });
+            if (session?.user) {
+                setUser({
+                    id: session.user.id,
+                    name: session.user.name,
+                    email: session.user.email,
+                });
+            }
 
-        setIsSignInSocialLoading(false);
+            return { success: true, data: session };
+        },
+        [setUser],
+    );
 
-        if (error) {
-            return {
-                success: false,
-                error: error.message,
-            };
-        }
+    const signInSocial = useCallback(
+        async (provider: OAuthProvider) => {
+            setIsSignInSocialLoading(true);
+            try {
+                if (provider === 'google') {
+                    const idToken = await googleSignIn();
 
-        if ('user' in session && session?.user) {
-            setUser({
-                id: session.user.id,
-                name: session.user.name,
-                email: session.user.email,
-            });
-        }
+                    if (!idToken) {
+                        return {
+                            success: false,
+                            error: 'Token do Google não encontrado',
+                        };
+                    }
 
-        return {
-            success: true,
-            data: session,
-        };
-    }, []);
+                    const { data: session, error } =
+                        await authClient.signIn.social({
+                            provider: 'google',
+                            idToken: {
+                                token: idToken,
+                            },
+                        });
+
+                    if (error) return { success: false, error: error.message };
+
+                    if (session && 'user' in session && session.user) {
+                        setUser({
+                            id: session.user.id,
+                            name: session.user.name,
+                            email: session.user.email,
+                        });
+                    }
+
+                    return { success: true, data: session };
+                }
+
+                return { success: false, error: 'Provider não suportado' };
+            } catch (e) {
+                return {
+                    success: false,
+                    error: 'Erro ao autenticar com Google',
+                };
+            } finally {
+                setIsSignInSocialLoading(false);
+            }
+        },
+        [setUser],
+    );
 
     const signUp = useCallback(
         async (data: RegisterFormData) => {
@@ -95,11 +108,9 @@ export const useAuth = () => {
 
             if (error) {
                 setIsSignUpLoading(false);
-                return {
-                    success: false,
-                    error: error.message,
-                };
+                return { success: false, error: error.message };
             }
+
             if (session?.user) {
                 setUser({
                     id: session.user.id,
@@ -109,11 +120,7 @@ export const useAuth = () => {
             }
 
             setIsSignUpLoading(false);
-
-            return {
-                success: true,
-                data: session,
-            };
+            return { success: true, data: session };
         },
         [setUser],
     );
@@ -123,7 +130,7 @@ export const useAuth = () => {
         try {
             await authClient.signOut();
             setUser(null);
-            //   router.replace("/login")
+            router.replace('/(auth)/Login');
         } catch (error) {
             console.error('Erro ao sair:', error);
         } finally {

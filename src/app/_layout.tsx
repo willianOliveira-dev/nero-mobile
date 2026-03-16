@@ -2,6 +2,9 @@ import { Stack } from 'expo-router';
 import React from 'react';
 import { AuthProvider } from '../providers/AuthProvider';
 import { RootProvider } from '../providers/RootProvider';
+import { configureGoogleSignIn } from '../lib/google';
+
+configureGoogleSignIn();
 
 export default function RootLayout() {
     return (

@@ -1,16 +1,24 @@
-import { useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { useRouter } from 'expo-router';
-import { Box } from '@/components/ui/box';
-import { Text } from '@/components/ui/text';
-import { Button, ButtonText } from '@/components/ui/button';
-import { Input, InputField } from '@/components/ui/input';
-import { VStack } from '@/components/ui/vstack';
-import { HStack } from '@/components/ui/hstack';
-import { Divider } from '@/components/ui/divider';
-import { Pressable } from '@/components/ui/pressable';
+import { iconsPath } from '@/src/constants/icons';
+import { imagesPath } from '@/src/constants/images';
 import { useAuth } from '@/src/hooks/auth/useAuth';
 import { useLoginForm } from '@/src/hooks/auth/useLoginForm';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { Eye, EyeOff } from 'lucide-react-native';
+import { useState } from 'react';
+import { Controller } from 'react-hook-form';
+import {
+    ActivityIndicator,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
     const router = useRouter();
@@ -29,155 +37,220 @@ export default function LoginScreen() {
     } = useAuth();
 
     const [serverError, setServerError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
 
     async function onSubmit(data: any) {
+        setServerError(null);
         const result = await signInEmail(data);
-
-        if (!result.success && result.error) {
+        if (result && !result.success && result.error) {
             setServerError(result.error);
-            return;
         }
-
-        // router.replace('/home');
     }
 
     async function handleGoogleLogin() {
+        setServerError(null);
         const result = await signInSocial('google');
-
-        if (!result.success && result.error) {
+        if (result && !result.success && result.error) {
             setServerError(result.error);
         }
     }
 
     return (
-        <Box className="flex-1 bg-gray-200">
-            <Box className="bg-red-600 pt-24 pb-32 items-center">
-                <Text className="text-white text-4xl font-bold mb-4">nero</Text>
-
-                <Text className="text-white text-2xl font-bold">Login com</Text>
-
-                <Text className="text-white text-2xl font-bold mb-2">
-                    sua conta
-                </Text>
-
-                <Text className="text-white/90 text-sm">
-                    Entre com email e senha para logar
-                </Text>
-            </Box>
-
-            <Box className="px-6 -mt-24">
-                <Box className="bg-white p-6 rounded-2xl shadow-md">
-                    <VStack className="space-y-5">
-                        <Button
-                            variant="outline"
-                            onPress={handleGoogleLogin}
-                            isDisabled={isSignInSocialLoading}
-                            className="border border-gray-300 rounded-xl h-12"
-                        >
-                            <ButtonText className="text-gray-700 font-medium">
-                                Continue com Google
-                            </ButtonText>
-                        </Button>
-
-                        <HStack className="items-center">
-                            <Divider className="flex-1 bg-gray-300" />
-
-                            <Text className="mx-3 text-gray-500 text-sm">
-                                ou login com
-                            </Text>
-
-                            <Divider className="flex-1 bg-gray-300" />
-                        </HStack>
-
-                        <Controller
-                            control={control}
-                            name="email"
-                            render={({ field: { onChange, value } }) => (
-                                <VStack className="space-y-1">
-                                    <Input className="border border-gray-300 rounded-xl h-12 px-3">
-                                        <InputField
-                                            placeholder="seu@email.com"
-                                            value={value}
-                                            onChangeText={onChange}
-                                            className="text-gray-900"
-                                        />
-                                    </Input>
-
-                                    {errors.email && (
-                                        <Text className="text-red-500 text-xs">
-                                            {errors.email.message}
-                                        </Text>
-                                    )}
-                                </VStack>
-                            )}
+        <SafeAreaView className="flex-1 bg-gray-50" edges={['bottom']}>
+            <KeyboardAvoidingView
+                className="flex-1"
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <ScrollView
+                    className="flex-1"
+                    contentContainerClassName="flex-grow"
+                    keyboardShouldPersistTaps="handled"
+                    showsVerticalScrollIndicator={false}
+                >
+                    <LinearGradient
+                        colors={['#d70040', '#BA0639']}
+                        className="pt-24 pb-36 items-center px-6"
+                    >
+                        <Image
+                            source={imagesPath.logoLight}
+                            className="w-36 h-10 mb-6"
+                            resizeMode="contain"
                         />
+                        <Text className="text-white text-3xl font-fredoka-bold text-center">
+                            Login com sua conta
+                        </Text>
+                        <Text className="text-white/80 text-md mt-3 text-center">
+                            Entre com email e senha para logar
+                        </Text>
+                    </LinearGradient>
 
-                        <Controller
-                            control={control}
-                            name="password"
-                            render={({ field: { onChange, value } }) => (
-                                <VStack className="space-y-1">
-                                    <Input className="border border-gray-300 rounded-xl h-12 px-3">
-                                        <InputField
-                                            placeholder="******"
-                                            secureTextEntry
-                                            value={value}
-                                            onChangeText={onChange}
-                                            className="text-gray-900"
+                    <View className="px-6 -mt-20 pb-10">
+                        <View className="bg-white rounded-2xl p-6 gap-6 shadow-md">
+                            <Pressable
+                                onPress={handleGoogleLogin}
+                                disabled={isSignInSocialLoading}
+                                className="flex-row items-center justify-center h-12 border border-gray-100 rounded-xl gap-2 active:opacity-75"
+                            >
+                                {isSignInSocialLoading ? (
+                                    <ActivityIndicator
+                                        size="small"
+                                        color="#6c7278"
+                                    />
+                                ) : (
+                                    <>
+                                        <Image
+                                            source={iconsPath.google}
+                                            className="w-5 h-5"
+                                            resizeMode="contain"
                                         />
-                                    </Input>
-
-                                    {errors.password && (
-                                        <Text className="text-red-500 text-xs">
-                                            {errors.password.message}
+                                        <Text className="text-gray-900 text-sm font-fredoka-semibold">
+                                            Continue com Google
                                         </Text>
+                                    </>
+                                )}
+                            </Pressable>
+
+                            <View className="flex-row items-center gap-4">
+                                <View className="flex-1 h-px bg-gray-100" />
+                                <Text className="text-xs text-gray-400">
+                                    ou login com
+                                </Text>
+                                <View className="flex-1 h-px bg-gray-100" />
+                            </View>
+
+                            <View className="gap-4">
+                                <Controller
+                                    control={control}
+                                    name="email"
+                                    render={({
+                                        field: { onChange, value, onBlur },
+                                    }) => (
+                                        <View className="gap-1">
+                                            <View
+                                                className={`flex-row items-center h-12 border rounded-xl px-3.5 bg-white ${errors.email ? 'border-red-400' : 'border-gray-100'}`}
+                                            >
+                                                <TextInput
+                                                    className="flex-1 text-sm text-gray-900 font-fredoka-medium"
+                                                    placeholder="seu@email.com"
+                                                    placeholderTextColor="#9ca3af"
+                                                    value={value}
+                                                    onChangeText={onChange}
+                                                    onBlur={onBlur}
+                                                    autoCapitalize="none"
+                                                    keyboardType="email-address"
+                                                    autoComplete="email"
+                                                />
+                                            </View>
+                                            {errors.email && (
+                                                <Text className="text-red-500 text-xs ml-1">
+                                                    {errors.email.message}
+                                                </Text>
+                                            )}
+                                        </View>
                                     )}
-                                </VStack>
+                                />
+
+                                <Controller
+                                    control={control}
+                                    name="password"
+                                    render={({
+                                        field: { onChange, value, onBlur },
+                                    }) => (
+                                        <View className="gap-1">
+                                            <View
+                                                className={`flex-row items-center h-12 border rounded-xl px-3.5 bg-white ${errors.password ? 'border-red-400' : 'border-gray-100'}`}
+                                            >
+                                                <TextInput
+                                                    className="flex-1 text-sm text-gray-900 font-fredoka-medium"
+                                                    placeholder="••••••••"
+                                                    placeholderTextColor="#9ca3af"
+                                                    value={value}
+                                                    onChangeText={onChange}
+                                                    onBlur={onBlur}
+                                                    secureTextEntry={
+                                                        !showPassword
+                                                    }
+                                                    autoComplete="password"
+                                                />
+                                                <Pressable
+                                                    onPress={() =>
+                                                        setShowPassword(
+                                                            (p) => !p,
+                                                        )
+                                                    }
+                                                    hitSlop={8}
+                                                >
+                                                    {showPassword ? (
+                                                        <Eye
+                                                            size={16}
+                                                            color="#9ca3af"
+                                                        />
+                                                    ) : (
+                                                        <EyeOff
+                                                            size={16}
+                                                            color="#9ca3af"
+                                                        />
+                                                    )}
+                                                </Pressable>
+                                            </View>
+                                            {errors.password && (
+                                                <Text className="text-red-500 text-xs ml-1">
+                                                    {errors.password.message}
+                                                </Text>
+                                            )}
+                                        </View>
+                                    )}
+                                />
+
+                                <Pressable
+                                    className="self-end active:opacity-70"
+                                    onPress={() =>
+                                        router.push('/ForgotPassword')
+                                    }
+                                >
+                                    <Text className="text-blue-500 text-xs font-fredoka-semibold">
+                                        Esqueceu a senha?
+                                    </Text>
+                                </Pressable>
+                            </View>
+
+                            {serverError && (
+                                <Text className="text-red-500 text-xs text-center -mt-2">
+                                    {serverError}
+                                </Text>
                             )}
-                        />
-
-                        <Pressable
-                            // onPress={() => router.push('/forgot-password')}
-                            className="items-center"
-                        >
-                            <Text className="text-blue-500 text-sm">
-                                Esqueceu a senha?
-                            </Text>
-                        </Pressable>
-
-                        {serverError && (
-                            <Text className="text-red-500 text-center text-sm">
-                                {serverError}
-                            </Text>
-                        )}
-
-                        <Button
-                            onPress={handleSubmit(onSubmit)}
-                            isDisabled={isSignInEmailLoading}
-                            className="bg-red-600 rounded-xl h-12 items-center justify-center"
-                        >
-                            <ButtonText className="text-white font-semibold text-base">
-                                Login
-                            </ButtonText>
-                        </Button>
-
-                        <HStack className="justify-center">
-                            <Text className="text-gray-600">
-                                Não possui uma conta?
-                            </Text>
 
                             <Pressable
-                                className="ml-2"
-                                // onPress={() => router.push('/register')}
+                                onPress={handleSubmit(onSubmit)}
+                                disabled={isSignInEmailLoading}
+                                className="h-12 bg-primary rounded-xl items-center justify-center active:opacity-90"
                             >
-                                <Text className="text-blue-500 font-semibold">
-                                    Registre-se
-                                </Text>
+                                {isSignInEmailLoading ? (
+                                    <ActivityIndicator color="white" />
+                                ) : (
+                                    <Text className="text-white text-sm font-fredoka-medium">
+                                        Login
+                                    </Text>
+                                )}
                             </Pressable>
-                        </HStack>
-                    </VStack>
-                </Box>
-            </Box>
-        </Box>
+
+                            <View className="flex-row items-center justify-center gap-1.5">
+                                <Text className="text-gray-400 text-xs font-fredoka-medium">
+                                    Não possui uma conta?
+                                </Text>
+                                <Pressable
+                                    className="active:opacity-70"
+                                    onPress={() => router.push('/Register')}
+                                >
+                                    <Text className="text-blue-500 text-xs font-fredoka-semibold">
+                                        Registre-se
+                                    </Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
