@@ -6,12 +6,12 @@ import {
 } from '@expo-google-fonts/fredoka';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
-import { SplashScreen } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen'; // ← corrigido
 import React, { useEffect, useState } from 'react';
 import { GluestackUIProvider } from '../components/gluestack/ui/gluestack-ui-provider';
-import NeroSplashScreen from '../components/ui/NeroSplashScreen';
+import NeroSplashScreen from '../components/ui/nero-splash-screen';
 import '../global.css';
-import { AuthProvider } from './AuthProvider';
+import { AuthProvider } from './auth-provider';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,8 +36,7 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
         'Fredoka-SemiBold': Fredoka_600SemiBold,
         Oughter: require('../assets/fonts/Oughter.otf'),
     });
-
-    const [showNeroSplash, setShowNeroSplash] = useState(true);
+    const [splashFinished, setSplashFinished] = useState(false);
 
     useEffect(() => {
         if (fontsLoaded || fontsError) {
@@ -45,12 +44,10 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [fontsLoaded, fontsError]);
 
-    if (!fontsLoaded && !fontsError) {
-        return null;
-    }
+    if (!fontsLoaded && !fontsError) return null;
 
-    if (showNeroSplash) {
-        return <NeroSplashScreen onFinish={() => setShowNeroSplash(false)} />;
+    if (!splashFinished) {
+        return <NeroSplashScreen onFinish={() => setSplashFinished(true)} />;
     }
 
     return (

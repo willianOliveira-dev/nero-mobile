@@ -1,15 +1,13 @@
-
-
-import React from 'react';
 import { Redirect } from 'expo-router';
-import { useAuthStore } from '../store/useAuthStore'; 
+import React from 'react';
+import { useAuth } from '../hooks/auth/use-auth';
 
 export default function Index() {
-    const { isAuthenticated } = useAuthStore();
+    const { isAuthenticated } = useAuth();
 
     if (isAuthenticated) {
-        // return <Redirect href="/(public)/home" />;
+        return <Redirect href="/(public)/(tabs)/home" />;
     }
 
-    return <Redirect href="/(auth)/Login" />;
+    return <Redirect href="/(public)/(tabs)/home" />;
 }

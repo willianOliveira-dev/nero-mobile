@@ -15,21 +15,17 @@ import {
 import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
+import { CircleLoadingIndicator } from '@/src/components/reacticx/ui/molecules/circle-loader';
 import { iconsPath } from '@/src/constants/icons';
 import { imagesPath } from '@/src/constants/images';
-import { useAuth } from '@/src/hooks/auth/useAuth';
-import { useLoginForm } from '@/src/hooks/auth/useLoginForm';
+import { useAuth } from '@/src/hooks/auth/use-auth';
+import { useLoginForm } from '@/src/hooks/auth/use-login-form';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
@@ -65,6 +61,7 @@ export default function LoginScreen() {
         if (result && !result.success && result.error) {
             setServerError(result.error);
         }
+        router.replace('/');
     }
 
     return (
@@ -105,9 +102,13 @@ export default function LoginScreen() {
                                 className="flex-row items-center justify-center h-12 border border-gray-100 rounded-xl gap-2 active:opacity-75"
                             >
                                 {isSignInSocialLoading ? (
-                                    <ActivityIndicator
-                                        size="small"
-                                        color="#6c7278"
+                                    <CircleLoadingIndicator
+                                        dotSpacing={8}
+                                        dotColor="#D70040"
+                                        style={{
+                                            marginTop: 60,
+                                        }}
+                                        duration={500}
                                     />
                                 ) : (
                                     <HStack className="items-center gap-2">
@@ -221,7 +222,7 @@ export default function LoginScreen() {
                                 <Pressable
                                     className="self-end active:opacity-70"
                                     onPress={() =>
-                                        router.push('/ForgotPassword')
+                                        router.replace('/forgot-password')
                                     }
                                 >
                                     <Text className="text-blue-500 text-xs font-fredoka-semibold">
@@ -242,7 +243,14 @@ export default function LoginScreen() {
                                 className="h-12 bg-primary rounded-xl active:opacity-90"
                             >
                                 {isSignInEmailLoading ? (
-                                    <ActivityIndicator color="white" />
+                                    <CircleLoadingIndicator
+                                        dotSpacing={8}
+                                        dotColor="#D70040"
+                                        style={{
+                                            marginTop: 60,
+                                        }}
+                                        duration={500}
+                                    />
                                 ) : (
                                     <ButtonText className="text-white text-sm font-fredoka-medium">
                                         Login
@@ -256,7 +264,7 @@ export default function LoginScreen() {
                                 </Text>
                                 <Pressable
                                     className="active:opacity-70"
-                                    onPress={() => router.push('/Register')}
+                                    onPress={() => router.replace('/register')}
                                 >
                                     <Text className="text-blue-500 text-xs font-fredoka-semibold">
                                         Registre-se

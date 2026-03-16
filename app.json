@@ -2,6 +2,7 @@
     "expo": {
         "name": "Nero",
         "slug": "nero-mobile",
+        "scheme": "nero",
         "icon": "./src/assets/images/logo/nero-icon-1024.png",
         "android": {
             "package": "com.nero.mobile",
@@ -19,13 +20,16 @@
                 "expo-splash-screen",
                 {
                     "image": "./src/assets/images/logo/nero-splash-1285.png",
-                    "imageWidth": 300,
+                    "imageWidth": 200,
                     "resizeMode": "contain",
                     "backgroundColor": "#D70040"
                 }
             ],
             "expo-web-browser"
         ],
+        "experiments": {
+            "typedRoutes": true
+        },
         "extra": {
             "router": {},
             "eas": {

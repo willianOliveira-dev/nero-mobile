@@ -4,14 +4,12 @@ import type {
     LoginFormData,
     RegisterFormData,
 } from '@/src/schemas/auth/auth.schema';
-import { useAuthStore } from '@/src/store/useAuthStore';
-import { useRouter } from 'expo-router';
+import { useAuthStore } from '@/src/store/use-auth.store';
 import { useCallback, useState } from 'react';
 
 type OAuthProvider = 'google';
 
 export const useAuth = () => {
-    const router = useRouter();
     const [isSignInEmailLoading, setIsSignInEmailLoading] = useState(false);
     const [isSignInSocialLoading, setIsSignInSocialLoading] = useState(false);
     const [isSignUpLoading, setIsSignUpLoading] = useState(false);
@@ -19,6 +17,7 @@ export const useAuth = () => {
     const [isResetPasswordLoading, setIsResetPasswordLoading] = useState(false);
 
     const user = useAuthStore((state) => state.user);
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const setUser = useAuthStore((state) => state.setUser);
 
     const signInEmail = useCallback(
@@ -28,7 +27,6 @@ export const useAuth = () => {
             const { data: session, error } = await authClient.signIn.email({
                 email: data.email,
                 password: data.password,
-                callbackURL: '/home',
             });
 
             setIsSignInEmailLoading(false);
@@ -100,7 +98,6 @@ export const useAuth = () => {
                 email: data.email,
                 password: data.password,
                 name: data.name,
-                callbackURL: '/home',
             });
 
             if (error) {
@@ -127,13 +124,12 @@ export const useAuth = () => {
         try {
             await authClient.signOut();
             setUser(null);
-            router.replace('/(auth)/Login');
         } catch (error) {
             console.error('Erro ao sair:', error);
         } finally {
             setIsSignOutLoading(false);
         }
-    }, [setUser, router]);
+    }, [setUser]);
 
     const isLoading = useCallback(() => {
         return (
@@ -153,10 +149,11 @@ export const useAuth = () => {
 
     return {
         user,
+        isAuthenticated,
         isLoading,
         isSignInEmailLoading,
-        isSignUpLoading,
         isSignInSocialLoading,
+        isSignUpLoading,
         isSignOutLoading,
         isResetPasswordLoading,
         signInEmail,

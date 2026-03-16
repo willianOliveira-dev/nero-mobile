@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useAuthStore } from '../store/useAuthStore';
-import { authClient } from '../lib/auth-client';
 import { ActivityIndicator, View } from 'react-native';
+import { authClient } from '../lib/auth-client';
+import { useAuthStore } from '../store/use-auth.store';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const setUser = useAuthStore((state) => state.setUser);
@@ -22,8 +22,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (isPending) {
         return (
-            <View className="flex-1 justify-center items-center">
-                <ActivityIndicator size="large" color="#000" />
+            <View className="flex-1 justify-center items-center bg-primary">
+                <ActivityIndicator size="large" color="#fff" />
             </View>
         );
     }
