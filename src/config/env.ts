@@ -7,6 +7,7 @@ const envSchema = z.object({
         .url()
         .default('http://localhost:8000/api/v1/auth'),
     EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID: z.string(),
+    EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

@@ -1,13 +1,20 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { env } from '../config/env';
 
 export function configureGoogleSignIn() {
     GoogleSignin.configure({
-        webClientId: '891201305783-4gf0qt8igrlmrnkpehk8184ep0aqs083.apps.googleusercontent.com',
+        webClientId: env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
     });
 }
 
 export async function googleSignIn() {
     await GoogleSignin.hasPlayServices();
-    const { data } = await GoogleSignin.signIn();
-    return data?.idToken;
+
+    const response = await GoogleSignin.signIn();
+
+    if (!response.data?.idToken) {
+        return null;
+    }
+
+    return response.data.idToken;
 }

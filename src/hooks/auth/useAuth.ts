@@ -56,10 +56,7 @@ export const useAuth = () => {
                     const idToken = await googleSignIn();
 
                     if (!idToken) {
-                        return {
-                            success: false,
-                            error: 'Token do Google não encontrado',
-                        };
+                        return { success: false, error: null };
                     }
 
                     const { data: session, error } =
@@ -84,7 +81,7 @@ export const useAuth = () => {
                 }
 
                 return { success: false, error: 'Provider não suportado' };
-            } catch (e) {
+            } catch (error) {
                 return {
                     success: false,
                     error: 'Erro ao autenticar com Google',

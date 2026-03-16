@@ -2,5 +2,5 @@ import { createAuthClient } from 'better-auth/react';
 import { env } from '../config/env';
 
 export const authClient = createAuthClient({
-    baseURL: `${env.EXPO_PUBLIC_BETTER_AUTH_URL}/api/v1/auth`,
+    baseURL: env.EXPO_PUBLIC_BETTER_AUTH_URL,
 });
