@@ -23,13 +23,20 @@ import { useLoginForm } from '@/src/hooks/auth/use-login-form';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
     const router = useRouter();
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.replace('/(public)/(tabs)/home');
+        }
+    }, [isAuthenticated]);
 
     const {
         control,
@@ -52,7 +59,9 @@ export default function LoginScreen() {
         const result = await signInEmail(data);
         if (result && !result.success && result.error) {
             setServerError(result.error);
+            return;
         }
+        router.replace('/(public)/(tabs)/home');
     }
 
     async function handleGoogleLogin() {
@@ -60,8 +69,9 @@ export default function LoginScreen() {
         const result = await signInSocial('google');
         if (result && !result.success && result.error) {
             setServerError(result.error);
+            return;
         }
-        router.replace('/');
+        router.replace('/(public)/(tabs)/home');
     }
 
     return (

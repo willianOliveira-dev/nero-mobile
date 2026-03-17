@@ -1,40 +1,41 @@
 {
-    "expo": {
-        "name": "Nero",
-        "slug": "nero-mobile",
-        "scheme": "nero",
-        "icon": "./src/assets/images/logo/nero-icon-1024.png",
-        "android": {
-            "package": "com.nero.mobile",
-            "adaptiveIcon": {
-                "foregroundImage": "./src/assets/images/logo/nero-foreground-432.png",
-                "backgroundColor": "#A2002A"
-            },
-            "edgeToEdgeEnabled": true,
-            "predictiveBackGestureEnabled": false
-        },
-        "plugins": [
-            "expo-router",
-            "@react-native-google-signin/google-signin",
-            [
-                "expo-splash-screen",
-                {
-                    "image": "./src/assets/images/logo/nero-splash-1285.png",
-                    "imageWidth": 200,
-                    "resizeMode": "contain",
-                    "backgroundColor": "#D70040"
-                }
-            ],
-            "expo-web-browser"
-        ],
-        "experiments": {
-            "typedRoutes": true
-        },
-        "extra": {
-            "router": {},
-            "eas": {
-                "projectId": "df23f5a3-d31c-403c-a589-fe084e3e10f9"
-            }
+  "expo": {
+    "name": "Nero",
+    "slug": "nero-mobile",
+    "scheme": "nero",
+    "icon": "./src/assets/images/logo/nero-icon-1024.png",
+    "android": {
+      "package": "com.nero.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/images/logo/nero-foreground-432.png",
+        "backgroundColor": "#A2002A"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./src/assets/images/logo/nero-splash-1285.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#D70040"
         }
-    }
+      ],
+      "expo-web-browser"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "429e61b2-27b8-4c8b-8658-40ecfa7fe2d8"
+      }
+    },
+    "owner": "w1llian"
+  }
 }

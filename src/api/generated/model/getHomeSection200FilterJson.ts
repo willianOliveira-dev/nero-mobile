@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetHomeSection200FilterJson = {[key: string]: string} | null;
+export type GetHomeSection200FilterJson = {[key: string]: unknown} | null;

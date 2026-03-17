@@ -10,7 +10,11 @@ export type CreateHomeSection201Type = typeof CreateHomeSection201Type[keyof typ
 
 
 export const CreateHomeSection201Type = {
-  product_list: 'product_list',
+  top_selling: 'top_selling',
+  new_in: 'new_in',
+  on_sale: 'on_sale',
+  free_shipping: 'free_shipping',
+  by_gender: 'by_gender',
   category_list: 'category_list',
   banner: 'banner',
 } as const;

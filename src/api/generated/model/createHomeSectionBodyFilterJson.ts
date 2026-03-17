@@ -7,9 +7,7 @@
  */
 
 export type CreateHomeSectionBodyFilterJson = {
-  sort?: 'recommended' | 'newest' | 'price_asc' | 'price_desc';
   gender?: 'men' | 'women' | 'kids' | 'unisex';
-  deals?: 'on_sale' | 'free_shipping';
   /**
    * @minimum 1
    * @maximum 50

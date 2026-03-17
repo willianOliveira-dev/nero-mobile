@@ -80,6 +80,7 @@ export const useAuth = () => {
 
                 return { success: false, error: 'Provider não suportado' };
             } catch (error) {
+                console.error('Erro ao autenticar com Google:', error);
                 return {
                     success: false,
                     error: 'Erro ao autenticar com Google',

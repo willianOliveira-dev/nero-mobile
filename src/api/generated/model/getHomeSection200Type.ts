@@ -10,7 +10,11 @@ export type GetHomeSection200Type = typeof GetHomeSection200Type[keyof typeof Ge
 
 
 export const GetHomeSection200Type = {
-  product_list: 'product_list',
+  top_selling: 'top_selling',
+  new_in: 'new_in',
+  on_sale: 'on_sale',
+  free_shipping: 'free_shipping',
+  by_gender: 'by_gender',
   category_list: 'category_list',
   banner: 'banner',
 } as const;

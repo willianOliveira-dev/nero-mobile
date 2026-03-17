@@ -27,9 +27,11 @@ import type {
 import type {
   CreateHomeSection201,
   CreateHomeSectionBody,
+  DeleteHomeSection200,
   GetHome200Item,
   GetHomeSection200,
   ListHomeSections200Item,
+  ReorderHomeSections200,
   ReorderHomeSectionsBody,
   UpdateHomeSection200,
   UpdateHomeSectionBody
@@ -136,13 +138,13 @@ export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError =
  * @summary Retornar seção específica por slug
  */
 export const getHomeSection = (
-    id: string,
+    slug: string,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<GetHomeSection200>(
-      {url: `/api/v1/home/${id}`, method: 'GET', signal
+      {url: `/api/v1/home/${slug}`, method: 'GET', signal
     },
       options);
     }
@@ -150,29 +152,29 @@ export const getHomeSection = (
 
 
 
-export const getGetHomeSectionQueryKey = (id: string,) => {
+export const getGetHomeSectionQueryKey = (slug: string,) => {
     return [
-    `/api/v1/home/${id}`
+    `/api/v1/home/${slug}`
     ] as const;
     }
 
     
-export const getGetHomeSectionQueryOptions = <TData = Awaited<ReturnType<typeof getHomeSection>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetHomeSectionQueryOptions = <TData = Awaited<ReturnType<typeof getHomeSection>>, TError = unknown>(slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetHomeSectionQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetHomeSectionQueryKey(slug);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHomeSection>>> = ({ signal }) => getHomeSection(id, requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHomeSection>>> = ({ signal }) => getHomeSection(slug, requestOptions, signal);
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(id), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(slug), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type GetHomeSectionQueryResult = NonNullable<Awaited<ReturnType<typeof getHomeSection>>>
@@ -180,7 +182,7 @@ export type GetHomeSectionQueryError = unknown
 
 
 export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSection>>, TError = unknown>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>> & Pick<
+ slug: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHomeSection>>,
           TError,
@@ -190,7 +192,7 @@ export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSecti
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSection>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>> & Pick<
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHomeSection>>,
           TError,
@@ -200,7 +202,7 @@ export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSecti
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSection>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -208,11 +210,11 @@ export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSecti
  */
 
 export function useGetHomeSection<TData = Awaited<ReturnType<typeof getHomeSection>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ slug: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHomeSection>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetHomeSectionQueryOptions(id,options)
+  const queryOptions = getGetHomeSectionQueryOptions(slug,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -448,7 +450,7 @@ export const deleteHomeSection = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<DeleteHomeSection200>(
       {url: `/api/v1/admin/home/${id}`, method: 'DELETE', signal
     },
       options);
@@ -509,7 +511,7 @@ export const reorderHomeSections = (
 ) => {
       
       
-      return customInstance<void>(
+      return customInstance<ReorderHomeSections200>(
       {url: `/api/v1/admin/home/reorder`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: reorderHomeSectionsBody, signal

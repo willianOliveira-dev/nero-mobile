@@ -14,7 +14,7 @@ export default function TabsLayout() {
                     <CurvedBottomTabs
                         {...props}
                         gradients={['#D70040', '#A2002A']}
-                        labelColor="#FFFFFF"
+                        labelColor="#FFB3C1"
                     />
                 )}
                 screenOptions={{
