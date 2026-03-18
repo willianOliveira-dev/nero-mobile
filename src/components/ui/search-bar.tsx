@@ -12,12 +12,13 @@ const DEFAULT_PLACEHOLDERS: string[] = [
     'Digite aqui...',
 ];
 
-interface SearchBarProps {
+import type { TextInputProps } from 'react-native';
+
+interface SearchBarProps extends Omit<TextInputProps, 'onChangeText' | 'value'> {
     value?: string;
     onChangeText?: (text: string) => void;
     onPress?: () => void;
     placeholders?: string[];
-
     animationInterval?: number;
 }
 
@@ -27,6 +28,7 @@ export function SearchBar({
     onPress,
     placeholders = DEFAULT_PLACEHOLDERS,
     animationInterval = 2000,
+    ...props
 }: SearchBarProps)  {
     const [text, setText] = useState(value ?? '');
 
@@ -59,6 +61,7 @@ export function SearchBar({
                         paddingVertical: 0,
                         paddingHorizontal: 0,
                     }}
+                    {...props}
                 />
             </HStack>
         </GestureHandlerRootView>

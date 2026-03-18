@@ -1,22 +1,23 @@
 import { useGetHome } from '@/src/api/generated/home/home';
+import type { GetHome200ItemItemsItem } from '@/src/api/generated/model';
 import { Avatar, AvatarImage } from '@/src/components/gluestack/ui/avatar';
-import { useRouter } from 'expo-router';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
-import { GenderFilter } from '@/src/components/ui/gender-filter';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { CategoryItem } from '@/src/components/ui/category-item';
+import { GenderFilter } from '@/src/components/ui/gender-filter';
 import { HomeSkeleton } from '@/src/components/ui/home-skeleton';
 import { ProductCard } from '@/src/components/ui/product-card';
 import { SectionHeader } from '@/src/components/ui/seaction-header';
 import { SearchBar } from '@/src/components/ui/search-bar';
 import { useInfiniteProducts } from '@/src/hooks/products/use-infinite-products';
 import { useAuthStore } from '@/src/store/use-auth.store';
-import type { GetHome200ItemItemsItem } from '@/src/api/generated/model';
 import { useCartStore } from '@/src/store/use-cart-store';
+import { useSearchStore } from '@/src/store/use-search-store';
+import { useRouter } from 'expo-router';
 import { ShoppingCart } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
@@ -72,6 +73,7 @@ export default function HomeScreen() {
 
     const user = useAuthStore((state) => state.user);
     const itemCount = useCartStore((state) => state.itemCount);
+    const setFilters = useSearchStore((state) => state.setFilters);
     const defaultGender: GenderFilter = user?.gender ?? 'unisex';
     const [selectedGender, setSelectedGender] =
         useState<GenderFilter>(defaultGender);
@@ -129,7 +131,6 @@ export default function HomeScreen() {
 
     const ListHeader = (
         <VStack>
-         
             <HStack className="items-center justify-between mb-4">
                 <Avatar size="md" className="rounded-full">
                     <AvatarImage source={{ uri: AVATAR_URI }} />
@@ -158,7 +159,16 @@ export default function HomeScreen() {
 
     
             <Box className="mb-6">
-                <SearchBar />
+                <SearchBar
+                    returnKeyType="search"
+                    onSubmitEditing={(e) => {
+                        const query = e.nativeEvent.text;
+                        if (query.trim().length > 0) {
+                            setFilters({ q: query });
+                            router.push('/search');
+                        }
+                    }}
+                />
             </Box>
 
         

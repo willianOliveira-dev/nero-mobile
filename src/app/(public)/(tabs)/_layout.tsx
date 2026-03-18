@@ -22,7 +22,7 @@ export default function TabsLayout() {
                     <CustomTabBar
                         {...props}
                         tabs={MY_TABS}
-                        hiddenRoutes={['product/[slug]']}
+                        hiddenRoutes={['product/[slug]', 'search']}
                     />
                 )}
                 screenOptions={{
@@ -32,6 +32,7 @@ export default function TabsLayout() {
                 }}
             >
                 <Tabs.Screen name="home" />
+                
                 <Tabs.Screen name="search" />
 
                 <Tabs.Screen
