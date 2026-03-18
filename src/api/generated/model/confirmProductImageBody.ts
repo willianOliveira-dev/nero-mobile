@@ -15,5 +15,4 @@ export type ConfirmProductImageBody = {
    */
   position: number;
   isPrimary?: boolean;
-  variantId?: string | null;
 };

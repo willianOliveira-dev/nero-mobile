@@ -6,6 +6,7 @@ interface User {
     id: string;
     name: string;
     email: string;
+    gender?: 'men' | 'women' | 'kids' | 'unisex';
 }
 
 interface AuthState {

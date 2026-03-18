@@ -9,10 +9,10 @@
 export type AddCartItemBody = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-7[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12})$ */
   productId: string;
-  variantId?: string | null;
+  skuId?: string | null;
   /**
    * @minimum 1
-   * @maximum 99
+   * @maximum 9007199254740991
    */
-  quantity: number;
+  quantity?: number;
 };

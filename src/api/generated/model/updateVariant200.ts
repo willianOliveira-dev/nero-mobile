@@ -6,7 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UpdateVariant200Attributes } from './updateVariant200Attributes';
-import type { UpdateVariant200Price } from './updateVariant200Price';
 
 export type UpdateVariant200 = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -14,8 +13,13 @@ export type UpdateVariant200 = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
   sku: string;
-  price: UpdateVariant200Price;
+  gtin: string | null;
+  price: number | null;
   stock: number;
   attributes: UpdateVariant200Attributes;
   isActive: boolean;
+  weightInGrams: number | null;
+  lengthCm: string | null;
+  widthCm: string | null;
+  heightCm: string | null;
 };

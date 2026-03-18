@@ -6,7 +6,9 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { UpdateProductBodyGender } from './updateProductBodyGender';
+import type { UpdateProductBodySkus } from './updateProductBodySkus';
 import type { UpdateProductBodyStatus } from './updateProductBodyStatus';
+import type { UpdateProductBodyVariationTypes } from './updateProductBodyVariationTypes';
 
 export type UpdateProductBody = {
   /**
@@ -21,12 +23,18 @@ export type UpdateProductBody = {
    */
   slug?: string;
   description?: string | null;
-  /** @exclusiveMinimum 0 */
-  basePrice?: number;
-  originalPrice?: number | null;
   categoryId?: string | null;
+  brandId?: string | null;
   gender?: UpdateProductBodyGender;
   status?: UpdateProductBodyStatus;
   freeShipping?: boolean;
-  isFeatured?: boolean;
+  thumbnailUrl?: string | null;
+  sizeChartUrl?: string | null;
+  price?: number | null;
+  compareAtPrice?: number | null;
+  stock?: number | null;
+  skuCode?: string | null;
+  ean?: string | null;
+  variationTypes?: UpdateProductBodyVariationTypes;
+  skus?: UpdateProductBodySkus;
 };

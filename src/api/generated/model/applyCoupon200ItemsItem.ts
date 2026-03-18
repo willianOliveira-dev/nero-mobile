@@ -7,18 +7,18 @@
  */
 import type { ApplyCoupon200ItemsItemPrice } from './applyCoupon200ItemsItemPrice';
 import type { ApplyCoupon200ItemsItemProduct } from './applyCoupon200ItemsItemProduct';
+import type { ApplyCoupon200ItemsItemSku } from './applyCoupon200ItemsItemSku';
 import type { ApplyCoupon200ItemsItemSubtotal } from './applyCoupon200ItemsItemSubtotal';
-import type { ApplyCoupon200ItemsItemVariant } from './applyCoupon200ItemsItemVariant';
 
 export type ApplyCoupon200ItemsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
-  variantId: string | null;
+  skuId: string | null;
   quantity: number;
   price: ApplyCoupon200ItemsItemPrice;
   subtotal: ApplyCoupon200ItemsItemSubtotal;
   product: ApplyCoupon200ItemsItemProduct;
-  variant: ApplyCoupon200ItemsItemVariant;
+  sku: ApplyCoupon200ItemsItemSku;
 };

@@ -15,5 +15,4 @@ export type UpdateProductImageBody = {
    */
   position?: number;
   isPrimary?: boolean;
-  variantId?: string | null;
 };

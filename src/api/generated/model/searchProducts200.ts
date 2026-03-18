@@ -12,5 +12,4 @@ export type SearchProducts200 = {
   total: number;
   nextCursor: string | null;
   hasMore: boolean;
-  limit: number;
 };

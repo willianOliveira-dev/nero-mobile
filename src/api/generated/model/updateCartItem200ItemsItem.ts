@@ -7,18 +7,18 @@
  */
 import type { UpdateCartItem200ItemsItemPrice } from './updateCartItem200ItemsItemPrice';
 import type { UpdateCartItem200ItemsItemProduct } from './updateCartItem200ItemsItemProduct';
+import type { UpdateCartItem200ItemsItemSku } from './updateCartItem200ItemsItemSku';
 import type { UpdateCartItem200ItemsItemSubtotal } from './updateCartItem200ItemsItemSubtotal';
-import type { UpdateCartItem200ItemsItemVariant } from './updateCartItem200ItemsItemVariant';
 
 export type UpdateCartItem200ItemsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
-  variantId: string | null;
+  skuId: string | null;
   quantity: number;
   price: UpdateCartItem200ItemsItemPrice;
   subtotal: UpdateCartItem200ItemsItemSubtotal;
   product: UpdateCartItem200ItemsItemProduct;
-  variant: UpdateCartItem200ItemsItemVariant;
+  sku: UpdateCartItem200ItemsItemSku;
 };

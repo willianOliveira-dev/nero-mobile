@@ -5,30 +5,35 @@
  * A Nero API é uma interface RESTful robusta projetada especificamente para o varejo de moda online. Ela oferece controle total sobre o ciclo de vida do produto, desde a entrada de estoque em múltiplas variantes (SKUs) até o processamento final do checkout. Ideal para marketplaces, lojas boutique ou aplicativos móveis de moda.
  * OpenAPI spec version: 1.0.0
  */
-import type { GetProductById200Gender } from './getProductById200Gender';
+import type { GetProductById200Brand } from './getProductById200Brand';
+import type { GetProductById200CartRules } from './getProductById200CartRules';
+import type { GetProductById200CategoriesItem } from './getProductById200CategoriesItem';
+import type { GetProductById200Features } from './getProductById200Features';
 import type { GetProductById200ImagesItem } from './getProductById200ImagesItem';
-import type { GetProductById200Price } from './getProductById200Price';
-import type { GetProductById200Status } from './getProductById200Status';
-import type { GetProductById200VariantsItem } from './getProductById200VariantsItem';
+import type { GetProductById200Pricing } from './getProductById200Pricing';
+import type { GetProductById200Rating } from './getProductById200Rating';
+import type { GetProductById200SimpleProduct } from './getProductById200SimpleProduct';
+import type { GetProductById200Skus } from './getProductById200Skus';
+import type { GetProductById200UserContext } from './getProductById200UserContext';
+import type { GetProductById200VariationTypes } from './getProductById200VariationTypes';
 
 export type GetProductById200 = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
   slug: string;
   description: string | null;
-  price: GetProductById200Price;
-  gender: GetProductById200Gender;
-  status: GetProductById200Status;
-  freeShipping: boolean;
-  isFeatured: boolean;
-  soldCount: number;
-  ratingAvg: number | null;
-  ratingCount: number;
-  categoryId: string | null;
-  category: unknown | null;
-  variants?: GetProductById200VariantsItem[];
-  images?: GetProductById200ImagesItem[];
-  createdAt: string;
-  updatedAt: string;
+  status: string;
+  thumbnailUrl: string | null;
+  hasVariations: boolean;
+  simpleProduct: GetProductById200SimpleProduct;
+  pricing: GetProductById200Pricing;
+  variationTypes: GetProductById200VariationTypes;
+  skus: GetProductById200Skus;
+  cartRules: GetProductById200CartRules;
+  brand: GetProductById200Brand;
+  categories: GetProductById200CategoriesItem[];
+  images: GetProductById200ImagesItem[];
+  rating: GetProductById200Rating;
+  features: GetProductById200Features;
+  userContext: GetProductById200UserContext;
 };

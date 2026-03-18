@@ -6,4 +6,4 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type UpdateVariant200Attributes = {[key: string]: string};
+export type UpdateVariant200Attributes = {[key: string]: unknown};

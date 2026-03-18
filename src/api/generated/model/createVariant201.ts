@@ -6,7 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { CreateVariant201Attributes } from './createVariant201Attributes';
-import type { CreateVariant201Price } from './createVariant201Price';
 
 export type CreateVariant201 = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
@@ -14,8 +13,13 @@ export type CreateVariant201 = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
   sku: string;
-  price: CreateVariant201Price;
+  gtin: string | null;
+  price: number | null;
   stock: number;
   attributes: CreateVariant201Attributes;
   isActive: boolean;
+  weightInGrams: number | null;
+  lengthCm: string | null;
+  widthCm: string | null;
+  heightCm: string | null;
 };

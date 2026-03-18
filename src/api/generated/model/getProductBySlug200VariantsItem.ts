@@ -6,16 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetProductBySlug200VariantsItemAttributes } from './getProductBySlug200VariantsItemAttributes';
+import type { GetProductBySlug200VariantsItemImagesItem } from './getProductBySlug200VariantsItemImagesItem';
 import type { GetProductBySlug200VariantsItemPrice } from './getProductBySlug200VariantsItemPrice';
 
 export type GetProductBySlug200VariantsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  productId: string;
   sku: string;
-  price: GetProductBySlug200VariantsItemPrice;
   stock: number;
   attributes: GetProductBySlug200VariantsItemAttributes;
-  isActive: boolean;
+  price: GetProductBySlug200VariantsItemPrice;
+  images: GetProductBySlug200VariantsItemImagesItem[];
 };

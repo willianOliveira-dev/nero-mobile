@@ -7,18 +7,18 @@
  */
 import type { AddCartItem200ItemsItemPrice } from './addCartItem200ItemsItemPrice';
 import type { AddCartItem200ItemsItemProduct } from './addCartItem200ItemsItemProduct';
+import type { AddCartItem200ItemsItemSku } from './addCartItem200ItemsItemSku';
 import type { AddCartItem200ItemsItemSubtotal } from './addCartItem200ItemsItemSubtotal';
-import type { AddCartItem200ItemsItemVariant } from './addCartItem200ItemsItemVariant';
 
 export type AddCartItem200ItemsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
-  variantId: string | null;
+  skuId: string | null;
   quantity: number;
   price: AddCartItem200ItemsItemPrice;
   subtotal: AddCartItem200ItemsItemSubtotal;
   product: AddCartItem200ItemsItemProduct;
-  variant: AddCartItem200ItemsItemVariant;
+  sku: AddCartItem200ItemsItemSku;
 };

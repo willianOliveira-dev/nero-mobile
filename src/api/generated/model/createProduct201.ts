@@ -5,30 +5,35 @@
  * A Nero API é uma interface RESTful robusta projetada especificamente para o varejo de moda online. Ela oferece controle total sobre o ciclo de vida do produto, desde a entrada de estoque em múltiplas variantes (SKUs) até o processamento final do checkout. Ideal para marketplaces, lojas boutique ou aplicativos móveis de moda.
  * OpenAPI spec version: 1.0.0
  */
-import type { CreateProduct201Gender } from './createProduct201Gender';
+import type { CreateProduct201Brand } from './createProduct201Brand';
+import type { CreateProduct201CartRules } from './createProduct201CartRules';
+import type { CreateProduct201CategoriesItem } from './createProduct201CategoriesItem';
+import type { CreateProduct201Features } from './createProduct201Features';
 import type { CreateProduct201ImagesItem } from './createProduct201ImagesItem';
-import type { CreateProduct201Price } from './createProduct201Price';
-import type { CreateProduct201Status } from './createProduct201Status';
-import type { CreateProduct201VariantsItem } from './createProduct201VariantsItem';
+import type { CreateProduct201Pricing } from './createProduct201Pricing';
+import type { CreateProduct201Rating } from './createProduct201Rating';
+import type { CreateProduct201SimpleProduct } from './createProduct201SimpleProduct';
+import type { CreateProduct201Skus } from './createProduct201Skus';
+import type { CreateProduct201UserContext } from './createProduct201UserContext';
+import type { CreateProduct201VariationTypes } from './createProduct201VariationTypes';
 
 export type CreateProduct201 = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   name: string;
   slug: string;
   description: string | null;
-  price: CreateProduct201Price;
-  gender: CreateProduct201Gender;
-  status: CreateProduct201Status;
-  freeShipping: boolean;
-  isFeatured: boolean;
-  soldCount: number;
-  ratingAvg: number | null;
-  ratingCount: number;
-  categoryId: string | null;
-  category: unknown | null;
-  variants?: CreateProduct201VariantsItem[];
-  images?: CreateProduct201ImagesItem[];
-  createdAt: string;
-  updatedAt: string;
+  status: string;
+  thumbnailUrl: string | null;
+  hasVariations: boolean;
+  simpleProduct: CreateProduct201SimpleProduct;
+  pricing: CreateProduct201Pricing;
+  variationTypes: CreateProduct201VariationTypes;
+  skus: CreateProduct201Skus;
+  cartRules: CreateProduct201CartRules;
+  brand: CreateProduct201Brand;
+  categories: CreateProduct201CategoriesItem[];
+  images: CreateProduct201ImagesItem[];
+  rating: CreateProduct201Rating;
+  features: CreateProduct201Features;
+  userContext: CreateProduct201UserContext;
 };

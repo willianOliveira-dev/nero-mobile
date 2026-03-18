@@ -30,6 +30,7 @@ import type {
   DeactivateCategory200,
   GetCategoryBySlug200,
   ListCategories200Item,
+  PresignCategoryImage200,
   ReorderCategories200,
   ReorderCategoriesBody,
   UpdateCategory200,
@@ -473,5 +474,66 @@ export const useReorderCategories = <TError = unknown,
         TContext
       > => {
       return useMutation(getReorderCategoriesMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Gerar assinatura para upload de imagem (admin)
+ */
+export const presignCategoryImage = (
+    
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<PresignCategoryImage200>(
+      {url: `/api/v1/admin/categories/image/presign`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getPresignCategoryImageMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof presignCategoryImage>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof presignCategoryImage>>, TError,void, TContext> => {
+
+const mutationKey = ['presignCategoryImage'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof presignCategoryImage>>, void> = () => {
+          
+
+          return  presignCategoryImage(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PresignCategoryImageMutationResult = NonNullable<Awaited<ReturnType<typeof presignCategoryImage>>>
+    
+    export type PresignCategoryImageMutationError = unknown
+
+    /**
+ * @summary Gerar assinatura para upload de imagem (admin)
+ */
+export const usePresignCategoryImage = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof presignCategoryImage>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof presignCategoryImage>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getPresignCategoryImageMutationOptions(options), queryClient);
     }
     

@@ -9,8 +9,8 @@
 export type PresignProductImage200 = {
   signature: string;
   timestamp: number;
-  folder: string;
-  publicId?: string;
-  cloudName: string;
   apiKey: string;
+  cloudName: string;
+  folder: string;
+  publicId: string;
 };

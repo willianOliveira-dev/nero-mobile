@@ -7,6 +7,9 @@
  */
 
 export type ApplyCouponBody = {
-  /** @minLength 1 */
+  /**
+   * @minLength 1
+   * @maxLength 50
+   */
   code: string;
 };

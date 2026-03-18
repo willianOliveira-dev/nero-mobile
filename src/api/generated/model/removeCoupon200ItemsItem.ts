@@ -7,18 +7,18 @@
  */
 import type { RemoveCoupon200ItemsItemPrice } from './removeCoupon200ItemsItemPrice';
 import type { RemoveCoupon200ItemsItemProduct } from './removeCoupon200ItemsItemProduct';
+import type { RemoveCoupon200ItemsItemSku } from './removeCoupon200ItemsItemSku';
 import type { RemoveCoupon200ItemsItemSubtotal } from './removeCoupon200ItemsItemSubtotal';
-import type { RemoveCoupon200ItemsItemVariant } from './removeCoupon200ItemsItemVariant';
 
 export type RemoveCoupon200ItemsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   productId: string;
-  variantId: string | null;
+  skuId: string | null;
   quantity: number;
   price: RemoveCoupon200ItemsItemPrice;
   subtotal: RemoveCoupon200ItemsItemSubtotal;
   product: RemoveCoupon200ItemsItemProduct;
-  variant: RemoveCoupon200ItemsItemVariant;
+  sku: RemoveCoupon200ItemsItemSku;
 };

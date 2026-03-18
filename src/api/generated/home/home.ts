@@ -29,6 +29,7 @@ import type {
   CreateHomeSectionBody,
   DeleteHomeSection200,
   GetHome200Item,
+  GetHomeParams,
   GetHomeSection200,
   ListHomeSections200Item,
   ReorderHomeSections200,
@@ -48,13 +49,14 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary Retornar todas as seções ativas da home com produtos
  */
 export const getHome = (
-    
+    params?: GetHomeParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
       return customInstance<GetHome200Item[]>(
-      {url: `/api/v1/home`, method: 'GET', signal
+      {url: `/api/v1/home`, method: 'GET',
+        params, signal
     },
       options);
     }
@@ -62,23 +64,23 @@ export const getHome = (
 
 
 
-export const getGetHomeQueryKey = () => {
+export const getGetHomeQueryKey = (params?: GetHomeParams,) => {
     return [
-    `/api/v1/home`
+    `/api/v1/home`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getGetHomeQueryOptions = <TData = Awaited<ReturnType<typeof getHome>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetHomeQueryOptions = <TData = Awaited<ReturnType<typeof getHome>>, TError = unknown>(params?: GetHomeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetHomeQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetHomeQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHome>>> = ({ signal }) => getHome(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHome>>> = ({ signal }) => getHome(params, requestOptions, signal);
 
       
 
@@ -92,7 +94,7 @@ export type GetHomeQueryError = unknown
 
 
 export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>> & Pick<
+ params: undefined |  GetHomeParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHome>>,
           TError,
@@ -102,7 +104,7 @@ export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError =
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>> & Pick<
+ params?: GetHomeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getHome>>,
           TError,
@@ -112,7 +114,7 @@ export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError =
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetHomeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -120,11 +122,11 @@ export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError =
  */
 
 export function useGetHome<TData = Awaited<ReturnType<typeof getHome>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ params?: GetHomeParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHome>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetHomeQueryOptions(options)
+  const queryOptions = getGetHomeQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

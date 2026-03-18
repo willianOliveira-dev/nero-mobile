@@ -9,7 +9,7 @@
 export type UpdateCartItemBody = {
   /**
    * @minimum 1
-   * @maximum 99
+   * @maximum 9007199254740991
    */
   quantity: number;
 };
