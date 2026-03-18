@@ -4,6 +4,7 @@ import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { ShoppingCart } from 'lucide-react-native';
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface AddToCartBarProps {
@@ -12,6 +13,7 @@ interface AddToCartBarProps {
     quantity: number;
     hasVariations: boolean;
     allVariationsSelected: boolean;
+    isPending?: boolean;
     onAddToCart: () => void;
 }
 
@@ -21,11 +23,12 @@ export function AddToCartBar({
     quantity,
     hasVariations,
     allVariationsSelected,
+    isPending = false,
     onAddToCart,
 }: AddToCartBarProps) {
     const insets = useSafeAreaInsets();
 
-    const isDisabled = isOutOfStock || (hasVariations && !allVariationsSelected);
+    const isDisabled = isOutOfStock || (hasVariations && !allVariationsSelected) || isPending;
 
     const label = isOutOfStock
         ? 'Esgotado'
@@ -45,7 +48,7 @@ export function AddToCartBar({
             style={{ paddingBottom: insets.bottom + 12, paddingTop: 12 }}
         >
             <HStack className="items-center justify-between">
-                {!isDisabled && (
+                {!isDisabled && !isPending && (
                     <Text className="text-lg font-fredoka-bold text-typography-900">
                         {formattedTotal}
                     </Text>
@@ -56,17 +59,23 @@ export function AddToCartBar({
                     disabled={isDisabled}
                     className={`flex-1 flex-row items-center justify-center gap-2 py-4 rounded-full ${
                         isDisabled ? 'bg-gray-200' : 'bg-primary'
-                    } ${!isDisabled ? '' : ''} ${isDisabled ? '' : 'ml-4'}`}
-                    style={isDisabled ? { marginLeft: 0 } : undefined}
+                    } ${(!isDisabled || isPending) ? '' : ''} ${isDisabled ? '' : 'ml-4'}`}
+                    style={isDisabled && !isPending ? { marginLeft: 0 } : undefined}
                 >
-                    {!isDisabled && <ShoppingCart size={18} color="#ffffff" />}
-                    <Text
-                        className={`text-sm font-fredoka-semibold ${
-                            isDisabled ? 'text-gray-400' : 'text-white'
-                        }`}
-                    >
-                        {label}
-                    </Text>
+                    {isPending ? (
+                        <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                        <>
+                            {!isDisabled && <ShoppingCart size={18} color="#ffffff" />}
+                            <Text
+                                className={`text-sm font-fredoka-semibold ${
+                                    isDisabled ? 'text-gray-400' : 'text-white'
+                                }`}
+                            >
+                                {label}
+                            </Text>
+                        </>
+                    )}
                 </Pressable>
             </HStack>
         </Box>

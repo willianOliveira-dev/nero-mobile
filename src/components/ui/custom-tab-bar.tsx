@@ -11,6 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Box } from '@/src/components/gluestack/ui/box';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
+import { Text } from '@/src/components/gluestack/ui/text';
+import { useCartStore } from '@/src/store/use-cart-store';
 
 export interface TabConfig {
     name: string;
@@ -37,6 +39,7 @@ const TabItem: React.FC<TabItemProps> = ({
 }) => {
     const { Icon } = tab;
     const progress = useSharedValue(isFocused ? 1 : 0);
+    const itemCount = useCartStore((s) => s.itemCount);
 
     useEffect(() => {
         progress.value = withSpring(isFocused ? 1 : 0, {
@@ -68,6 +71,8 @@ const TabItem: React.FC<TabItemProps> = ({
         ],
     }));
 
+    const showBadge = tab.name === 'cart' && itemCount > 0;
+
     return (
         <Pressable
             onPress={onPress}
@@ -82,6 +87,15 @@ const TabItem: React.FC<TabItemProps> = ({
                     color={isFocused ? '#D70040' : '#9CA3AF'}
                     strokeWidth={isFocused ? 2.5 : 1.5}
                 />
+                {showBadge && (
+                    <Box
+                        className="absolute -top-1.5 -right-2.5 bg-primary rounded-full min-w-[18px] h-[18px] items-center justify-center px-1"
+                    >
+                        <Text className="text-[10px] font-fredoka-semibold text-white leading-none">
+                            {itemCount > 99 ? '99+' : itemCount}
+                        </Text>
+                    </Box>
+                )}
             </Animated.View>
 
             <Animated.View

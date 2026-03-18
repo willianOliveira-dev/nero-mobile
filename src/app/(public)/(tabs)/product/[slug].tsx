@@ -12,6 +12,8 @@ import { VStack } from '@/src/components/gluestack/ui/vstack';
 
 import { useGetProductBySlug } from '@/src/api/generated/products/products';
 import { useListReviews } from '@/src/api/generated/reviews/reviews';
+import { useAddCartItem, getGetCartQueryKey } from '@/src/api/generated/cart/cart';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { AddToCartBar } from '@/src/components/ui/add-to-cart-bar';
 import { ProductHeader } from '@/src/components/ui/product-header';
@@ -35,12 +37,22 @@ function useWishlistStub(productId: string | undefined) {
 
 export default function ProductScreen() {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const { slug } = useLocalSearchParams<{ slug: string }>();
     const {
         data: product,
         isLoading,
         error,
     } = useGetProductBySlug(slug as string);
+
+    const { mutate: addToCart, isPending: isAdding } = useAddCartItem({
+        mutation: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+                router.push('/cart');
+            },
+        },
+    });
 
     const { data: reviewsData } = useListReviews(
         { productId: product?.id ?? '', limit: 5 },
@@ -235,12 +247,16 @@ export default function ProductScreen() {
                 quantity={quantity}
                 hasVariations={product.hasVariations}
                 allVariationsSelected={allVariationsSelected}
+                isPending={isAdding}
                 onAddToCart={() => {
-                    // TODO: dispatch para o carrinho com activeSku.id ou simpleProduct
-                    const skuId = product.hasVariations
-                        ? activeSku?.id
-                        : 'simple';
-                    console.log('ADD TO CART', { skuId, quantity });
+                    const skuId = product.hasVariations ? activeSku?.id : undefined;
+                    addToCart({
+                        data: {
+                            productId: product.id,
+                            skuId,
+                            quantity,
+                        },
+                    });
                 }}
             />
         </SafeAreaView>

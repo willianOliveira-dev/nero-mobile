@@ -1,5 +1,6 @@
 import { useGetHome } from '@/src/api/generated/home/home';
 import { Avatar, AvatarImage } from '@/src/components/gluestack/ui/avatar';
+import { useRouter } from 'expo-router';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { Pressable } from '@/src/components/gluestack/ui/pressable';
@@ -15,6 +16,7 @@ import { SearchBar } from '@/src/components/ui/search-bar';
 import { useInfiniteProducts } from '@/src/hooks/products/use-infinite-products';
 import { useAuthStore } from '@/src/store/use-auth.store';
 import type { GetHome200ItemItemsItem } from '@/src/api/generated/model';
+import { useCartStore } from '@/src/store/use-cart-store';
 import { ShoppingCart } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
@@ -65,9 +67,11 @@ const GENDER_OPTIONS: { label: string; value: GenderFilter }[] = [
 ];
 
 export default function HomeScreen() {
+    const router = useRouter();
     const [activeCategory, setActiveCategory] = useState('1');
 
     const user = useAuthStore((state) => state.user);
+    const itemCount = useCartStore((state) => state.itemCount);
     const defaultGender: GenderFilter = user?.gender ?? 'unisex';
     const [selectedGender, setSelectedGender] =
         useState<GenderFilter>(defaultGender);
@@ -137,8 +141,18 @@ export default function HomeScreen() {
                     onChange={setSelectedGender}
                 />
 
-                <Pressable className="w-10 h-10 rounded-full bg-primary items-center justify-center">
+                <Pressable
+                    onPress={() => router.push('/cart')}
+                    className="w-10 h-10 rounded-full bg-primary items-center justify-center relative"
+                >
                     <ShoppingCart size={16} color="#ffffff" />
+                    {itemCount > 0 && (
+                        <Box className="absolute -top-1 -right-1 bg-red-500 w-4 h-4 rounded-full items-center justify-center border border-white">
+                            <Text className="text-[9px] font-fredoka-bold text-white leading-none">
+                                {itemCount > 99 ? '99+' : itemCount}
+                            </Text>
+                        </Box>
+                    )}
                 </Pressable>
             </HStack>
 
