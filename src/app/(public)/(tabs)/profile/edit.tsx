@@ -29,7 +29,7 @@ export default function EditProfileScreen() {
             reset({
                 name: me.name || '',
                 phone: me.phone || '',
-                genderPreference: (me.genderPreference as any) || 'unisex',
+                genderPreference: (me.genderPreference as ProfileFormData['genderPreference']) || 'unisex',
             });
         }
     }, [me, reset]);

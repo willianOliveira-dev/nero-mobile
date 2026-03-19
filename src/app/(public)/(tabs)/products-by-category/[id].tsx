@@ -109,7 +109,7 @@ export default function ProductsByCategoryScreen() {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <Box className="w-1/2 p-2">
-                            <ProductCard product={item as any} />
+                            <ProductCard product={item} />
                         </Box>
                     )}
                     onEndReached={() => {

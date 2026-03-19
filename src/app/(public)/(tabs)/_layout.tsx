@@ -31,6 +31,7 @@ export default function TabsLayout() {
                             'address',
                             'address/new',
                             'address/edit',
+                            'wishlist'
                         ]}
                     />
                 )}
@@ -51,6 +52,11 @@ export default function TabsLayout() {
 
                 <Tabs.Screen
                     name="categories"
+                    options={{ headerShown: false }}
+                />
+
+                <Tabs.Screen
+                    name="wishlist"
                     options={{ headerShown: false }}
                 />
 

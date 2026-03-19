@@ -11,7 +11,7 @@ export type UpdateCategory200SubcategoriesItem = {
   id: string;
   name: string;
   slug: string;
-  iconUrl: string | null;
+  iconUrl?: string | null;
   sortOrder: number;
   isActive: boolean;
 };

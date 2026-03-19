@@ -11,7 +11,7 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { useAuth } from '@/src/hooks/auth/use-auth';
 import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { ChevronRight,  ImageUpIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
@@ -57,11 +57,12 @@ export default function ProfileScreen() {
        
             const formData = new FormData();
             
+            // @ts-expect-error React Native's FormData accepts an object with uri, type, and name
             formData.append('file', {
                 uri: asset.uri,
                 type: asset.mimeType || 'image/jpeg',
                 name: asset.fileName || 'avatar.jpg',
-            } as any);
+            });
             formData.append('api_key', presignData.apiKey);
             formData.append('timestamp', String(presignData.timestamp));
             formData.append('signature', presignData.signature);
@@ -100,12 +101,12 @@ export default function ProfileScreen() {
         }
     };
 
-    const menuItems = [
+    const menuItems: { label: string; route?: Href }[] = [
         { label: 'Endereços', route: '/address' },
-        { label: 'Lista de desejos', route: '/Wishlist' },
-        { label: 'Payment', route: '#' },
-        { label: 'Help', route: '#' },
-        { label: 'Support', route: '#' },
+        { label: 'Lista de desejos', route: '/wishlist' },
+        { label: 'Payment' },
+        { label: 'Help' },
+        { label: 'Support' },
     ];
 
     if (isMePending) {
@@ -159,7 +160,7 @@ export default function ProfileScreen() {
                                 </Text>
                             )}
                         </VStack>
-                        <Pressable onPress={() => router.push('/profile/edit' as any)} className="p-2">
+                        <Pressable onPress={() => router.push('/profile/edit')} className="p-2">
                             <Text className="text-primary font-fredoka-bold text-sm">
                                 Edit
                             </Text>
@@ -172,7 +173,7 @@ export default function ProfileScreen() {
                             <Pressable
                                 key={index}
                                 onPress={() => {
-                                    if (item.route !== '#') router.push(item.route as any);
+                                    if (item.route) router.push(item.route);
                                 }}
                                 className="w-full bg-white h-14 rounded-lg px-4 flex-row items-center justify-between"
                             >

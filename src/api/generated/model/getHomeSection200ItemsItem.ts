@@ -8,6 +8,7 @@
 import type { GetHomeSection200ItemsItemBrand } from './getHomeSection200ItemsItemBrand';
 import type { GetHomeSection200ItemsItemPricing } from './getHomeSection200ItemsItemPricing';
 import type { GetHomeSection200ItemsItemRating } from './getHomeSection200ItemsItemRating';
+import type { GetHomeSection200ItemsItemUserContext } from './getHomeSection200ItemsItemUserContext';
 
 export type GetHomeSection200ItemsItem = {
   id: string;
@@ -20,4 +21,5 @@ export type GetHomeSection200ItemsItem = {
   brand: GetHomeSection200ItemsItemBrand;
   rating: GetHomeSection200ItemsItemRating;
   freeShipping: boolean;
+  userContext?: GetHomeSection200ItemsItemUserContext;
 };

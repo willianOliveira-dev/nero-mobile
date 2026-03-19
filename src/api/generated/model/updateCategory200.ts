@@ -12,10 +12,9 @@ export type UpdateCategory200 = {
   id: string;
   name: string;
   slug: string;
-  parentId: string | null;
-  iconUrl: string | null;
-  imageUrl: string | null;
-  sizeGuideUrl: string | null;
+  parentId?: string | null;
+  iconUrl?: string | null;
+  imageUrl?: string | null;
   sortOrder: number;
   isActive: boolean;
   subcategories?: UpdateCategory200SubcategoriesItem[];

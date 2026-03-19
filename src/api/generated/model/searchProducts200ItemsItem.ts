@@ -8,6 +8,7 @@
 import type { SearchProducts200ItemsItemBrand } from './searchProducts200ItemsItemBrand';
 import type { SearchProducts200ItemsItemPricing } from './searchProducts200ItemsItemPricing';
 import type { SearchProducts200ItemsItemRating } from './searchProducts200ItemsItemRating';
+import type { SearchProducts200ItemsItemUserContext } from './searchProducts200ItemsItemUserContext';
 
 export type SearchProducts200ItemsItem = {
   id: string;
@@ -20,4 +21,5 @@ export type SearchProducts200ItemsItem = {
   brand: SearchProducts200ItemsItemBrand;
   rating: SearchProducts200ItemsItemRating;
   freeShipping: boolean;
+  userContext?: SearchProducts200ItemsItemUserContext;
 };

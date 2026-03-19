@@ -27,13 +27,7 @@ import { ProductDetailSkeleton } from '@/src/components/ui/product-detail-skelet
 
 import { useProductVariants } from '@/src/hooks/products/use-product-variants';
 
-//  TODO: substituir pelo hook funcional quando estiver pronto 
-// import { useWishlist } from '@/src/hooks/useWishlist';
-function useWishlistStub(productId: string | undefined) {
-    const [isFavorite, setIsFavorite] = useState(false);
-    const toggle = () => setIsFavorite((prev) => !prev);
-    return { isFavorite, toggle };
-}
+import { useToggleWishlist } from '@/src/hooks/wishlist/use-toggle-wishlist';
 
 export default function ProductScreen() {
     const router = useRouter();
@@ -59,7 +53,11 @@ export default function ProductScreen() {
         { query: { enabled: !!product?.id } },
     );
 
-    const { isFavorite, toggle: toggleFavorite } = useWishlistStub(product?.id);
+    const { isWishlisted: isFavorite, toggleWishlist: toggleFavorite } = useToggleWishlist(
+        product?.id ?? '', 
+        product?.userContext?.isWishlisted ?? false
+    );
+    
     const variants = useProductVariants(
         product ?? ({} as NonNullable<typeof product>),
     );

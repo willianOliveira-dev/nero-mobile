@@ -7,10 +7,28 @@ import { Image } from '../gluestack/ui/image';
 import { Pressable } from '../gluestack/ui/pressable';
 import { Text } from '../gluestack/ui/text';
 import { VStack } from '../gluestack/ui/vstack';
-import type { GetHome200ItemItemsItem } from '@/src/api/generated/model';
+import { useToggleWishlist } from '@/src/hooks/wishlist/use-toggle-wishlist';
+export type BaseProductCardData = {
+    id: string;
+    slug: string;
+    name: string;
+    thumbnailUrl?: string | null;
+    freeShipping: boolean;
+    pricing?: {
+        hasPriceVariation: boolean;
+        displayPriceMin: { formatted: string };
+    } | null;
+    rating: {
+        average: number;
+        count: number;
+    };
+    userContext?: {
+        isWishlisted: boolean;
+    };
+};
 
 interface ProductCardProps {
-    product: GetHome200ItemItemsItem;
+    product: BaseProductCardData;
     showFavorite?: boolean;
     onFavoritePress?: () => void;
 }
@@ -19,13 +37,17 @@ export function ProductCard({
     product,
     showFavorite = true,
     onFavoritePress,
-}: ProductCardProps) {
+    isFavorite: initialIsFavorite,
+}: ProductCardProps & { isFavorite?: boolean }) {
     const router = useRouter();
-    const [isFavorite, setIsFavorite] = React.useState(false);
+    const { isWishlisted, toggleWishlist } = useToggleWishlist(
+        product.id,
+        initialIsFavorite ?? product.userContext?.isWishlisted ?? false
+    );
 
     const handleFavorite = (e: any) => {
         e.stopPropagation();
-        setIsFavorite(!isFavorite);
+        toggleWishlist();
         onFavoritePress?.();
     };
 
@@ -72,8 +94,8 @@ export function ProductCard({
                     >
                         <Heart
                             size={16}
-                            color={isFavorite ? '#E11D48' : '#6B7280'}
-                            fill={isFavorite ? '#E11D48' : 'none'}
+                            color={isWishlisted ? '#E11D48' : '#6B7280'}
+                            fill={isWishlisted ? '#E11D48' : 'none'}
                         />
                     </Pressable>
                 )}
