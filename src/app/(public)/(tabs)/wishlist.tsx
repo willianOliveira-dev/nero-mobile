@@ -15,7 +15,7 @@ export default function WishlistScreen() {
     const { data: wishlistData, isLoading, refetch } = useGetWishlist();
 
     const products = wishlistData?.items ?? [];
-    console.log(products);
+
     return (
         <SafeAreaView className="flex-1 bg-white pt-4">
             <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
