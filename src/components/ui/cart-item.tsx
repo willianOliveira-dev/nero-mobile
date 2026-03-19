@@ -1,4 +1,4 @@
-import { useRemoveCartItem, useUpdateCartItem } from '@/src/api/generated/cart/cart';
+import { useRemoveCartItem, useUpdateCartItem , getGetCartQueryKey } from '@/src/api/generated/cart/cart';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { Image } from '@/src/components/gluestack/ui/image';
@@ -7,7 +7,6 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import type { GetCart200ItemsItem } from '@/src/api/generated/model';
 import { useQueryClient } from '@tanstack/react-query';
-import { getGetCartQueryKey } from '@/src/api/generated/cart/cart';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator } from 'react-native';

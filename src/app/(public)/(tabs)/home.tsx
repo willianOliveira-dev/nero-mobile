@@ -1,4 +1,5 @@
 import { useListCategories } from '@/src/api/generated/categories/categories';
+import { useGetMe } from '@/src/api/generated/users/users';
 import { useGetHome } from '@/src/api/generated/home/home';
 import type { GetHome200ItemItemsItem } from '@/src/api/generated/model';
 import { Avatar, AvatarImage } from '@/src/components/gluestack/ui/avatar';
@@ -41,6 +42,7 @@ export default function HomeScreen() {
     const router = useRouter();
 
     const user = useAuthStore((state) => state.user);
+    const { data: me } = useGetMe();
     const itemCount = useCartStore((state) => state.itemCount);
     const setFilters = useSearchStore((state) => state.setFilters);
     const defaultGender: GenderFilter = user?.gender ?? 'unisex';
@@ -109,9 +111,11 @@ export default function HomeScreen() {
     const ListHeader = (
         <VStack>
             <HStack className="items-center justify-between mb-4">
-                <Avatar size="md" className="rounded-full">
-                    <AvatarImage source={{ uri: AVATAR_URI }} />
-                </Avatar>
+                <Pressable onPress={() => router.push('/profile')}>
+                    <Avatar size="md" className="rounded-full">
+                        <AvatarImage source={{ uri: me?.avatarUrl || AVATAR_URI }} />
+                    </Avatar>
+                </Pressable>
 
                 <GenderFilter
                     options={GENDER_OPTIONS}

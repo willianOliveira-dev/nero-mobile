@@ -27,6 +27,10 @@ export default function TabsLayout() {
                             'search',
                             'categories',
                             'products-by-category/[id]',
+                            'profile/edit',
+                            'address',
+                            'address/new',
+                            'address/edit',
                         ]}
                     />
                 )}
@@ -58,6 +62,10 @@ export default function TabsLayout() {
                 <Tabs.Protected guard={isAuthenticated}>
                     <Tabs.Screen name="cart" />
                     <Tabs.Screen name="profile" />
+                    <Tabs.Screen name="profile/edit" options={{ headerShown: false }} />
+                    <Tabs.Screen name="address" options={{ headerShown: false }} />
+                    <Tabs.Screen name="address/new" options={{ headerShown: false }} />
+                    <Tabs.Screen name="address/edit" options={{ headerShown: false }} />
                 </Tabs.Protected>
             </Tabs>
         </GestureHandlerRootView>

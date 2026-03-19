@@ -6,13 +6,13 @@ import { Box } from '../gluestack/ui/box';
 import { HStack } from '../gluestack/ui/hstack';
 import AnimatedInputBar from '../reacticx/ui/base/animated-input-bar';
 
+import type { TextInputProps } from 'react-native';
+
 const DEFAULT_PLACEHOLDERS: string[] = [
     'Pesquisar...',
     'O que você procura?',
     'Digite aqui...',
 ];
-
-import type { TextInputProps } from 'react-native';
 
 interface SearchBarProps extends Omit<TextInputProps, 'onChangeText' | 'value'> {
     value?: string;

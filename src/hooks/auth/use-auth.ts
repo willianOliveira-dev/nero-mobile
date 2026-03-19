@@ -5,6 +5,9 @@ import type {
     RegisterFormData,
 } from '@/src/schemas/auth/auth.schema';
 import { useAuthStore } from '@/src/store/use-auth.store';
+import { useCartStore } from '@/src/store/use-cart-store';
+import { useSearchStore } from '@/src/store/use-search-store';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 
 type OAuthProvider = 'google';
@@ -19,6 +22,7 @@ export const useAuth = () => {
     const user = useAuthStore((state) => state.user);
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     const setUser = useAuthStore((state) => state.setUser);
+    const queryClient = useQueryClient();
 
     const signInEmail = useCallback(
         async (data: LoginFormData) => {
@@ -124,13 +128,22 @@ export const useAuth = () => {
         setIsSignOutLoading(true);
         try {
             await authClient.signOut();
+            
+        
             setUser(null);
+            
+         
+            useCartStore.getState().setItemCount(0);
+            useSearchStore.getState().clearFilters();
+            
+            queryClient.clear();
+            
         } catch (error) {
             console.error('Erro ao sair:', error);
         } finally {
             setIsSignOutLoading(false);
         }
-    }, [setUser]);
+    }, [setUser, queryClient]);
 
     const isLoading = useCallback(() => {
         return (
