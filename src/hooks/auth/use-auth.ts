@@ -1,5 +1,6 @@
 import { authClient } from '@/src/lib/auth-client';
-import { googleSignIn } from '@/src/lib/google';
+import { googleSignIn, googleSignOut } from '@/src/lib/google';
+import * as SecureStore from 'expo-secure-store';
 import type {
     LoginFormData,
     RegisterFormData,
@@ -127,9 +128,10 @@ export const useAuth = () => {
     const signOut = useCallback(async () => {
         setIsSignOutLoading(true);
         try {
+            await googleSignOut();
             await authClient.signOut();
+            await SecureStore.deleteItemAsync('nero_better-auth.session_token').catch(() => null);
             
-        
             setUser(null);
             
          

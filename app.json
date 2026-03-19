@@ -32,7 +32,8 @@
           "merchantIdentifier": "merchant.com.nero",
           "enableGooglePay": true
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

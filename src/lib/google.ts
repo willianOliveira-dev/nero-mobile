@@ -18,3 +18,11 @@ export async function googleSignIn() {
 
     return response.data.idToken;
 }
+
+export async function googleSignOut() {
+    try {
+        await GoogleSignin.signOut();
+    } catch (error) {
+        console.log('Erro ao deslogar do Google:', error);
+    }
+}
