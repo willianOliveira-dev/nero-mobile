@@ -5,6 +5,7 @@ import { X } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ActivityIndicator, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { z } from 'zod';
 
 const filterSchema = z.object({
@@ -43,6 +44,7 @@ const DEALS_OPTIONS = [
 ];
 
 export function SearchFiltersModal({ visible, onClose }: Props) {
+    const insets = useSafeAreaInsets();
     const { filters, setFilters, clearFilters } = useSearchStore();
     const { data: brandsData, isPending: isBrandsLoading } = useListBrands();
     const brands = brandsData?.data ?? [];
@@ -83,8 +85,8 @@ export function SearchFiltersModal({ visible, onClose }: Props) {
     };
 
     return (
-        <Modal visible={visible} animationType="slide" transparent>
-            <View className="flex-1 bg-black/50 justify-end">
+        <Modal visible={visible}  animationType="slide" transparent>
+            <View style={{ paddingBottom: insets.bottom }} className="flex-1 bg-black/50 justify-end">
                 <View className="bg-white rounded-t-3xl min-h-[80%] max-h-[90%] p-6">
                     <View className="flex-row items-center justify-between mb-6">
                         <Text className="text-xl font-fredoka-medium text-typography-900">

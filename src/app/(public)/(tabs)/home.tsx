@@ -20,7 +20,7 @@ import { useAuthStore } from '@/src/store/use-auth.store';
 import { useCartStore } from '@/src/store/use-cart-store';
 import { useSearchStore } from '@/src/store/use-search-store';
 import { useRouter } from 'expo-router';
-import { ShoppingCart } from 'lucide-react-native';
+import { Heart, ShoppingCart } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
 
@@ -110,6 +110,7 @@ export default function HomeScreen() {
 
     const ListHeader = (
         <VStack>
+            <Text className="text-center items-center text-2xs font-fredoka text-typography-500 mb-3">Feito com <Heart size={10} color="red" fill="red"/> por Willian</Text>
             <HStack className="items-center justify-between mb-4">
                 <Pressable onPress={() => router.push('/profile')}>
                     <Avatar size="md" className="rounded-full">
