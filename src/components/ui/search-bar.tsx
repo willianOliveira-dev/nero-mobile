@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable as RNPressable } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Box } from '../gluestack/ui/box';
@@ -31,6 +31,10 @@ export function SearchBar({
     ...props
 }: SearchBarProps)  {
     const [text, setText] = useState(value ?? '');
+
+    useEffect(() => {
+        setText(value ?? '');
+    }, [value]);
 
     const handleChangeText = (t: string) => {
         setText(t);

@@ -1,3 +1,4 @@
+import { useListCategories } from '@/src/api/generated/categories/categories';
 import { useGetHome } from '@/src/api/generated/home/home';
 import type { GetHome200ItemItemsItem } from '@/src/api/generated/model';
 import { Avatar, AvatarImage } from '@/src/components/gluestack/ui/avatar';
@@ -25,39 +26,6 @@ import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native
 const AVATAR_URI =
     'https://www.figma.com/api/mcp/asset/0e9d6c12-a83a-4d88-80ad-5360fa62c3a0';
 
-const CATEGORIES = [
-    {
-        id: '1',
-        label: 'Moletons',
-        imageUri:
-            'https://www.figma.com/api/mcp/asset/c7e60d37-5356-47f6-bebe-fe4b1b9a4973',
-    },
-    {
-        id: '2',
-        label: 'Shorts',
-        imageUri:
-            'https://www.figma.com/api/mcp/asset/85d42c6e-0f27-4d21-bef0-8a0432288063',
-    },
-    {
-        id: '3',
-        label: 'Tênis',
-        imageUri:
-            'https://www.figma.com/api/mcp/asset/aa74d529-17b9-49c1-9bc0-3eb8223d133f',
-    },
-    {
-        id: '4',
-        label: 'Mochilas',
-        imageUri:
-            'https://www.figma.com/api/mcp/asset/55b46a81-2139-4d8d-805c-6cec9897756d',
-    },
-    {
-        id: '5',
-        label: 'Acessórios',
-        imageUri:
-            'https://www.figma.com/api/mcp/asset/37aee49b-f1b8-43f7-9c1a-7a479342bf2e',
-    },
-];
-
 type GenderFilter = 'unisex' | 'men' | 'women' | 'kids';
 
 const GENDER_OPTIONS: { label: string; value: GenderFilter }[] = [
@@ -67,9 +35,10 @@ const GENDER_OPTIONS: { label: string; value: GenderFilter }[] = [
     { label: 'Kids', value: 'kids' },
 ];
 
+const MAX_VISIBLE_CATEGORIES = 5;
+
 export default function HomeScreen() {
     const router = useRouter();
-    const [activeCategory, setActiveCategory] = useState('1');
 
     const user = useAuthStore((state) => state.user);
     const itemCount = useCartStore((state) => state.itemCount);
@@ -84,6 +53,14 @@ export default function HomeScreen() {
     } = useGetHome({ gender: selectedGender });
 
     const sections = homeResponse ?? [];
+
+    const { data: categoriesData } = useListCategories();
+    const visibleCategories = useMemo(
+        () => (categoriesData ?? []).slice(0, MAX_VISIBLE_CATEGORIES),
+        [categoriesData],
+    );
+
+    const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
     const {
         data: productsData,
@@ -173,15 +150,24 @@ export default function HomeScreen() {
 
         
             <VStack className="gap-4 mb-6">
-                <SectionHeader title="Categorias" />
+                <SectionHeader
+                    title="Categorias"
+                    onSeeAll={() => router.push('/categories')}
+                />
                 <HStack className="justify-between items-start">
-                    {CATEGORIES.map((cat) => (
+                    {visibleCategories.map((cat) => (
                         <CategoryItem
                             key={cat.id}
-                            label={cat.label}
-                            imageUri={cat.imageUri}
+                            label={cat.name}
+                            imageUri={cat.imageUrl ?? ''}
                             isActive={activeCategory === cat.id}
-                            onPress={() => setActiveCategory(cat.id)}
+                            onPress={() => {
+                                setActiveCategory(cat.id);
+                                router.push({
+                                    pathname: '/products-by-category/[id]',
+                                    params: { id: cat.id, name: cat.name },
+                                });
+                            }}
                         />
                     ))}
                 </HStack>

@@ -1,15 +1,17 @@
+import { useListBrands } from '@/src/api/generated/brands/brands';
 import { useSearchStore } from '@/src/store/use-search-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
 
 const filterSchema = z.object({
     gender: z.enum(['men', 'women', 'kids', 'unisex']).optional(),
     sort: z.enum(['recommended', 'newest', 'price_asc', 'price_desc']).optional(),
     deals: z.enum(['on_sale', 'free_shipping']).optional(),
+    brandId: z.string().uuid().optional(),
     priceMin: z.coerce.number().positive().optional(),
     priceMax: z.coerce.number().positive().optional(),
 });
@@ -42,6 +44,8 @@ const DEALS_OPTIONS = [
 
 export function SearchFiltersModal({ visible, onClose }: Props) {
     const { filters, setFilters, clearFilters } = useSearchStore();
+    const { data: brandsData, isPending: isBrandsLoading } = useListBrands();
+    const brands = brandsData?.data ?? [];
 
     const { control, handleSubmit, reset } = useForm<FilterFormValues>({
         resolver: zodResolver(filterSchema) as any,
@@ -49,6 +53,7 @@ export function SearchFiltersModal({ visible, onClose }: Props) {
             sort: filters.sort,
             gender: filters.gender,
             deals: filters.deals,
+            brandId: filters.brandId,
             priceMin: filters.priceMin,
             priceMax: filters.priceMax,
         },
@@ -60,6 +65,7 @@ export function SearchFiltersModal({ visible, onClose }: Props) {
                 sort: filters.sort,
                 gender: filters.gender,
                 deals: filters.deals,
+                brandId: filters.brandId,
                 priceMin: filters.priceMin,
                 priceMax: filters.priceMax,
             });
@@ -155,6 +161,48 @@ export function SearchFiltersModal({ visible, onClose }: Props) {
                         </View>
 
                   
+                        <View className="mb-6">
+                            <Text className="text-sm font-fredoka-medium text-gray-500 mb-3 uppercase">Marca</Text>
+                            <Controller
+                                control={control}
+                                name="brandId"
+                                render={({ field: { onChange, value } }) => (
+                                    <View>
+                                        {isBrandsLoading ? (
+                                            <ActivityIndicator size="small" color="#d70040" />
+                                        ) : (
+                                            <ScrollView
+                                                horizontal
+                                                showsHorizontalScrollIndicator={false}
+                                                contentContainerStyle={{ gap: 8 }}
+                                            >
+                                                {brands.map((brand) => (
+                                                    <Pressable
+                                                        key={brand.id}
+                                                        onPress={() => onChange(value === brand.id ? undefined : brand.id)}
+                                                        className={`px-4 py-2 border rounded-full ${
+                                                            value === brand.id
+                                                                ? 'bg-primary border-primary'
+                                                                : 'bg-white border-gray-200'
+                                                        }`}
+                                                    >
+                                                        <Text
+                                                            className={`text-sm font-fredoka-medium ${
+                                                                value === brand.id ? 'text-white' : 'text-gray-700'
+                                                            }`}
+                                                        >
+                                                            {brand.name}
+                                                        </Text>
+                                                    </Pressable>
+                                                ))}
+                                            </ScrollView>
+                                        )}
+                                    </View>
+                                )}
+                            />
+                        </View>
+
+                   
                         <View className="mb-6">
                             <Text className="text-sm font-fredoka-medium text-gray-500 mb-3 uppercase">Ofertas Especiais</Text>
                             <Controller
