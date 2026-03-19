@@ -66,21 +66,20 @@ export default function ProfileScreen() {
             formData.append('api_key', presignData.apiKey);
             formData.append('timestamp', String(presignData.timestamp));
             formData.append('signature', presignData.signature);
+            if (presignData.folder) formData.append('folder', presignData.folder);
+            if (presignData.publicId) formData.append('public_id', presignData.publicId);
 
             const uploadUrl = `https://api.cloudinary.com/v1_1/${presignData.cloudName}/image/upload`;
 
             const cloudinaryResponse = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
             });
 
             const cloudinaryResult = await cloudinaryResponse.json();
 
             if (!cloudinaryResponse.ok) {
-                console.error('Erro Cloudinary:', cloudinaryResult);
+                console.log('Erro Cloudinary:', cloudinaryResult);
                 throw new Error('Falha ao fazer upload da imagem no Cloudinary');
             }
 
@@ -94,7 +93,7 @@ export default function ProfileScreen() {
             await refetch();
             Alert.alert('Sucesso', 'Avatar atualizado com sucesso!');
         } catch (error: any) {
-            console.error('Erro upload avatar:', error);
+            console.log('Erro upload avatar:', error);
             Alert.alert('Erro', 'Não foi possível atualizar o avatar. Verifique as credenciais e conexão.');
         } finally {
             setIsUploading(false);
