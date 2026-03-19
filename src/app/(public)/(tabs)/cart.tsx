@@ -11,7 +11,7 @@ import { SkeletonBox } from '@/src/components/ui/skeleton-box';
 import { useCartStore } from '@/src/store/use-cart-store';
 import type { GetCart200ItemsItem } from '@/src/api/generated/model';
 import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, ShoppingBag, Trash2 } from 'lucide-react-native';
 import React, { useEffect } from 'react';
@@ -186,10 +186,7 @@ export default function CartScreen() {
 
             <Pressable
                 className="bg-primary rounded-full py-4 items-center"
-                onPress={() => {
-                    // TODO: Navigate to checkout
-                    console.log('CHECKOUT');
-                }}
+                onPress={() => router.push('/checkout' as Href)}
             >
                 <Text className="text-base font-fredoka-semibold text-white">
                     Finalizar Compra

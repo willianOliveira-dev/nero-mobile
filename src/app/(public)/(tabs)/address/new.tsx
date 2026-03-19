@@ -1,4 +1,5 @@
-import { useCreateAddress, useSetDefaultAddress } from '@/src/api/generated/addresses/addresses';
+import { useCreateAddress, useSetDefaultAddress, getListAddressesQueryKey } from '@/src/api/generated/addresses/addresses';
+import { useQueryClient } from '@tanstack/react-query';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { Button, ButtonText } from '@/src/components/gluestack/ui/button';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
@@ -16,10 +17,12 @@ import { Controller as FormController } from 'react-hook-form';
 import { AddressFormData } from '@/src/schemas/addresses/address.schema';
 import { useAddressForm } from '@/src/hooks/addresses/use-address-form';
 import { maskCep } from '@/src/utils/masks';
+import { extractApiError } from '@/src/utils/error-handler';
 
 export default function NewAddressScreen() {
     const router = useRouter();
     const { goBack } = useSafeBack();
+    const queryClient = useQueryClient();
     const { mutateAsync: createAddress, isPending: isCreating } = useCreateAddress();
     const { mutateAsync: setDefaultAddress } = useSetDefaultAddress();
 
@@ -44,10 +47,12 @@ export default function NewAddressScreen() {
                 await setDefaultAddress({ id: createdAddress.id });
             }
 
+            await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
             goBack();
         } catch (error) {
-            console.error('Erro ao adicionar endereço:', error);
-            form.setError('root', { message: 'Erro ao criar endereço. Tente novamente.' });
+            console.log('Erro ao adicionar endereço:', error);
+            const errorMessage = extractApiError(error, 'Erro ao criar endereço. Tente novamente.');
+            form.setError('root', { message: errorMessage });
         }
     };
 

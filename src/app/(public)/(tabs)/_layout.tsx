@@ -31,7 +31,12 @@ export default function TabsLayout() {
                             'address',
                             'address/new',
                             'address/edit',
-                            'wishlist'
+                            'wishlist',
+                            'checkout/index',
+                            'checkout/payment',
+                            'checkout/address',
+                            'orders/index',
+                            'orders/[id]'
                         ]}
                     />
                 )}
@@ -69,9 +74,13 @@ export default function TabsLayout() {
                     <Tabs.Screen name="cart" />
                     <Tabs.Screen name="profile" />
                     <Tabs.Screen name="profile/edit" options={{ headerShown: false }} />
+                    <Tabs.Screen name="orders/index" options={{ headerShown: false }} />
                     <Tabs.Screen name="address" options={{ headerShown: false }} />
                     <Tabs.Screen name="address/new" options={{ headerShown: false }} />
                     <Tabs.Screen name="address/edit" options={{ headerShown: false }} />
+                    <Tabs.Screen name="checkout/index" options={{ headerShown: false }} />
+                    <Tabs.Screen name="checkout/payment" options={{ headerShown: false }} />
+                    <Tabs.Screen name="checkout/address" options={{ headerShown: false }} />
                 </Tabs.Protected>
             </Tabs>
         </GestureHandlerRootView>

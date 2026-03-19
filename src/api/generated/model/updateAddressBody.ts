@@ -30,7 +30,7 @@ export type UpdateAddressBody = {
   state?: string;
   /**
    * @minLength 1
-   * @pattern ^\d{5}(-\d{4})?$|^\d{8}$
+   * @pattern ^\d{5}(-\d{3})?$|^\d{8}$
    */
   zipCode?: string;
   /**

@@ -5,6 +5,7 @@
  * A Nero API é uma interface RESTful robusta projetada especificamente para o varejo de moda online. Ela oferece controle total sobre o ciclo de vida do produto, desde a entrada de estoque em múltiplas variantes (SKUs) até o processamento final do checkout. Ideal para marketplaces, lojas boutique ou aplicativos móveis de moda.
  * OpenAPI spec version: 1.0.0
  */
+import type { UpdateCartItem200TotalsDiscount } from './updateCartItem200TotalsDiscount';
 import type { UpdateCartItem200TotalsShipping } from './updateCartItem200TotalsShipping';
 import type { UpdateCartItem200TotalsSubtotal } from './updateCartItem200TotalsSubtotal';
 import type { UpdateCartItem200TotalsTax } from './updateCartItem200TotalsTax';
@@ -14,6 +15,7 @@ export type UpdateCartItem200Totals = {
   subtotal: UpdateCartItem200TotalsSubtotal;
   shipping: UpdateCartItem200TotalsShipping;
   tax: UpdateCartItem200TotalsTax;
+  discount: UpdateCartItem200TotalsDiscount;
   total: UpdateCartItem200TotalsTotal;
   itemCount: number;
 };

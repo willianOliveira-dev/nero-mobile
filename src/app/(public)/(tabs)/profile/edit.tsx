@@ -15,6 +15,7 @@ import { Controller as FormController } from 'react-hook-form';
 import { ProfileFormData } from '@/src/schemas/users/profile.schema';
 import { useProfileForm } from '@/src/hooks/users/use-profile-form';
 import { maskPhone } from '@/src/utils/masks';
+import { extractApiError } from '@/src/utils/error-handler';
 
 export default function EditProfileScreen() {
     const { goBack } = useSafeBack();
@@ -46,8 +47,9 @@ export default function EditProfileScreen() {
             await refetch();
             goBack();
         } catch (error) {
-            console.error('Erro ao atualizar perfil:', error);
-            form.setError('root', { message: 'Erro ao atualizar o perfil. Conexão falhou.' });
+            console.log('Erro ao atualizar perfil:', error);
+            const errorMessage = extractApiError(error, 'Erro ao atualizar o perfil. Conexão falhou.');
+            form.setError('root', { message: errorMessage });
         }
     };
 

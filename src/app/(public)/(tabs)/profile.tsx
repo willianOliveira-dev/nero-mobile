@@ -102,9 +102,10 @@ export default function ProfileScreen() {
     };
 
     const menuItems: { label: string; route?: Href }[] = [
+        { label: 'Meus Pedidos', route: '/orders' as Href },
         { label: 'Endereços', route: '/address' },
         { label: 'Lista de desejos', route: '/wishlist' },
-        { label: 'Payment' },
+        { label: 'Formas de pagamento', route: '/checkout/payment' as Href },
         { label: 'Help' },
         { label: 'Support' },
     ];

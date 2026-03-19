@@ -84,7 +84,7 @@ export const useAuth = () => {
 
                 return { success: false, error: 'Provider não suportado' };
             } catch (error) {
-                console.error('Erro ao autenticar com Google:', error);
+                console.log('Erro ao autenticar com Google:', error);
                 return {
                     success: false,
                     error: 'Erro ao autenticar com Google',
@@ -139,7 +139,7 @@ export const useAuth = () => {
             queryClient.clear();
             
         } catch (error) {
-            console.error('Erro ao sair:', error);
+            console.log('Erro ao sair:', error);
         } finally {
             setIsSignOutLoading(false);
         }

@@ -2,7 +2,9 @@ import {
     useDeleteAddress,
     useListAddresses,
     useUpdateAddress,
+    getListAddressesQueryKey
 } from '@/src/api/generated/addresses/addresses';
+import { useQueryClient } from '@tanstack/react-query';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { Button, ButtonText } from '@/src/components/gluestack/ui/button';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
@@ -20,10 +22,12 @@ import { Controller as FormController } from 'react-hook-form';
 import { AddressFormData } from '@/src/schemas/addresses/address.schema';
 import { useAddressForm } from '@/src/hooks/addresses/use-address-form';
 import { maskCep } from '@/src/utils/masks';
+import { extractApiError } from '@/src/utils/error-handler';
 
 export default function EditAddressScreen() {
     const router = useRouter();
     const { goBack } = useSafeBack();
+    const queryClient = useQueryClient();
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const { data: addresses, isPending: isFetching } = useListAddresses();
@@ -71,10 +75,12 @@ export default function EditAddressScreen() {
                 },
             });
 
+            await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
             goBack();
         } catch (error) {
-            console.error('Erro ao atualizar endereço:', error);
-            form.setError('root', { message: 'Erro ao atualizar o endereço. Tente novamente.' });
+            console.log('Erro ao atualizar endereço:', error);
+            const errorMessage = extractApiError(error, 'Erro ao atualizar o endereço. Tente novamente.');
+            form.setError('root', { message: errorMessage });
         }
     };
 
@@ -92,10 +98,12 @@ export default function EditAddressScreen() {
                     onPress: async () => {
                         try {
                             await deleteAddress({ id });
+                            await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
                             goBack();
                         } catch (error) {
-                            console.error('Erro ao excluir:', error);
-                            form.setError('root', { message: 'Erro ao excluir endereço.' });
+                            console.log('Erro ao excluir:', error);
+                            const errorMessage = extractApiError(error, 'Erro ao excluir endereço.');
+                            form.setError('root', { message: errorMessage });
                         }
                     },
                 },
