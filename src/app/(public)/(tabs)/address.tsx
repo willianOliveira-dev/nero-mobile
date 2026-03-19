@@ -11,12 +11,14 @@ import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft, Plus } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, Alert, FlatList } from 'react-native';
 
 export default function AddressListScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
 
     const {
         data: addresses,
@@ -62,7 +64,7 @@ export default function AddressListScreen() {
                
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => router.back()}
+                        onPress={() => goBack()}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />

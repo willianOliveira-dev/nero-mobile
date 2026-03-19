@@ -7,6 +7,7 @@ import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, Grid2x2, ShoppingBag } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
@@ -54,6 +55,7 @@ function CategoryCard({ category }: { category: ListCategories200Item }) {
 
 export default function CategoriesScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
     const { data: categories, isPending } = useListCategories();
 
     return (
@@ -63,7 +65,7 @@ export default function CategoriesScreen() {
             <VStack className="px-5 pt-2 pb-4 border-b border-gray-100">
                 <HStack className="items-center justify-between">
                     <Pressable
-                        onPress={() => router.back()}
+                        onPress={() => goBack()}
                         className="p-2 -mx-2"
                         accessibilityRole="button"
                         accessibilityLabel="Voltar"

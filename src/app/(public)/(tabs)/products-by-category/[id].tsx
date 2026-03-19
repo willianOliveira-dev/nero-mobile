@@ -9,6 +9,7 @@ import { SearchFiltersModal } from '@/src/components/ui/search-filters-modal';
 import { useInfiniteProducts } from '@/src/hooks/products/use-infinite-products';
 import { useSearchStore } from '@/src/store/use-search-store';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, SearchX, SlidersHorizontal } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
@@ -16,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProductsByCategoryScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
     const { id, name } = useLocalSearchParams<{ id: string; name?: string }>();
     const { filters, setFilters, clearFilters } = useSearchStore();
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
@@ -57,7 +59,7 @@ export default function ProductsByCategoryScreen() {
             <VStack className="px-5 pt-2 pb-4 border-b border-gray-100 space-y-4">
                 <HStack className="items-center justify-between">
                     <Pressable
-                        onPress={() => router.back()}
+                        onPress={() => goBack()}
                         className="p-2 -mx-2"
                         accessibilityRole="button"
                         accessibilityLabel="Voltar"

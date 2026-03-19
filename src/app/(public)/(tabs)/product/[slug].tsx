@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, Heart } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
 import { FlatList, StatusBar } from 'react-native';
@@ -31,6 +32,7 @@ import { useToggleWishlist } from '@/src/hooks/wishlist/use-toggle-wishlist';
 
 export default function ProductScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
     const queryClient = useQueryClient();
     const { slug } = useLocalSearchParams<{ slug: string }>();
     const {
@@ -121,7 +123,7 @@ export default function ProductScreen() {
                     Produto não encontrado.
                 </Text>
                 <Pressable
-                    onPress={() => router.back()}
+                    onPress={() => goBack()}
                     className="px-6 py-3 bg-primary rounded-full"
                 >
                     <Text className="text-sm font-fredoka-semibold text-white">
@@ -139,7 +141,7 @@ export default function ProductScreen() {
     
             <HStack className="absolute top-12 left-0 right-0 px-5 justify-between z-10">
                 <Pressable
-                    onPress={() => router.back()}
+                    onPress={() => goBack()}
                     className="w-11 h-11 rounded-full bg-white/90 items-center justify-center shadow-sm"
                 >
                     <ArrowLeft size={20} color="#272727" />

@@ -12,6 +12,7 @@ import { useCartStore } from '@/src/store/use-cart-store';
 import type { GetCart200ItemsItem } from '@/src/api/generated/model';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, ShoppingBag, Trash2 } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { FlatList, StatusBar } from 'react-native';
@@ -73,6 +74,7 @@ function EmptyCart() {
 
 export default function CartScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
     const queryClient = useQueryClient();
     const setItemCount = useCartStore((s) => s.setItemCount);
 
@@ -96,7 +98,7 @@ export default function CartScreen() {
             <SafeAreaView className="flex-1 bg-white">
                 <StatusBar barStyle="dark-content" />
                 <HStack className="items-center justify-between px-5 py-3">
-                    <Pressable onPress={() => router.back()}>
+                    <Pressable onPress={() => goBack()}>
                         <ArrowLeft size={22} color="#272727" />
                     </Pressable>
                     <Text className="text-lg font-fredoka-semibold text-typography-900">
@@ -114,7 +116,7 @@ export default function CartScreen() {
             <SafeAreaView className="flex-1 bg-white">
                 <StatusBar barStyle="dark-content" />
                 <HStack className="items-center justify-between px-5 py-3">
-                    <Pressable onPress={() => router.back()}>
+                    <Pressable onPress={() => goBack()}>
                         <ArrowLeft size={22} color="#272727" />
                     </Pressable>
                     <Text className="text-lg font-fredoka-semibold text-typography-900">

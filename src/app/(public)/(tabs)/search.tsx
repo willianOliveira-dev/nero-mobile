@@ -8,14 +8,15 @@ import { ProductCard } from '@/src/components/ui/product-card';
 import { SearchBar } from '@/src/components/ui/search-bar';
 import { useInfiniteProducts } from '@/src/hooks/products/use-infinite-products';
 import { useSearchStore } from '@/src/store/use-search-store';
-import { useFocusEffect, useRouter } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, SearchX, SlidersHorizontal } from 'lucide-react-native';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SearchScreen() {
-    const router = useRouter();
+    const { goBack } = useSafeBack();
     const { filters, setFilters, clearFilters } = useSearchStore();
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
 
@@ -38,7 +39,7 @@ export default function SearchScreen() {
             
             <VStack className="px-5 pt-2 pb-4 border-b border-gray-100 space-y-4">
                 <HStack className="items-center justify-between">
-                    <Pressable onPress={() => router.back()} className="p-2 -mx-2">
+                    <Pressable onPress={() => goBack()} className="p-2 -mx-2">
                         <ArrowLeft size={24} color="#272727" />
                     </Pressable>
                     <Text className="text-lg font-fredoka-medium text-typography-900">Busca</Text>

@@ -8,6 +8,7 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { FormControl, FormControlError, FormControlErrorText } from '@/src/components/gluestack/ui/form-control';
 import { useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, ScrollView, TextInput, Switch } from 'react-native';
@@ -18,6 +19,7 @@ import { maskCep } from '@/src/utils/masks';
 
 export default function NewAddressScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
     const { mutateAsync: createAddress, isPending: isCreating } = useCreateAddress();
     const { mutateAsync: setDefaultAddress } = useSetDefaultAddress();
 
@@ -42,7 +44,7 @@ export default function NewAddressScreen() {
                 await setDefaultAddress({ id: createdAddress.id });
             }
 
-            router.back();
+            goBack();
         } catch (error) {
             console.error('Erro ao adicionar endereço:', error);
             form.setError('root', { message: 'Erro ao criar endereço. Tente novamente.' });
@@ -54,7 +56,7 @@ export default function NewAddressScreen() {
             <VStack className="flex-1 px-6">
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => router.back()}
+                        onPress={() => goBack()}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />

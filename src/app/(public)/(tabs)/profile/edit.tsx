@@ -7,7 +7,7 @@ import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { FormControl, FormControlError, FormControlErrorText } from '@/src/components/gluestack/ui/form-control';
-import { useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, ScrollView, TextInput } from 'react-native';
@@ -17,7 +17,7 @@ import { useProfileForm } from '@/src/hooks/users/use-profile-form';
 import { maskPhone } from '@/src/utils/masks';
 
 export default function EditProfileScreen() {
-    const router = useRouter();
+    const { goBack } = useSafeBack();
     const { data: me, isPending: isMePending, refetch } = useGetMe();
     const { mutateAsync: updateMe, isPending: isUpdating } = useUpdateMe();
 
@@ -44,7 +44,7 @@ export default function EditProfileScreen() {
                 },
             });
             await refetch();
-            router.back();
+            goBack();
         } catch (error) {
             console.error('Erro ao atualizar perfil:', error);
             form.setError('root', { message: 'Erro ao atualizar o perfil. Conexão falhou.' });
@@ -71,7 +71,7 @@ export default function EditProfileScreen() {
             <VStack className="flex-1 px-6">
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => router.back()}
+                        onPress={() => goBack()}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />
@@ -200,8 +200,8 @@ export default function EditProfileScreen() {
                     >
                         {isUpdating ? (
                             <ActivityIndicator color="#fff" />
-                        ) : (
-                            <ButtonText className="font-fredoka-bold text-base">Salvar Alterações</ButtonText>
+                        ) : ( 
+                            <ButtonText className="font-fredoka-bold text-base text-white">Salvar Alterações</ButtonText>
                         )}
                     </Button>
                 </Box>

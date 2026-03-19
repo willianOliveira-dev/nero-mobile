@@ -12,6 +12,7 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { FormControl, FormControlError, FormControlErrorText } from '@/src/components/gluestack/ui/form-control';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft, Trash2 } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, ScrollView, TextInput, Alert } from 'react-native';
@@ -22,6 +23,7 @@ import { maskCep } from '@/src/utils/masks';
 
 export default function EditAddressScreen() {
     const router = useRouter();
+    const { goBack } = useSafeBack();
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const { data: addresses, isPending: isFetching } = useListAddresses();
@@ -46,7 +48,7 @@ export default function EditAddressScreen() {
                     isDefault: false,
                 });
             } else {
-                router.back();
+                goBack();
             }
         }
     }, [addresses, id, reset]);
@@ -69,7 +71,7 @@ export default function EditAddressScreen() {
                 },
             });
 
-            router.back();
+            goBack();
         } catch (error) {
             console.error('Erro ao atualizar endereço:', error);
             form.setError('root', { message: 'Erro ao atualizar o endereço. Tente novamente.' });
@@ -78,7 +80,7 @@ export default function EditAddressScreen() {
 
     const handleDelete = () => {
         if (!id) return;
-        // Keeping Alert for critical actions like delete
+
         Alert.alert(
             'Excluir Endereço',
             'Tem certeza que deseja excluir este endereço?',
@@ -90,7 +92,7 @@ export default function EditAddressScreen() {
                     onPress: async () => {
                         try {
                             await deleteAddress({ id });
-                            router.back();
+                            goBack();
                         } catch (error) {
                             console.error('Erro ao excluir:', error);
                             form.setError('root', { message: 'Erro ao excluir endereço.' });
@@ -114,7 +116,7 @@ export default function EditAddressScreen() {
             <VStack className="flex-1 px-6">
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => router.back()}
+                        onPress={() => goBack()}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />
