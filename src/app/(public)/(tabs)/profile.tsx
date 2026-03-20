@@ -90,7 +90,7 @@ export default function ProfileScreen() {
 
             await refetch();
             Alert.alert('Sucesso', 'Avatar atualizado com sucesso!');
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.log('Erro upload avatar:', error);
             Alert.alert('Erro', 'Não foi possível atualizar o avatar. Verifique as credenciais e conexão.');
         } finally {

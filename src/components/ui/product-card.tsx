@@ -9,6 +9,7 @@ import { Text } from '../gluestack/ui/text';
 import { VStack } from '../gluestack/ui/vstack';
 import { useToggleWishlist } from '@/src/hooks/wishlist/use-toggle-wishlist';
 import { imagesPath } from '@/src/constants/images';
+import { GestureResponderEvent } from 'react-native';
 export type BaseProductCardData = {
     id: string;
     slug: string;
@@ -46,7 +47,7 @@ export function ProductCard({
         initialIsFavorite ?? product.userContext?.isWishlisted ?? false
     );
 
-    const handleFavorite = (e: any) => {
+    const handleFavorite = (e: GestureResponderEvent) => {
         e.stopPropagation();
         toggleWishlist();
         onFavoritePress?.();

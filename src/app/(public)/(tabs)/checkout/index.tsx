@@ -44,9 +44,18 @@ function CheckoutItem({ item }: { item: GetCart200ItemsItem }) {
                 />
             </Box>
             <VStack className="flex-1 justify-between">
-                <Text className="text-sm font-fredoka-medium text-secondary" numberOfLines={1}>
-                    {item.product?.name ?? 'Produto'}
-                </Text>
+                <HStack className="items-center gap-2">
+                    <Text className="text-sm font-fredoka-medium text-secondary flex-1" numberOfLines={1}>
+                        {item.product?.name ?? 'Produto'}
+                    </Text>
+                    {item.product?.freeShipping && (
+                        <Box className="bg-green-100 px-2 py-0.5 rounded-full">
+                            <Text className="text-[10px] font-fredoka-semibold text-green-700">
+                                Frete Grátis
+                            </Text>
+                        </Box>
+                    )}
+                </HStack>
                 <HStack className="items-center justify-between">
                     <Text className="text-xs font-fredoka text-text-muted">
                         Qtd: {item.quantity}
@@ -88,10 +97,12 @@ function SummaryRow({
     label,
     value,
     bold = false,
+    valueColor,
 }: {
     label: string;
     value: string;
     bold?: boolean;
+    valueColor?: string;
 }) {
     return (
         <HStack className="items-center justify-between py-1.5">
@@ -101,7 +112,7 @@ function SummaryRow({
                 {label}
             </Text>
             <Text
-                className={`text-sm ${bold ? 'font-fredoka-bold text-secondary' : 'font-fredoka-semibold text-secondary'}`}
+                className={`text-sm ${bold ? 'font-fredoka-bold text-secondary' : 'font-fredoka-semibold text-secondary'} ${valueColor ?? ''}`}
             >
                 {value}
             </Text>
@@ -336,7 +347,8 @@ export default function CheckoutScreen() {
                                 />
                                 <SummaryRow
                                     label="Frete"
-                                    value={cart.totals.shipping.formatted}
+                                    value={cart.totals.shipping.value === 0 ? 'Grátis' : cart.totals.shipping.formatted}
+                                    valueColor={cart.totals.shipping.value === 0 ? 'text-green-600' : undefined}
                                 />
                                 {cart.coupon && (
                                     <SummaryRow

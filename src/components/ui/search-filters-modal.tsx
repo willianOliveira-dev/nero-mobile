@@ -3,7 +3,7 @@ import { useSearchStore } from '@/src/store/use-search-store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react-native';
 import React, { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, Resolver, useForm } from 'react-hook-form';
 import { ActivityIndicator, Modal, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { z } from 'zod';
@@ -50,7 +50,7 @@ export function SearchFiltersModal({ visible, onClose }: Props) {
     const brands = brandsData?.data ?? [];
 
     const { control, handleSubmit, reset } = useForm<FilterFormValues>({
-        resolver: zodResolver(filterSchema) as any,
+        resolver: zodResolver(filterSchema) as unknown as Resolver<FilterFormValues>,
         defaultValues: {
             sort: filters.sort,
             gender: filters.gender,

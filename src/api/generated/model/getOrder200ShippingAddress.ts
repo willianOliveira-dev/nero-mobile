@@ -6,4 +6,13 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type GetOrder200ShippingAddress = {[key: string]: string};
+export type GetOrder200ShippingAddress = {
+  recipientName: string;
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  complement?: string | null;
+  [key: string]: unknown;
+};

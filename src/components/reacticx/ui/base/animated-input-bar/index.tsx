@@ -230,8 +230,8 @@ const AnimatedInput: React.FC<IAnimatedInput> &
               enterDuration={characterEnterDuration}
               exitDuration={characterExitDuration}
               delayIncrement={characterDelayIncrement}
-              // style={[styles.character as any, placeholderStyle as any]}
-              style={[styles.character, placeholderStyle] as any}
+              // style={[styles.character, placeholderStyle] as StyleProp<TextStyle>}
+              style={[styles.character, placeholderStyle] as StyleProp<TextStyle>}
             />
           )}
           <AnimatedBlurView

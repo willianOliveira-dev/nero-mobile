@@ -10,4 +10,5 @@ export type UpdateCartItem200ItemsItemProduct = {
   name: string;
   slug: string;
   imageUrl: string | null;
+  freeShipping: boolean;
 } | null;

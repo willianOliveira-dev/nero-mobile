@@ -7,7 +7,7 @@ export function useSafeBack() {
         if (router.canGoBack()) {
             router.back();
         } else {
-            router.replace(fallbackRoute as any);
+            router.replace(fallbackRoute as import('expo-router').Href);
         }
     };
 

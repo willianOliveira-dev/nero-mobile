@@ -10,6 +10,7 @@ export type PresignReviewMedia200Data = {
   signature: string;
   timestamp: number;
   folder: string;
+  publicId?: string;
   cloudName: string;
   apiKey: string;
 };

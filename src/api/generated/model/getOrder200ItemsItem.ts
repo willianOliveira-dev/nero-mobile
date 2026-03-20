@@ -7,13 +7,17 @@
  */
 import type { GetOrder200ItemsItemPrice } from './getOrder200ItemsItemPrice';
 import type { GetOrder200ItemsItemProduct } from './getOrder200ItemsItemProduct';
+import type { GetOrder200ItemsItemReview } from './getOrder200ItemsItemReview';
 import type { GetOrder200ItemsItemSubtotal } from './getOrder200ItemsItemSubtotal';
 
 export type GetOrder200ItemsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
+  productId: string | null;
   quantity: number;
   price: GetOrder200ItemsItemPrice;
   subtotal: GetOrder200ItemsItemSubtotal;
   product: GetOrder200ItemsItemProduct;
+  isReviewed: boolean;
+  review?: GetOrder200ItemsItemReview;
 };

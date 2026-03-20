@@ -60,7 +60,7 @@ export default function LoginScreen() {
     const [serverError, setServerError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
 
-    async function onSubmit(data: any) {
+    async function onSubmit(data: { email: string; password: string }) {
         setServerError(null);
         const result = await signInEmail(data);
         if (result && !result.success && result.error) {

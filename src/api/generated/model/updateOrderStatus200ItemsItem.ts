@@ -7,13 +7,17 @@
  */
 import type { UpdateOrderStatus200ItemsItemPrice } from './updateOrderStatus200ItemsItemPrice';
 import type { UpdateOrderStatus200ItemsItemProduct } from './updateOrderStatus200ItemsItemProduct';
+import type { UpdateOrderStatus200ItemsItemReview } from './updateOrderStatus200ItemsItemReview';
 import type { UpdateOrderStatus200ItemsItemSubtotal } from './updateOrderStatus200ItemsItemSubtotal';
 
 export type UpdateOrderStatus200ItemsItem = {
   /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
   id: string;
+  productId: string | null;
   quantity: number;
   price: UpdateOrderStatus200ItemsItemPrice;
   subtotal: UpdateOrderStatus200ItemsItemSubtotal;
   product: UpdateOrderStatus200ItemsItemProduct;
+  isReviewed: boolean;
+  review?: UpdateOrderStatus200ItemsItemReview;
 };

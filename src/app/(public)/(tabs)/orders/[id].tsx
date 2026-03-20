@@ -13,6 +13,7 @@ import React from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 
 import { imagesPath } from '@/src/constants/images';
+import { OrderProductItem } from '@/src/components/ui/order-product-item';
 
 function SectionHeader({ title }: { title: string }) {
     return (
@@ -146,31 +147,16 @@ export default function OrderDetailsScreen() {
                                 .join(' | ');
 
                             return (
-                                <HStack key={index} className="bg-white border border-border rounded-xl p-3 gap-3">
-                                    <Image
-                                        source={item.product.imageUrl ? { uri: item.product.imageUrl } : imagesPath.neroPlaceholder}
-                                        className="w-16 h-16 rounded-lg bg-gray-100"
-                                        alt={item.product.name}
-                                    />
-                                    <VStack className="flex-1 justify-center gap-1">
-                                        <Text className="text-sm font-fredoka-semibold text-[#272727]" numberOfLines={1}>
-                                            {item.product.name}
-                                        </Text>
-                                        {variationText ? (
-                                            <Text className="text-xs font-fredoka text-text-muted">
-                                                {variationText}
-                                            </Text>
-                                        ) : null}
-                                        <HStack className="justify-between items-center mt-1">
-                                            <Text className="text-xs font-fredoka-semibold text-primary">
-                                                {item.quantity}x {item.price.formatted}
-                                            </Text>
-                                            <Text className="text-sm font-fredoka-bold text-[#272727]">
-                                                {item.subtotal.formatted}
-                                            </Text>
-                                        </HStack>
-                                    </VStack>
-                                </HStack>
+                                <OrderProductItem
+                                    key={item.id ?? index}
+                                    productId={item.productId ?? item.id}
+                                    productName={String(item.product.name ?? 'Produto')}
+                                    productImage={String(item.product.imageUrl ?? '')}
+                                    variant={variationText || null}
+                                    price={`${item.quantity}x ${item.price.formatted}`}
+                                    review={item.review}
+                                    orderId={order.id}
+                                />
                             );
                         })}
                     </VStack>

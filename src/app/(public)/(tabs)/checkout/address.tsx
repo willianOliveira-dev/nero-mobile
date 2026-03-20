@@ -95,7 +95,7 @@ export default function CheckoutAddressScreen() {
     const handleConfirm = () => {
         if (selectedId) {
             router.navigate({
-                pathname: '/checkout' as any,
+                pathname: '/checkout' as const,
                 params: { addressId: selectedId },
             });
         }
