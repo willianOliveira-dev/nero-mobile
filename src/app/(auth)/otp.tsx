@@ -7,6 +7,7 @@ import { Image } from '@/src/components/gluestack/ui/image';
 import { imagesPath } from '@/src/constants/images';
 import { useAuth } from '@/src/hooks/auth/use-auth';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useAuthStore } from '@/src/store/use-auth.store';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Dimensions, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
@@ -23,12 +24,26 @@ export default function OtpScreen() {
     const params = useLocalSearchParams<{ email: string }>();
     const email = params.email ?? '';
 
-    const { verifyOtp, resendOtp, isVerifyOtpLoading, isResendOtpLoading } = useAuth();
+    const { 
+        verifyOtp, 
+        resendOtp, 
+        signOut,
+        isVerifyOtpLoading, 
+        isResendOtpLoading,
+        isSignOutLoading 
+    } = useAuth();
 
     const [otp, setOtp] = useState<string[]>(Array(OTP_LENGTH).fill(''));
     const [serverError, setServerError] = useState<string | null>(null);
     const [countdown, setCountdown] = useState(RESEND_COUNTDOWN);
     const inputRefs = useRef<(TextInput | null)[]>([]);
+    
+    const user = useAuthStore((state) => state.user);
+    useEffect(() => {
+        if (user?.emailVerified) {
+            router.replace('/(public)/(tabs)/home');
+        }
+    }, [user?.emailVerified]);
 
     useEffect(() => {
         if (countdown <= 0) return;
@@ -191,6 +206,25 @@ export default function OtpScreen() {
                                         )}
                                     </Pressable>
                                 )}
+                            </HStack>
+
+                            <HStack className="items-center justify-center mt-2">
+                                <Pressable
+                                    className="active:opacity-70 p-2"
+                                    onPress={async () => {
+                                        await signOut();
+                                        router.replace('/(auth)/login');
+                                    }}
+                                    disabled={isSignOutLoading}
+                                >
+                                    {isSignOutLoading ? (
+                                        <ActivityIndicator size="small" color="#9ca3af" />
+                                    ) : (
+                                        <Text className="text-gray-500 text-xs font-fredoka-semibold underline">
+                                            Trocar de email ou Sair
+                                        </Text>
+                                    )}
+                                </Pressable>
                             </HStack>
                         </VStack>
                     </VStack>

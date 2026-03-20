@@ -47,6 +47,7 @@ export const useAuth = () => {
                     id: session.user.id,
                     name: session.user.name,
                     email: session.user.email,
+                    emailVerified: session.user.emailVerified,
                 });
             }
 
@@ -81,6 +82,7 @@ export const useAuth = () => {
                             id: session.user.id,
                             name: session.user.name,
                             email: session.user.email,
+                            emailVerified: session.user.emailVerified,
                         });
                     }
 
@@ -172,6 +174,7 @@ export const useAuth = () => {
                     id: sessionData.user.id,
                     name: sessionData.user.name,
                     email: sessionData.user.email,
+                    emailVerified: sessionData.user.emailVerified,
                 });
             }
 

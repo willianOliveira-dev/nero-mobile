@@ -22,6 +22,7 @@ import { useLoginForm } from '@/src/hooks/auth/use-login-form';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { useAuthStore } from '@/src/store/use-auth.store';
 import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
@@ -31,11 +32,17 @@ export default function LoginScreen() {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
 
+    const user = useAuthStore((state) => state.user);
+
     useEffect(() => {
         if (isAuthenticated) {
-            router.push('/(public)/(tabs)/home');
+            if (user && !user.emailVerified) {
+                router.push({ pathname: '/(auth)/otp', params: { email: user.email } } as Parameters<typeof router.push>[0]);
+            } else {
+                router.push('/(public)/(tabs)/home');
+            }
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, user]);
 
     const {
         control,
@@ -60,7 +67,15 @@ export default function LoginScreen() {
             setServerError(result.error);
             return;
         }
-        router.replace('/(public)/(tabs)/home');
+        if (result && result.success && result.data && 'user' in result.data && result.data.user) {
+            if (!result.data.user.emailVerified) {
+                router.replace({ pathname: '/(auth)/otp', params: { email: result.data.user.email } } as Parameters<typeof router.replace>[0]);
+            } else {
+                router.replace('/(public)/(tabs)/home');
+            }
+        } else {
+            router.replace('/(public)/(tabs)/home'); // Fallback if type casting is weird
+        }
     }
 
     async function handleGoogleLogin() {
@@ -70,7 +85,15 @@ export default function LoginScreen() {
             setServerError(result.error);
             return;
         }
-        router.replace('/(public)/(tabs)/home');
+        if (result && result.success && result.data && 'user' in result.data && result.data.user) {
+            if (!result.data.user.emailVerified) {
+                router.replace({ pathname: '/(auth)/otp', params: { email: result.data.user.email } } as Parameters<typeof router.replace>[0]);
+            } else {
+                router.replace('/(public)/(tabs)/home');
+            }
+        } else {
+            router.replace('/(public)/(tabs)/home');
+        }
     }
 
     return (

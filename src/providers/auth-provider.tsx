@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 id: session.user.id,
                 name: session.user.name,
                 email: session.user.email,
+                emailVerified: session.user.emailVerified,
             });
         } else if (!isPending) {
             setUser(null);

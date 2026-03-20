@@ -6,6 +6,7 @@ interface User {
     id: string;
     name: string;
     email: string;
+    emailVerified: boolean;
     gender?: 'men' | 'women' | 'kids' | 'unisex';
 }
 
