@@ -46,31 +46,13 @@ export default function TabsLayout() {
                     sceneStyle: { backgroundColor: 'transparent' },
                 }}
             >
-                <Tabs.Screen name="home" />
-                
-                <Tabs.Screen name="search" />
-
-                <Tabs.Screen
-                    name="product/[slug]"
-                    options={{ headerShown: false }}
-                />
-
-                <Tabs.Screen
-                    name="categories"
-                    options={{ headerShown: false }}
-                />
-
-                <Tabs.Screen
-                    name="wishlist"
-                    options={{ headerShown: false }}
-                />
-
-                <Tabs.Screen
-                    name="products-by-category/[id]"
-                    options={{ headerShown: false }}
-                />
-
                 <Tabs.Protected guard={isAuthenticated}>
+                    <Tabs.Screen name="home" />
+                    <Tabs.Screen name="search" />
+                    <Tabs.Screen name="product/[slug]" options={{ headerShown: false }} />
+                    <Tabs.Screen name="categories" options={{ headerShown: false }} />
+                    <Tabs.Screen name="wishlist" options={{ headerShown: false }} />
+                    <Tabs.Screen name="products-by-category/[id]" options={{ headerShown: false }} />
                     <Tabs.Screen name="cart" />
                     <Tabs.Screen name="profile" />
                     <Tabs.Screen name="profile/edit" options={{ headerShown: false }} />

@@ -41,7 +41,7 @@ export default function OtpScreen() {
     const user = useAuthStore((state) => state.user);
     useEffect(() => {
         if (user?.emailVerified) {
-            router.replace('/(public)/(tabs)/home');
+            router.replace('/(private)/(tabs)/home');
         }
     }, [user?.emailVerified]);
 

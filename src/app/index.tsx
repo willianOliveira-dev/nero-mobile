@@ -11,7 +11,7 @@ export default function Index() {
         if (user && !user.emailVerified) {
             return <Redirect href={`/(auth)/otp?email=${user.email}`} />;
         }
-        return <Redirect href="/(public)/(tabs)/home" />;
+        return <Redirect href="/(private)/(tabs)/home" />;
     }
 
     return <Redirect href="/(auth)/login" />;

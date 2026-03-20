@@ -55,7 +55,7 @@ export default function PreferencesScreen() {
     }
 
     function handleSkip() {
-        router.replace('/(public)/(tabs)/home');
+        router.replace('/(private)/(tabs)/home');
     }
 
     const firstName = user?.name?.split(' ')[0] ?? '';

@@ -39,7 +39,7 @@ export default function LoginScreen() {
             if (user && !user.emailVerified) {
                 router.push({ pathname: '/(auth)/otp', params: { email: user.email } } as Parameters<typeof router.push>[0]);
             } else {
-                router.push('/(public)/(tabs)/home');
+                router.push('/(private)/(tabs)/home');
             }
         }
     }, [isAuthenticated, user]);
@@ -71,10 +71,10 @@ export default function LoginScreen() {
             if (!result.data.user.emailVerified) {
                 router.replace({ pathname: '/(auth)/otp', params: { email: result.data.user.email } } as Parameters<typeof router.replace>[0]);
             } else {
-                router.replace('/(public)/(tabs)/home');
+                router.replace('/(private)/(tabs)/home');
             }
         } else {
-            router.replace('/(public)/(tabs)/home'); // Fallback if type casting is weird
+            router.replace('/(private)/(tabs)/home'); // Fallback if type casting is weird
         }
     }
 
@@ -89,10 +89,10 @@ export default function LoginScreen() {
             if (!result.data.user.emailVerified) {
                 router.replace({ pathname: '/(auth)/otp', params: { email: result.data.user.email } } as Parameters<typeof router.replace>[0]);
             } else {
-                router.replace('/(public)/(tabs)/home');
+                router.replace('/(private)/(tabs)/home');
             }
         } else {
-            router.replace('/(public)/(tabs)/home');
+            router.replace('/(private)/(tabs)/home');
         }
     }
 
