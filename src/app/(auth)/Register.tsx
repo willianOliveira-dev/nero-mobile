@@ -84,7 +84,6 @@ export default function RegisterScreen() {
 
                     <VStack className="px-6 -mt-20 pb-10">
                         <VStack className="bg-white rounded-2xl p-6 gap-4 shadow-md">
-                            {/* Nome */}
                             <Controller
                                 control={control}
                                 name="name"
@@ -115,7 +114,6 @@ export default function RegisterScreen() {
                                 )}
                             />
 
-                            {/* Email */}
                             <Controller
                                 control={control}
                                 name="email"
@@ -147,7 +145,6 @@ export default function RegisterScreen() {
                                 )}
                             />
 
-                            {/* Senha */}
                             <Controller
                                 control={control}
                                 name="password"
@@ -188,7 +185,6 @@ export default function RegisterScreen() {
                                 )}
                             />
 
-                            {/* Confirmar Senha */}
                             <Controller
                                 control={control}
                                 name="confirmPassword"

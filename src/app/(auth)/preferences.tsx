@@ -41,7 +41,6 @@ export default function PreferencesScreen() {
                 },
             });
 
-            // Save gender to auth store so Home filters correctly
             if (user) {
                 setUser({
                     ...user,
@@ -49,9 +48,8 @@ export default function PreferencesScreen() {
                 });
             }
         } catch (error) {
-            // Silently ignore — preference is not critical
         }
-        router.replace('/(public)/(tabs)/home');
+        router.replace('/(private)/(tabs)/home');
     }
 
     function handleSkip() {
@@ -62,7 +60,7 @@ export default function PreferencesScreen() {
 
     return (
         <View className="flex-1">
-            {/* Full-screen gradient + image */}
+          
             <LinearGradient
                 colors={['#ff1a5e', '#d70040', '#9e002e']}
                 style={{ flex: 1 }}
@@ -75,7 +73,7 @@ export default function PreferencesScreen() {
                         justifyContent: 'flex-end',
                     }}
                 >
-                    {/* Bottom card overlay */}
+                 
                     <VStack className="bg-white rounded-t-4xl px-6 pt-8 pb-8">
                         <VStack className="gap-4">
                             <VStack className="gap-2">
@@ -87,7 +85,6 @@ export default function PreferencesScreen() {
                                 </Text>
                             </VStack>
 
-                            {/* Preference Options Grid */}
                             <HStack className="flex-wrap gap-3 justify-center mt-2">
                                 {PREFERENCE_OPTIONS.map((option) => {
                                     const isSelected = selectedPreference === option.value;

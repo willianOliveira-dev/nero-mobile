@@ -94,7 +94,6 @@ export default function OrdersListScreen() {
     return (
         <SafeAreaView className="flex-1 bg-white">
             <VStack className="flex-1 px-6">
-                {/* Header */}
                 <HStack className="items-center justify-between py-6">
                     <Pressable
                         onPress={() => goBack()}

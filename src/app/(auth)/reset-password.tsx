@@ -94,7 +94,6 @@ export default function ResetPasswordScreen() {
 
                     <VStack className="px-6 -mt-20 pb-10">
                         <VStack className="bg-white rounded-2xl p-6 gap-4 shadow-md">
-                            {/* OTP Code Input */}
                             <FormControl isInvalid={!!serverError && otpCode.length < 6}>
                                 <Input
                                     className={`h-12 rounded-xl border bg-white px-3.5 ${serverError && otpCode.length < 6 ? 'border-red-400' : 'border-gray-100'}`}
@@ -111,7 +110,6 @@ export default function ResetPasswordScreen() {
                                 </Input>
                             </FormControl>
 
-                            {/* Password */}
                             <Controller
                                 control={control}
                                 name="password"
@@ -152,7 +150,6 @@ export default function ResetPasswordScreen() {
                                 )}
                             />
 
-                            {/* Confirm Password */}
                             <Controller
                                 control={control}
                                 name="confirmPassword"
