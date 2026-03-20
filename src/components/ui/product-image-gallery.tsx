@@ -2,6 +2,7 @@ import { Box } from '@/src/components/gluestack/ui/box';
 import { Image } from 'expo-image';
 import React, { useCallback, useRef, useState } from 'react';
 import { Dimensions, FlatList, type ViewToken } from 'react-native';
+import { imagesPath } from '@/src/constants/images';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_HEIGHT = 420;
@@ -48,7 +49,7 @@ export function ProductImageGallery({ images }: ProductImageGalleryProps) {
                 renderItem={({ item }) => (
                     <Box style={{ width: SCREEN_WIDTH, height: IMAGE_HEIGHT }}>
                         <Image
-                            source={{ uri: item }}
+                            source={item ? { uri: item } : imagesPath.neroPlaceholder}
                             style={{ width: SCREEN_WIDTH, height: IMAGE_HEIGHT }}
                             contentFit="cover"
                             transition={200}

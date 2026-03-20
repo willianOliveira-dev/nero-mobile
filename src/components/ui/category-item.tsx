@@ -5,6 +5,7 @@ import { Image } from '../gluestack/ui/image';
 import { Pressable } from '../gluestack/ui/pressable';
 import { Text } from '../gluestack/ui/text';
 import { VStack } from '../gluestack/ui/vstack';
+import { imagesPath } from '@/src/constants/images';
 
 export interface CategoryItemProps {
     label: string;
@@ -29,7 +30,7 @@ export function CategoryItem({
                     )}
                 >
                     <Image
-                        source={{ uri: imageUri }}
+                        source={imageUri ? { uri: imageUri } : imagesPath.neroPlaceholder}
                         alt={label}
                         className="w-full h-full"
                         resizeMode="cover"

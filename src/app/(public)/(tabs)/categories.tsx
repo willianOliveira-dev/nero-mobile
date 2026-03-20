@@ -12,6 +12,7 @@ import { ArrowLeft, Grid2x2, ShoppingBag } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { imagesPath } from '@/src/constants/images';
 
 function CategoryCard({ category }: { category: ListCategories200Item }) {
     const router = useRouter();
@@ -31,16 +32,12 @@ function CategoryCard({ category }: { category: ListCategories200Item }) {
             accessibilityLabel={`Categoria ${category.name}`}
         >
             <Box className="w-10 h-10 rounded-full bg-white items-center justify-center overflow-hidden mr-4">
-                {category.imageUrl ? (
-                    <Image
-                        source={{ uri: category.imageUrl }}
-                        alt={category.name}
-                        className="w-full h-full"
-                        resizeMode="cover"
-                    />
-                ) : (
-                    <ShoppingBag size={20} color="#d4d4d4" />
-                )}
+                <Image
+                    source={category.imageUrl ? { uri: category.imageUrl } : imagesPath.neroPlaceholder}
+                    alt={category.name}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                />
             </Box>
 
             <Text

@@ -23,9 +23,7 @@ import { useRouter } from 'expo-router';
 import { Heart, ShoppingCart } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
-
-const AVATAR_URI =
-    'https://www.figma.com/api/mcp/asset/0e9d6c12-a83a-4d88-80ad-5360fa62c3a0';
+import { imagesPath } from '@/src/constants/images';
 
 type GenderFilter = 'unisex' | 'men' | 'women' | 'kids';
 
@@ -114,7 +112,7 @@ export default function HomeScreen() {
             <HStack className="items-center justify-between mb-4">
                 <Pressable onPress={() => router.push('/profile')}>
                     <Avatar size="md" className="rounded-full">
-                        <AvatarImage source={{ uri: me?.avatarUrl || AVATAR_URI }} />
+                        <AvatarImage source={me?.avatarUrl ? { uri: me?.avatarUrl } : imagesPath.avatarPlaceholder} />
                     </Avatar>
                 </Pressable>
 

@@ -6,6 +6,7 @@ import { Check, X } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import React from 'react';
 import { Modal, ScrollView } from 'react-native';
+import { imagesPath } from '@/src/constants/images';
 
 export interface SheetOptionItem {
     id: string;
@@ -97,7 +98,7 @@ export function SelectOptionSheet({
                                         <HStack className="items-center gap-4">
                                             {option.imageUrl && (
                                                 <Image
-                                                    source={{ uri: option.imageUrl }}
+                                                    source={option.imageUrl ? { uri: option.imageUrl } : imagesPath.neroPlaceholder}
                                                     style={{
                                                         width: 36,
                                                         height: 36,

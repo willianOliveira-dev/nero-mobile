@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { SelectOptionSheet } from './select-option-sheet';
+import { imagesPath } from '@/src/constants/images';
 
 // Single variationType item extracted from the nullable array
 type VariationTypeItem = NonNullable<GetProductBySlug200VariationTypes>[number];
@@ -130,7 +131,7 @@ function InlineChip({
         >
             {showImage ? (
                 <Image
-                    source={{ uri: option.imageUrl ?? undefined }}
+                    source={option.imageUrl ? { uri: option.imageUrl } : imagesPath.neroPlaceholder}
                     style={{ width: 52, height: 52, borderRadius: 10 }}
                     contentFit="cover"
                     transition={200}

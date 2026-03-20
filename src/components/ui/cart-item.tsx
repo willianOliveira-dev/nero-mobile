@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator } from 'react-native';
+import { imagesPath } from '@/src/constants/images';
 
 interface CartItemProps {
     item: GetCart200ItemsItem;
@@ -45,7 +46,7 @@ export function CartItem({ item }: CartItemProps) {
             <Box className="w-24 h-24 rounded-xl overflow-hidden bg-gray-50">
                 {item.product?.imageUrl ? (
                     <Image
-                        source={{ uri: item.product.imageUrl }}
+                        source={item.product?.imageUrl ? { uri: item.product.imageUrl } : imagesPath.neroPlaceholder}
                         alt={item.product?.name ?? 'Produto'}
                         className="w-full h-full"
                         resizeMode="cover"

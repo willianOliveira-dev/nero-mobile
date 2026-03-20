@@ -30,23 +30,18 @@ import { Image } from '@/src/components/gluestack/ui/image';
 import { CardBrandLogo, type CardBrand } from '@/src/components/ui/card-brand-logo';
 import { useCartStore } from '@/src/store/use-cart-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { imagesPath } from '@/src/constants/images';
 
 function CheckoutItem({ item }: { item: GetCart200ItemsItem }) {
     return (
         <HStack className="bg-white rounded-2xl p-3 gap-3 border border-border mb-2">
             <Box className="w-16 h-16 rounded-xl overflow-hidden bg-surface-muted">
-                {item.product?.imageUrl ? (
-                    <Image
-                        source={{ uri: item.product.imageUrl }}
-                        alt={item.product?.name ?? 'Produto'}
-                        className="w-full h-full"
-                        resizeMode="cover"
-                    />
-                ) : (
-                    <Box className="w-full h-full items-center justify-center">
-                        <ShoppingBag size={20} color="#9CA3AF" />
-                    </Box>
-                )}
+                <Image
+                    source={item.product?.imageUrl ? { uri: item.product.imageUrl } : imagesPath.neroPlaceholder}
+                    alt={item.product?.name ?? 'Produto'}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                />
             </Box>
             <VStack className="flex-1 justify-between">
                 <Text className="text-sm font-fredoka-medium text-secondary" numberOfLines={1}>

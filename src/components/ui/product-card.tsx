@@ -8,6 +8,7 @@ import { Pressable } from '../gluestack/ui/pressable';
 import { Text } from '../gluestack/ui/text';
 import { VStack } from '../gluestack/ui/vstack';
 import { useToggleWishlist } from '@/src/hooks/wishlist/use-toggle-wishlist';
+import { imagesPath } from '@/src/constants/images';
 export type BaseProductCardData = {
     id: string;
     slug: string;
@@ -66,7 +67,7 @@ export function ProductCard({
             <Box className="w-full h-56 relative bg-gray-100">
                 {product.thumbnailUrl ? (
                     <Image
-                        source={{ uri: product.thumbnailUrl }}
+                        source={product.thumbnailUrl ? { uri: product.thumbnailUrl } : imagesPath.neroPlaceholder}
                         alt={product.name}
                         className="w-full h-full"
                         resizeMode="cover"

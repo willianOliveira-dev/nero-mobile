@@ -9,15 +9,13 @@ import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
+import { imagesPath } from '@/src/constants/images';
 import { useAuth } from '@/src/hooks/auth/use-auth';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter, type Href } from 'expo-router';
 import { ChevronRight,  ImageUpIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
-
-const AVATAR_PLACEHOLDER =
-    'https://www.figma.com/api/mcp/asset/0e9d6c12-a83a-4d88-80ad-5360fa62c3a0';
 
 export default function ProfileScreen() {
     const router = useRouter();
@@ -101,10 +99,10 @@ export default function ProfileScreen() {
     };
 
     const menuItems: { label: string; route?: Href }[] = [
-        { label: 'Meus Pedidos', route: '/orders' as Href },
+        { label: 'Meus Pedidos', route: '/orders' },
         { label: 'Endereços', route: '/address' },
         { label: 'Lista de desejos', route: '/wishlist' },
-        { label: 'Formas de pagamento', route: '/checkout/payment' as Href },
+        { label: 'Formas de pagamento', route: '/checkout/payment' },
         { label: 'Help' },
         { label: 'Support' },
     ];
@@ -126,7 +124,7 @@ export default function ProfileScreen() {
                             <Box className="relative rounded-full overflow-hidden">
                                 <Avatar size="2xl" className="rounded-full bg-gray-100 overflow-hidden">
                                     <AvatarImage
-                                        source={{ uri: me?.avatarUrl || AVATAR_PLACEHOLDER }}
+                                        source={me?.avatarUrl ? { uri: me?.avatarUrl } : imagesPath.avatarPlaceholder}
                                         className="w-full h-full"
                                         resizeMode="cover"
                                     />

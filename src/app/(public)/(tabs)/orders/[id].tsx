@@ -12,7 +12,7 @@ import { ChevronLeft, Copy, CreditCard, MapPin } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 
-const IMAGE_PLACEHOLDER = 'https://placehold.co/150x150/png';
+import { imagesPath } from '@/src/constants/images';
 
 function SectionHeader({ title }: { title: string }) {
     return (
@@ -148,7 +148,7 @@ export default function OrderDetailsScreen() {
                             return (
                                 <HStack key={index} className="bg-white border border-border rounded-xl p-3 gap-3">
                                     <Image
-                                        source={{ uri: item.product.imageUrl || IMAGE_PLACEHOLDER }}
+                                        source={item.product.imageUrl ? { uri: item.product.imageUrl } : imagesPath.neroPlaceholder}
                                         className="w-16 h-16 rounded-lg bg-gray-100"
                                         alt={item.product.name}
                                     />

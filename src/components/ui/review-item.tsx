@@ -6,6 +6,7 @@ import type { ListReviews200ItemsItem } from '@/src/api/generated/model/listRevi
 import { Star, CheckCircle2 } from 'lucide-react-native';
 import { Image } from 'expo-image';
 import React from 'react';
+import { imagesPath } from '@/src/constants/images';
 
 interface ReviewItemProps {
     review: ListReviews200ItemsItem;
@@ -26,7 +27,7 @@ export function ReviewItem({ review }: ReviewItemProps) {
                     <Box className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
                         {review.user?.avatar ? (
                             <Image
-                                source={{ uri: review.user.avatar }}
+                                source={review.user.avatar ? { uri: review.user.avatar } : imagesPath.avatarPlaceholder}
                                 style={{ width: 40, height: 40, borderRadius: 20 }}
                                 contentFit="cover"
                                 transition={200}
