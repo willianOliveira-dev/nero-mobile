@@ -1,6 +1,5 @@
 import { authClient } from '@/src/lib/auth-client';
 import { googleSignIn, googleSignOut } from '@/src/lib/google';
-import * as SecureStore from 'expo-secure-store';
 import type {
     LoginFormData,
     RegisterFormData,
@@ -8,7 +7,9 @@ import type {
 import { useAuthStore } from '@/src/store/use-auth.store';
 import { useCartStore } from '@/src/store/use-cart-store';
 import { useSearchStore } from '@/src/store/use-search-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQueryClient } from '@tanstack/react-query';
+import * as SecureStore from 'expo-secure-store';
 import { useCallback, useState } from 'react';
 
 type OAuthProvider = 'google';
@@ -115,7 +116,6 @@ export const useAuth = () => {
                 return { success: false, error: error.message };
             }
 
-            // Do NOT set user here - user must verify OTP first
             return { success: true, data: session };
         },
         [],
@@ -166,7 +166,6 @@ export const useAuth = () => {
 
             if (error) return { success: false, error: error.message };
 
-            // After successful OTP, fetch the session and set user in store
             const { data: sessionData } = await authClient.getSession();
             if (sessionData?.user) {
                 setUser({
@@ -204,23 +203,27 @@ export const useAuth = () => {
     const signOut = useCallback(async () => {
         setIsSignOutLoading(true);
         try {
-            await googleSignOut();
-            await authClient.signOut();
-            await SecureStore.deleteItemAsync('nero_better-auth.session_token').catch(() => null);
-            
-            setUser(null);
+            await SecureStore.deleteItemAsync('nero_cookie');
+            await SecureStore.deleteItemAsync('nero_session_data');
 
+            await AsyncStorage.removeItem('auth-storage');
+            await AsyncStorage.removeItem('cart-storage');
+
+            useAuthStore.getState().logout();
             useCartStore.getState().setItemCount(0);
             useSearchStore.getState().clearFilters();
-            
+
             queryClient.clear();
+
+            try { await authClient.signOut(); } catch (e) { console.log('signOut server:', e); }
             
+            try { await googleSignOut(); } catch (e) { console.log('googleSignOut:', e); }
         } catch (error) {
             console.log('Erro ao sair:', error);
         } finally {
             setIsSignOutLoading(false);
         }
-    }, [setUser, queryClient]);
+    }, [queryClient]);
 
     const isLoading = useCallback(() => {
         return (

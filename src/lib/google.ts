@@ -21,6 +21,7 @@ export async function googleSignIn() {
 
 export async function googleSignOut() {
     try {
+        await GoogleSignin.revokeAccess();
         await GoogleSignin.signOut();
     } catch (error) {
         console.log('Erro ao deslogar do Google:', error);
