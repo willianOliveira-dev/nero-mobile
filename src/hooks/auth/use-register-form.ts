@@ -1,11 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import {
-    registerSchema,
-    RegisterFormData,
-} from '../../schemas/auth/auth.schema';
+import { registerSchema, type RegisterFormData } from '../../schemas/auth/auth.schema';
 
-export const useRegisterForm = (defaultValues?: Partial<RegisterFormData>) => {
+export const useRegisterForm = () => {
     const form = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -13,7 +10,6 @@ export const useRegisterForm = (defaultValues?: Partial<RegisterFormData>) => {
             email: '',
             password: '',
             confirmPassword: '',
-            ...defaultValues,
         },
     });
 

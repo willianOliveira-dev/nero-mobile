@@ -1,11 +1,9 @@
 import { Button, ButtonText } from '@/src/components/gluestack/ui/button';
-import { Divider } from '@/src/components/gluestack/ui/divider';
 import {
     FormControl,
     FormControlError,
     FormControlErrorText,
 } from '@/src/components/gluestack/ui/form-control';
-import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { Image } from '@/src/components/gluestack/ui/image';
 import {
     Input,
@@ -15,41 +13,53 @@ import {
 import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
+import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { imagesPath } from '@/src/constants/images';
 import { useAuth } from '@/src/hooks/auth/use-auth';
-import { useRegisterForm } from '@/src/hooks/auth/use-register-form';
+import { useResetPasswordForm } from '@/src/hooks/auth/use-reset-password-form';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, TextInput as RNTextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { RegisterFormData } from '@/src/schemas/auth/auth.schema';
+import type { ResetPasswordFormData } from '@/src/schemas/auth/auth.schema';
 
-export default function RegisterScreen() {
+export default function ResetPasswordScreen() {
     const router = useRouter();
+    const params = useLocalSearchParams<{ email: string }>();
+    const email = params.email ?? '';
 
     const {
         control,
         handleSubmit,
         formState: { errors },
-    } = useRegisterForm();
+    } = useResetPasswordForm();
 
-    const { signUp, isSignUpLoading } = useAuth();
+    const { resetPassword, isResetPasswordLoading } = useAuth();
 
     const [serverError, setServerError] = useState<string | null>(null);
+    const [otpCode, setOtpCode] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    async function onSubmit(data: RegisterFormData) {
+    async function onSubmit(data: ResetPasswordFormData) {
         setServerError(null);
-        const result = await signUp(data);
-        if (result && !result.success && result.error) {
-            setServerError(result.error);
+        if (!otpCode || otpCode.length < 6) {
+            setServerError('Digite o código de 6 dígitos.');
             return;
         }
-        router.push({ pathname: '/otp', params: { email: data.email } } as Parameters<typeof router.push>[0]);
+        if (!email) {
+            setServerError('E-mail não encontrado. Tente novamente.');
+            return;
+        }
+        const result = await resetPassword(email, otpCode, data.password);
+        if (!result.success) {
+            setServerError(result.error ?? 'Erro ao redefinir senha.');
+            return;
+        }
+        router.replace('/login');
     }
 
     return (
@@ -75,79 +85,33 @@ export default function RegisterScreen() {
                             alt="Nero logo"
                         />
                         <Text className="text-white text-3xl font-fredoka-bold text-center">
-                            Criar conta
+                            Nova senha
                         </Text>
                         <Text className="text-white/80 text-md mt-3 text-center">
-                            Preencha os dados para se cadastrar
+                            Digite o código e sua nova senha
                         </Text>
                     </LinearGradient>
 
                     <VStack className="px-6 -mt-20 pb-10">
                         <VStack className="bg-white rounded-2xl p-6 gap-4 shadow-md">
-                            {/* Nome */}
-                            <Controller
-                                control={control}
-                                name="name"
-                                render={({
-                                    field: { onChange, value, onBlur },
-                                }) => (
-                                    <FormControl isInvalid={!!errors.name}>
-                                        <Input
-                                            className={`h-12 rounded-xl border bg-white px-3.5 ${errors.name ? 'border-red-400' : 'border-gray-100'}`}
-                                        >
-                                            <InputField
-                                                className="flex-1 text-sm text-gray-900 font-fredoka-medium"
-                                                placeholder="Nome completo"
-                                                placeholderTextColor="#9ca3af"
-                                                value={value}
-                                                onChangeText={onChange}
-                                                onBlur={onBlur}
-                                                autoCapitalize="words"
-                                                autoComplete="name"
-                                            />
-                                        </Input>
-                                        <FormControlError>
-                                            <FormControlErrorText className="text-red-500 text-xs ml-1">
-                                                {errors.name?.message}
-                                            </FormControlErrorText>
-                                        </FormControlError>
-                                    </FormControl>
-                                )}
-                            />
+                            {/* OTP Code Input */}
+                            <FormControl isInvalid={!!serverError && otpCode.length < 6}>
+                                <Input
+                                    className={`h-12 rounded-xl border bg-white px-3.5 ${serverError && otpCode.length < 6 ? 'border-red-400' : 'border-gray-100'}`}
+                                >
+                                    <InputField
+                                        className="flex-1 text-sm text-gray-900 font-fredoka-medium tracking-widest text-center"
+                                        placeholder="Código de 6 dígitos"
+                                        placeholderTextColor="#9ca3af"
+                                        value={otpCode}
+                                        onChangeText={(text) => setOtpCode(text.replace(/[^0-9]/g, '').slice(0, 6))}
+                                        keyboardType="number-pad"
+                                        maxLength={6}
+                                    />
+                                </Input>
+                            </FormControl>
 
-                            {/* Email */}
-                            <Controller
-                                control={control}
-                                name="email"
-                                render={({
-                                    field: { onChange, value, onBlur },
-                                }) => (
-                                    <FormControl isInvalid={!!errors.email}>
-                                        <Input
-                                            className={`h-12 rounded-xl border bg-white px-3.5 ${errors.email ? 'border-red-400' : 'border-gray-100'}`}
-                                        >
-                                            <InputField
-                                                className="flex-1 text-sm text-gray-900 font-fredoka-medium"
-                                                placeholder="seu@email.com"
-                                                placeholderTextColor="#9ca3af"
-                                                value={value}
-                                                onChangeText={onChange}
-                                                onBlur={onBlur}
-                                                autoCapitalize="none"
-                                                keyboardType="email-address"
-                                                autoComplete="email"
-                                            />
-                                        </Input>
-                                        <FormControlError>
-                                            <FormControlErrorText className="text-red-500 text-xs ml-1">
-                                                {errors.email?.message}
-                                            </FormControlErrorText>
-                                        </FormControlError>
-                                    </FormControl>
-                                )}
-                            />
-
-                            {/* Senha */}
+                            {/* Password */}
                             <Controller
                                 control={control}
                                 name="password"
@@ -160,7 +124,7 @@ export default function RegisterScreen() {
                                         >
                                             <InputField
                                                 className="flex-1 text-sm text-gray-900 font-fredoka-medium"
-                                                placeholder="Senha"
+                                                placeholder="Nova senha"
                                                 placeholderTextColor="#9ca3af"
                                                 value={value}
                                                 onChangeText={onChange}
@@ -188,7 +152,7 @@ export default function RegisterScreen() {
                                 )}
                             />
 
-                            {/* Confirmar Senha */}
+                            {/* Confirm Password */}
                             <Controller
                                 control={control}
                                 name="confirmPassword"
@@ -201,7 +165,7 @@ export default function RegisterScreen() {
                                         >
                                             <InputField
                                                 className="flex-1 text-sm text-gray-900 font-fredoka-medium"
-                                                placeholder="Confirmar senha"
+                                                placeholder="Confirmar nova senha"
                                                 placeholderTextColor="#9ca3af"
                                                 value={value}
                                                 onChangeText={onChange}
@@ -230,35 +194,32 @@ export default function RegisterScreen() {
                             />
 
                             {serverError && (
-                                <Text className="text-red-500 text-xs text-center -mt-2">
+                                <Text className="text-red-500 text-xs text-center">
                                     {serverError}
                                 </Text>
                             )}
 
                             <Button
                                 onPress={handleSubmit(onSubmit)}
-                                disabled={isSignUpLoading}
+                                disabled={isResetPasswordLoading}
                                 className="h-12 bg-primary rounded-xl active:opacity-90"
                             >
-                                {isSignUpLoading ? (
+                                {isResetPasswordLoading ? (
                                     <ActivityIndicator color="#fff" />
                                 ) : (
                                     <ButtonText className="text-white text-sm font-fredoka-medium">
-                                        Criar conta
+                                        Redefinir senha
                                     </ButtonText>
                                 )}
                             </Button>
 
                             <HStack className="items-center justify-center gap-1.5">
-                                <Text className="text-gray-400 text-xs font-fredoka-medium">
-                                    Já possui uma conta?
-                                </Text>
                                 <Pressable
                                     className="active:opacity-70"
                                     onPress={() => router.replace('/login')}
                                 >
                                     <Text className="text-blue-500 text-xs font-fredoka-semibold">
-                                        Fazer login
+                                        Voltar ao login
                                     </Text>
                                 </Pressable>
                             </HStack>

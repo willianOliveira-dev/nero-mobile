@@ -8,6 +8,7 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { FormControl, FormControlError, FormControlErrorText } from '@/src/components/gluestack/ui/form-control';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
+import { useAuthStore } from '@/src/store/use-auth.store';
 import { ChevronLeft } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, ScrollView, TextInput } from 'react-native';
@@ -21,6 +22,9 @@ export default function EditProfileScreen() {
     const { goBack } = useSafeBack();
     const { data: me, isPending: isMePending, refetch } = useGetMe();
     const { mutateAsync: updateMe, isPending: isUpdating } = useUpdateMe();
+    
+    const user = useAuthStore((state) => state.user);
+    const setUser = useAuthStore((state) => state.setUser);
 
     const form = useProfileForm();
     const { control, handleSubmit, reset } = form;
@@ -45,6 +49,16 @@ export default function EditProfileScreen() {
                 },
             });
             await refetch();
+            
+            // Sync with auth store so other screens react immediately
+            if (user) {
+                setUser({
+                    ...user,
+                    name: data.name,
+                    gender: data.genderPreference,
+                });
+            }
+
             goBack();
         } catch (error) {
             console.log('Erro ao atualizar perfil:', error);
