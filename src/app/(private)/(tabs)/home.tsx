@@ -184,6 +184,7 @@ export default function HomeScreen() {
                         titleClassName={
                             section.slug === 'new-in' ? 'text-primary' : ''
                         }
+                        onSeeAll={() => router.push('/search')}
                     />
                     <ScrollView
                         horizontal
@@ -202,7 +203,10 @@ export default function HomeScreen() {
             ))}
 
         
-            <SectionHeader title="Para você" />
+            <SectionHeader
+                title="Para você"
+                onSeeAll={() => router.push('/search')}
+            />
             <Box className="h-4" />
         </VStack>
     );
