@@ -74,7 +74,7 @@ export default function LoginScreen() {
                 router.replace('/(private)/(tabs)/home');
             }
         } else {
-            router.replace('/(private)/(tabs)/home'); // Fallback if type casting is weird
+            router.replace('/(private)/(tabs)/home');
         }
     }
 
@@ -86,8 +86,13 @@ export default function LoginScreen() {
             return;
         }
         if (result && result.success && result.data && 'user' in result.data && result.data.user) {
+            const userCreatedAt = new Date(result.data.user.createdAt).getTime();
+            const isNewUser = Date.now() - userCreatedAt < 15000;
+
             if (!result.data.user.emailVerified) {
                 router.replace({ pathname: '/(auth)/otp', params: { email: result.data.user.email } } as Parameters<typeof router.replace>[0]);
+            } else if (isNewUser) {
+                router.replace('/preferences');
             } else {
                 router.replace('/(private)/(tabs)/home');
             }
