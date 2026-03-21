@@ -27,7 +27,13 @@ export default function AddressListScreen() {
         isRefetching,
     } = useListAddresses();
     
-    const { mutateAsync: setDefaultAddress, isPending: isSettingDefault } = useSetDefaultAddress();
+    const { mutateAsync: setDefaultAddress, isPending: isSettingDefault } = useSetDefaultAddress({
+        mutation: {
+            meta: {
+                successMessage: 'Endereço definido como padrão com sucesso!'
+            }
+        }
+    });
 
     const sortedAddresses = addresses
         ? [...addresses].sort((a, b) => (a.isDefault ? -1 : b.isDefault ? 1 : 0))

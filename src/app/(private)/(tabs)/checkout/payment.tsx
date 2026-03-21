@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, CreditCard, Plus, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
+import { toast } from 'sonner-native';
 import type { ListPaymentMethods200Item } from '@/src/api/generated/model';
 import {
     getListPaymentMethodsQueryKey,
@@ -106,8 +107,20 @@ export default function CheckoutPaymentScreen() {
 
     const { data: methods, isPending, refetch, isRefetching } = useListPaymentMethods();
     const { mutateAsync: createSetupIntent, isPending: isCreatingSetup } = useCreateSetupIntent();
-    const { mutateAsync: setDefault, isPending: isSettingDefault } = useSetDefaultPaymentMethod();
-    const { mutateAsync: deleteMethod, isPending: isDeleting } = useDeletePaymentMethod();
+    const { mutateAsync: setDefault, isPending: isSettingDefault } = useSetDefaultPaymentMethod({
+        mutation: {
+            meta: {
+                successMessage: 'Cartão definido como padrão com sucesso!',
+            }
+        }
+    });
+    const { mutateAsync: deleteMethod, isPending: isDeleting } = useDeletePaymentMethod({
+        mutation: {
+            meta: {
+                successMessage: 'Cartão removido com sucesso!',
+            }
+        }
+    });
 
     const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
@@ -139,6 +152,7 @@ export default function CheckoutPaymentScreen() {
                 queryClient.invalidateQueries({
                     queryKey: getListPaymentMethodsQueryKey(),
                 });
+                toast.success('Cartão adicionado com sucesso!');
             }, 2000);
 
 

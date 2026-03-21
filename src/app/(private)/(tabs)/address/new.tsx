@@ -22,7 +22,13 @@ import { useRouter } from 'expo-router';
 export default function NewAddressScreen() {
     const router = useRouter();
     const queryClient = useQueryClient();
-    const { mutateAsync: createAddress, isPending: isCreating } = useCreateAddress();
+    const { mutateAsync: createAddress, isPending: isCreating } = useCreateAddress({
+        mutation: {
+            meta: {
+                successMessage: 'Endereço cadastrado com sucesso!'
+            }
+        }
+    });
     const { mutateAsync: setDefaultAddress } = useSetDefaultAddress();
 
     const form = useAddressForm();

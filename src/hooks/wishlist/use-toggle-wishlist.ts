@@ -22,6 +22,9 @@ export function useToggleWishlist(productId: string, initialIsWishlisted: boolea
             onError: () => {
                 setIsWishlisted(false);
             },
+            meta: {
+                successMessage: 'Produto adicionado aos favoritos!',
+            }
         },
     });
 
@@ -33,6 +36,9 @@ export function useToggleWishlist(productId: string, initialIsWishlisted: boolea
             onError: () => {
                 setIsWishlisted(true);
             },
+            meta: {
+                successMessage: 'Produto removido dos favoritos!',
+            }
         },
     });
 

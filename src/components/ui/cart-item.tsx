@@ -23,11 +23,16 @@ export function CartItem({ item }: CartItemProps) {
         queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
 
     const { mutate: updateQuantity, isPending: isUpdating } = useUpdateCartItem({
-        mutation: { onSuccess: invalidateCart },
+        mutation: { 
+            onSuccess: invalidateCart,
+        },
     });
 
     const { mutate: removeItem, isPending: isRemoving } = useRemoveCartItem({
-        mutation: { onSuccess: invalidateCart },
+        mutation: { 
+            onSuccess: invalidateCart,
+            meta: { successMessage: 'Produto removido do carrinho!' }
+        },
     });
 
     const variantLabels = item.sku?.optionLabels

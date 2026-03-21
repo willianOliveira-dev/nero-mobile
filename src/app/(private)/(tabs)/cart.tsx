@@ -84,6 +84,9 @@ export default function CartScreen() {
         mutation: {
             onSuccess: () =>
                 queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() }),
+            meta: {
+                successMessage: 'Seu carrinho foi esvaziado!',
+            }
         },
     });
 

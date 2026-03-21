@@ -32,8 +32,20 @@ export default function EditAddressScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const { data: addresses, isPending: isFetching } = useListAddresses();
-    const { mutateAsync: updateAddress, isPending: isUpdating } = useUpdateAddress();
-    const { mutateAsync: deleteAddress, isPending: isDeleting } = useDeleteAddress();
+    const { mutateAsync: updateAddress, isPending: isUpdating } = useUpdateAddress({
+        mutation: {
+            meta: {
+                successMessage: 'Endereço atualizado com sucesso!'
+            }
+        }
+    });
+    const { mutateAsync: deleteAddress, isPending: isDeleting } = useDeleteAddress({
+        mutation: {
+            meta: {
+                successMessage: 'Endereço removido com sucesso!'
+            }
+        }
+    });
 
     const form = useAddressForm();
     const { control, handleSubmit, reset } = form;
