@@ -8,7 +8,6 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { ChevronLeft, ChevronRight, Package, Clock, CheckCircle2, XCircle, Truck } from 'lucide-react-native';
-import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { useListOrders } from '@/src/api/generated/orders/orders';
 
 function OrderStatusBadge({ status }: { status: string }) {
@@ -105,61 +104,60 @@ export default function OrdersListScreen() {
                     <Box className="w-10" />
                 </HStack>
 
-                {orders.length === 0 ? (
-                    <VStack className="flex-1 items-center justify-center gap-4">
-                        <Package size={64} color="#d1d5db" />
-                        <Text className="text-lg font-fredoka-semibold text-text-muted text-center">
-                            Você ainda não tem nenhum pedido.
-                        </Text>
-                    </VStack>
-                ) : (
-                    <FlatList
-                        data={orders}
-                        keyExtractor={(item) => item.id}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingBottom: 40 }}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={isRefetching}
-                                onRefresh={refetch}
-                                colors={['#d70040']}
-                                tintColor="#d70040"
-                            />
-                        }
-                        renderItem={({ item }) => (
-                            <Pressable
-                                onPress={() => handlePressOrder(item.id)}
-                                className="bg-surface-muted rounded-2xl p-4 mb-4"
-                            >
-                                <HStack className="justify-between items-start mb-3">
-                                    <VStack className="gap-1">
-                                        <Text className="text-sm font-fredoka-semibold text-[#272727]">
-                                            Pedido #{item.id.split('-')[0].toUpperCase()}
-                                        </Text>
-                                        <Text className="text-xs font-fredoka text-text-muted">
-                                            {new Date(item.createdAt).toLocaleDateString('pt-BR')}
-                                        </Text>
-                                    </VStack>
-                                    <OrderStatusBadge status={item.status} />
-                                </HStack>
-
-                                <Box className="border-t border-border my-2" />
-
-                                <HStack className="justify-between items-center mt-2">
-                                    <Text className="text-sm font-fredoka text-text-muted">
-                                        {item.itemCount} {item.itemCount === 1 ? 'item' : 'itens'}
+                <FlatList
+                    data={orders}
+                    keyExtractor={(item) => item.id}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 40, flexGrow: 1 }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
+                            colors={['#d70040']}
+                            tintColor="#d70040"
+                        />
+                    }
+                    ListEmptyComponent={
+                        <VStack className="flex-1 items-center justify-center gap-4">
+                            <Package size={64} color="#d1d5db" />
+                            <Text className="text-lg font-fredoka-semibold text-text-muted text-center">
+                                Você ainda não tem nenhum pedido.
+                            </Text>
+                        </VStack>
+                    }
+                    renderItem={({ item }) => (
+                        <Pressable
+                            onPress={() => handlePressOrder(item.id)}
+                            className="bg-surface-muted rounded-2xl p-4 mb-4"
+                        >
+                            <HStack className="justify-between items-start mb-3">
+                                <VStack className="gap-1">
+                                    <Text className="text-sm font-fredoka-semibold text-[#272727]">
+                                        Pedido #{item.id.split('-')[0].toUpperCase()}
                                     </Text>
-                                    <HStack className="items-center gap-2">
-                                        <Text className="text-base font-fredoka-bold text-secondary">
-                                            {item.total?.formatted}
-                                        </Text>
-                                        <ChevronRight size={16} color="#9ca3af" />
-                                    </HStack>
+                                    <Text className="text-xs font-fredoka text-text-muted">
+                                        {new Date(item.createdAt).toLocaleDateString('pt-BR')}
+                                    </Text>
+                                </VStack>
+                                <OrderStatusBadge status={item.status} />
+                            </HStack>
+
+                            <Box className="border-t border-border my-2" />
+
+                            <HStack className="justify-between items-center mt-2">
+                                <Text className="text-sm font-fredoka text-text-muted">
+                                    {item.itemCount} {item.itemCount === 1 ? 'item' : 'itens'}
+                                </Text>
+                                <HStack className="items-center gap-2">
+                                    <Text className="text-base font-fredoka-bold text-secondary">
+                                        {item.total?.formatted}
+                                    </Text>
+                                    <ChevronRight size={16} color="#9ca3af" />
                                 </HStack>
-                            </Pressable>
-                        )}
-                    />
-                )}
+                            </HStack>
+                        </Pressable>
+                    )}
+                />
             </VStack>
         </SafeAreaView>
     );

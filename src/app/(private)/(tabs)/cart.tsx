@@ -15,7 +15,7 @@ import { useRouter, type Href } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, ShoppingBag, Trash2 } from 'lucide-react-native';
 import React, { useEffect } from 'react';
-import { FlatList, StatusBar } from 'react-native';
+import { FlatList, StatusBar, RefreshControl } from 'react-native';
 
 function CartSkeleton() {
     return (
@@ -78,7 +78,7 @@ export default function CartScreen() {
     const queryClient = useQueryClient();
     const setItemCount = useCartStore((s) => s.setItemCount);
 
-    const { data: cart, isPending } = useGetCart();
+    const { data: cart, isPending, refetch, isRefetching } = useGetCart();
 
     const { mutate: clearCart, isPending: isClearing } = useClearCart({
         mutation: {
@@ -111,34 +111,16 @@ export default function CartScreen() {
         );
     }
 
-    if (!cart || cart.items.length === 0) {
-        return (
-            <SafeAreaView className="flex-1 bg-white">
-                <StatusBar barStyle="dark-content" />
-                <HStack className="items-center justify-between px-5 py-3">
-                    <Pressable onPress={() => goBack()}>
-                        <ArrowLeft size={22} color="#272727" />
-                    </Pressable>
-                    <Text className="text-lg font-fredoka-semibold text-typography-900">
-                        Carrinho
-                    </Text>
-                    <Box className="w-6" />
-                </HStack>
-                <EmptyCart />
-            </SafeAreaView>
-        );
-    }
-
     const renderItem = ({ item }: { item: GetCart200ItemsItem }) => (
         <Box className="px-5 mb-3">
             <CartItem item={item} />
         </Box>
     );
 
-    const discountCents = cart.totals.subtotal.cents + cart.totals.shipping.cents - cart.totals.total.cents;
+    const discountCents = cart ? cart.totals.subtotal.cents + cart.totals.shipping.cents - cart.totals.total.cents : 0;
     const discountFormatted = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(discountCents / 100);
 
-    const ListFooter = (
+    const ListFooter = cart ? (
         <VStack className="px-5 gap-4 pb-36">
             <CouponSection appliedCoupon={cart.coupon} />
 
@@ -193,7 +175,7 @@ export default function CartScreen() {
                 </Text>
             </Pressable>
         </VStack>
-    );
+    ) : null;
 
     return (
         <SafeAreaView className="flex-1 bg-white">
@@ -204,11 +186,11 @@ export default function CartScreen() {
                     <ArrowLeft size={22} color="#272727" />
                 </Pressable>
                 <Text className="text-lg font-fredoka-semibold text-typography-900">
-                    Carrinho ({cart.totals.itemCount})
+                    Carrinho ({cart?.totals?.itemCount ?? 0})
                 </Text>
                 <Pressable
                     onPress={() => clearCart()}
-                    disabled={isClearing}
+                    disabled={isClearing || !cart || cart.items.length === 0}
                     accessibilityLabel="Limpar carrinho"
                 >
                     <Trash2 size={20} color={isClearing ? '#D1D5DB' : '#EF4444'} />
@@ -216,12 +198,21 @@ export default function CartScreen() {
             </HStack>
 
             <FlatList
-                data={cart.items}
+                data={cart?.items ?? []}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
-                ListFooterComponent={ListFooter}
+                ListEmptyComponent={<EmptyCart />}
+                ListFooterComponent={cart && cart.items.length > 0 ? ListFooter : null}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingTop: 8 }}
+                contentContainerStyle={{ paddingTop: 8, flexGrow: 1 }}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefetching}
+                        onRefresh={refetch}
+                        colors={['#d70040']}
+                        tintColor="#d70040"
+                    />
+                }
             />
         </SafeAreaView>
     );

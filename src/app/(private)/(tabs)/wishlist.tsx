@@ -6,12 +6,12 @@ import { ProductCard } from '@/src/components/ui/product-card';
 import { useGetWishlist } from '@/src/api/generated/wishlist/wishlist';
 import { HeartCrack } from 'lucide-react-native';
 import React from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function WishlistScreen() {
-    const { data: wishlistData, isLoading, refetch } = useGetWishlist();
+    const { data: wishlistData, isLoading, refetch, isRefetching } = useGetWishlist();
 
     const products = wishlistData?.items ?? [];
 
@@ -45,8 +45,14 @@ export default function WishlistScreen() {
                             />
                         </Box>
                     )}
-                    refreshing={isLoading}
-                    onRefresh={refetch}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
+                            colors={['#d70040']}
+                            tintColor="#d70040"
+                        />
+                    }
                     ListEmptyComponent={
                         <VStack className="flex-1 items-center justify-center pt-32 space-y-4">
                             <HeartCrack size={64} color="#d4d4d4" />

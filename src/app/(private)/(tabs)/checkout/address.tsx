@@ -1,7 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, Check, MapPin, Plus } from 'lucide-react-native';
 
 import { useListAddresses } from '@/src/api/generated/addresses/addresses';
@@ -76,7 +75,7 @@ export default function CheckoutAddressScreen() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
 
-    const { data: addresses, isPending } = useListAddresses();
+    const { data: addresses, isPending, refetch, isRefetching } = useListAddresses();
 
     const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
@@ -133,6 +132,14 @@ export default function CheckoutAddressScreen() {
                         keyExtractor={(item) => item.id}
                         contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 120 }}
                         showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={isRefetching}
+                                onRefresh={refetch}
+                                colors={['#d70040']}
+                                tintColor="#d70040"
+                            />
+                        }
                         ListEmptyComponent={
                             <VStack className="items-center justify-center py-16 gap-4">
                                 <Box className="w-20 h-20 rounded-full bg-surface-muted items-center justify-center">

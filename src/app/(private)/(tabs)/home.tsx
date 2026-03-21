@@ -23,7 +23,7 @@ import { useRouter } from 'expo-router';
 import { Linking } from 'react-native';
 import {  ShoppingCart } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, ScrollView, StatusBar, RefreshControl } from 'react-native';
 import { imagesPath } from '@/src/constants/images';
 
 type GenderFilter = 'unisex' | 'men' | 'women' | 'kids';
@@ -51,11 +51,18 @@ export default function HomeScreen() {
     const {
         data: homeResponse,
         isPending: isHomePending,
+        refetch: refetchHome,
+        isRefetching: isRefetchingHome,
     } = useGetHome({ gender: selectedGender });
 
     const sections = homeResponse ?? [];
 
-    const { data: categoriesData } = useListCategories();
+    const { 
+        data: categoriesData,
+        refetch: refetchCategories,
+        isRefetching: isRefetchingCategories,
+    } = useListCategories();
+    
     const visibleCategories = useMemo(
         () => (categoriesData ?? []).slice(0, MAX_VISIBLE_CATEGORIES),
         [categoriesData],
@@ -69,11 +76,19 @@ export default function HomeScreen() {
         hasNextPage,
         isFetchingNextPage,
         isPending: isProductsPending,
+        refetch: refetchProducts,
+        isRefetching: isRefetchingProducts,
     } = useInfiniteProducts({
         gender: selectedGender,
         limit: 20,
         sort: 'recommended',
     });
+
+    const isRefreshing = isRefetchingHome || isRefetchingCategories || isRefetchingProducts;
+
+    const handleRefresh = useCallback(async () => {
+        await Promise.all([refetchHome(), refetchCategories(), refetchProducts()]);
+    }, [refetchHome, refetchCategories, refetchProducts]);
 
     const allProducts = useMemo(
         () => productsData?.pages.flatMap((page) => page.items) ?? [],
@@ -229,6 +244,14 @@ export default function HomeScreen() {
                 }}
                 columnWrapperStyle={{ marginHorizontal: -6 }}
                 showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefreshing}
+                        onRefresh={handleRefresh}
+                        colors={['#d70040']}
+                        tintColor="#d70040"
+                    />
+                }
                 ListHeaderComponent={ListHeader}
                 onEndReached={handleLoadMore}
                 onEndReachedThreshold={0.8}

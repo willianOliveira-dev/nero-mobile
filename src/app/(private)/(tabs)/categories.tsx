@@ -8,9 +8,9 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { useRouter } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
-import { ArrowLeft, Grid2x2, ShoppingBag } from 'lucide-react-native';
+import { ArrowLeft,  Tag } from 'lucide-react-native';
 import React from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { imagesPath } from '@/src/constants/images';
 
@@ -53,7 +53,7 @@ function CategoryCard({ category }: { category: ListCategories200Item }) {
 export default function CategoriesScreen() {
     const router = useRouter();
     const { goBack } = useSafeBack();
-    const { data: categories, isPending } = useListCategories();
+    const { data: categories, isPending, refetch, isRefetching } = useListCategories();
 
     return (
         <SafeAreaView className="flex-1 bg-white">
@@ -71,7 +71,7 @@ export default function CategoriesScreen() {
                     </Pressable>
 
                     <HStack className="items-center gap-2">
-                        <Grid2x2 size={20} color="#272727" />
+                        <Tag size={20} color="#272727" />
                         <Text className="text-lg font-fredoka-medium text-typography-900">
                             Categorias
                         </Text>
@@ -96,9 +96,17 @@ export default function CategoriesScreen() {
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => <CategoryCard category={item} />}
                     showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
+                            colors={['#d70040']}
+                            tintColor="#d70040"
+                        />
+                    }
                     ListEmptyComponent={
                         <VStack className="flex-1 items-center justify-center pt-20 space-y-4">
-                            <Grid2x2 size={48} color="#d4d4d4" />
+                            <Tag size={48} color="#d4d4d4" />
                             <Text className="text-gray-500 font-fredoka text-base">
                                 Nenhuma categoria encontrada.
                             </Text>

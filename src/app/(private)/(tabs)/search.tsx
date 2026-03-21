@@ -12,7 +12,7 @@ import { useFocusEffect } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, SearchX, SlidersHorizontal } from 'lucide-react-native';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SearchScreen() {
@@ -28,7 +28,7 @@ export default function SearchScreen() {
         }, [])
     );
     
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch, isRefetching } =
         useInfiniteProducts(filters);
         
     const products = data?.pages.flatMap((page) => page.items ?? []) ?? [];
@@ -48,12 +48,12 @@ export default function SearchScreen() {
                     </Pressable>
                 </HStack>
 
-                <Box className='mb-8 mt-4'>
+                <Box className='mb-4 mt-4'>
                     <SearchBar
                         value={filters.q ?? ''}
                         onChangeText={(text) => setFilters({ q: text })}
                         returnKeyType="search"
-                        placeholders={['Procure por camisas, tênis, etc...']}
+                        placeholder="Procure por camisas, tênis, etc..."
                     />
                     </Box>
             </VStack>
@@ -74,6 +74,14 @@ export default function SearchScreen() {
                             <ProductCard product={item} />
                         </Box>
                     )}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
+                            colors={['#d70040']}
+                            tintColor="#d70040"
+                        />
+                    }
                     onEndReached={() => {
                         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
                     }}

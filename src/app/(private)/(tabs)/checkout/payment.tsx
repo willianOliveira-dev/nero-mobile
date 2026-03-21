@@ -3,8 +3,7 @@ import { useStripe } from '@stripe/stripe-react-native';
 import { useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, CreditCard, Plus, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
-
+import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
 import type { ListPaymentMethods200Item } from '@/src/api/generated/model';
 import {
     getListPaymentMethodsQueryKey,
@@ -13,7 +12,6 @@ import {
     useListPaymentMethods,
     useSetDefaultPaymentMethod,
 } from '@/src/api/generated/payment-methods/payment-methods';
-
 import { Box } from '@/src/components/gluestack/ui/box';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
 import { Pressable } from '@/src/components/gluestack/ui/pressable';
@@ -106,7 +104,7 @@ export default function CheckoutPaymentScreen() {
 
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
-    const { data: methods, isPending } = useListPaymentMethods();
+    const { data: methods, isPending, refetch, isRefetching } = useListPaymentMethods();
     const { mutateAsync: createSetupIntent, isPending: isCreatingSetup } = useCreateSetupIntent();
     const { mutateAsync: setDefault, isPending: isSettingDefault } = useSetDefaultPaymentMethod();
     const { mutateAsync: deleteMethod, isPending: isDeleting } = useDeletePaymentMethod();
@@ -208,6 +206,14 @@ export default function CheckoutPaymentScreen() {
                             keyExtractor={(item) => item.id}
                             contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 8, paddingBottom: 100 }}
                             showsVerticalScrollIndicator={false}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={isRefetching}
+                                    onRefresh={refetch}
+                                    colors={['#d70040']}
+                                    tintColor="#d70040"
+                                />
+                            }
                             ListHeaderComponent={
                                 defaultCard ? (
                                     <Box className="items-center mb-5">

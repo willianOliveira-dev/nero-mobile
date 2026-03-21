@@ -9,14 +9,13 @@ import { SearchFiltersModal } from '@/src/components/ui/search-filters-modal';
 import { useInfiniteProducts } from '@/src/hooks/products/use-infinite-products';
 import { useSearchStore } from '@/src/store/use-search-store';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ArrowLeft, SearchX, SlidersHorizontal } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProductsByCategoryScreen() {
-    const { goBack } = useSafeBack();
+    const router = useRouter();
     const { id, name } = useLocalSearchParams<{ id: string; name?: string }>();
     const { filters, setFilters, clearFilters } = useSearchStore();
     const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
@@ -38,7 +37,7 @@ export default function ProductsByCategoryScreen() {
         [filters, id],
     );
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch, isRefetching } =
         useInfiniteProducts(categoryFilters);
 
     const products = data?.pages.flatMap((page) => page.items ?? []) ?? [];
@@ -58,7 +57,7 @@ export default function ProductsByCategoryScreen() {
             <VStack className="px-5 pt-2 pb-4 border-b border-gray-100 space-y-4">
                 <HStack className="items-center justify-between">
                     <Pressable
-                        onPress={() => goBack()}
+                        onPress={() => router.push('/categories')}
                         className="p-2 -mx-2"
                         accessibilityRole="button"
                         accessibilityLabel="Voltar"
@@ -89,7 +88,7 @@ export default function ProductsByCategoryScreen() {
                         onChangeText={setLocalQuery}
                         returnKeyType="search"
                         onSubmitEditing={handleSearch}
-                        placeholders={['Buscar nesta categoria...']}
+                        placeholder="Buscar nesta categoria..."
                     />
                 </Box>
             </VStack>
@@ -113,6 +112,14 @@ export default function ProductsByCategoryScreen() {
                             <ProductCard product={item} />
                         </Box>
                     )}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
+                            colors={['#d70040']}
+                            tintColor="#d70040"
+                        />
+                    }
                     onEndReached={() => {
                         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
                     }}
