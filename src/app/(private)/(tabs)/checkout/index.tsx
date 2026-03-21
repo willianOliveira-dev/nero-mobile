@@ -221,7 +221,7 @@ export default function CheckoutScreen() {
             <StatusBar barStyle="dark-content" />
             <Box className='flex-1' style={{ paddingBottom: insets.bottom }}>
                 <HStack className="items-center justify-between px-5 py-3">
-                    <Pressable onPress={() => goBack()}>
+                    <Pressable onPress={() => router.push('/cart')}>
                         <ArrowLeft size={22} color="#272727" />
                     </Pressable>
                     <Text className="text-lg font-fredoka-semibold text-secondary">Checkout</Text>
@@ -243,11 +243,11 @@ export default function CheckoutScreen() {
                         <VStack>
                             <SectionHeader
                                 title="Endereço de Entrega"
-                                onPress={() => router.push('/checkout/address' as Href)}
+                                onPress={() => router.push('/checkout/address')}
                             />
                             {selectedAddress ? (
                                 <Pressable
-                                    onPress={() => router.push('/checkout/address' as Href)}
+                                    onPress={() => router.push('/checkout/address')}
                                     className="bg-surface-muted rounded-2xl p-4"
                                 >
                                     <HStack className="items-start gap-3">
@@ -275,7 +275,7 @@ export default function CheckoutScreen() {
                                 </Pressable>
                             ) : (
                                 <Pressable
-                                    onPress={() => router.push('/checkout/address' as Href)}
+                                    onPress={() => router.push('/checkout/address')}
                                     className="bg-surface-muted rounded-2xl p-4 items-center"
                                 >
                                     <Text className="text-sm font-fredoka-semibold text-primary">
@@ -286,11 +286,11 @@ export default function CheckoutScreen() {
 
                             <SectionHeader
                                 title="Forma de Pagamento"
-                                onPress={() => router.push('/checkout/payment' as Href)}
+                                onPress={() => router.push('/checkout/payment')}
                             />
                             {defaultCard ? (
                                 <Pressable
-                                    onPress={() => router.push('/checkout/payment' as Href)}
+                                    onPress={() => router.push('/checkout/payment')}
                                     className="bg-surface-muted rounded-2xl p-4"
                                 >
                                     <HStack className="items-center gap-3">

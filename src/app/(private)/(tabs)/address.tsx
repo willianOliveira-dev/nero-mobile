@@ -2,7 +2,7 @@ import {
     useListAddresses,
     useSetDefaultAddress,
 } from '@/src/api/generated/addresses/addresses';
-import { AddressCard } from '@/src/components/ui/AddressCard';
+import { AddressCard } from '@/src/components/ui/address-card';
 import { Box } from '@/src/components/gluestack/ui/box';
 import { Button, ButtonText } from '@/src/components/gluestack/ui/button';
 import { HStack } from '@/src/components/gluestack/ui/hstack';
@@ -19,7 +19,6 @@ import { ActivityIndicator, FlatList } from 'react-native';
 
 export default function AddressListScreen() {
     const router = useRouter();
-    const { goBack } = useSafeBack();
 
     const {
         data: addresses,
@@ -66,7 +65,7 @@ export default function AddressListScreen() {
                
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => goBack()}
+                        onPress={() => router.push('/profile')}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />

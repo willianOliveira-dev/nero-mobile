@@ -4,7 +4,7 @@ import {
     Fredoka_600SemiBold,
     Fredoka_700Bold,
 } from '@expo-google-fonts/fredoka';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MutationCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import React, { useEffect, useState } from 'react';
@@ -17,18 +17,28 @@ import { env } from '../config/env';
 
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: 1000 * 60 * 5,
-            gcTime: 1000 * 60 * 10,
-            retry: 2,
+const createQueryClient = () => {
+    const client = new QueryClient({
+        mutationCache: new MutationCache({
+            onSuccess: () => {
+                client.invalidateQueries();
+            },
+        }),
+        defaultOptions: {
+            queries: {
+                staleTime: 1000 * 60 * 5,
+                gcTime: 1000 * 60 * 10,
+                retry: 2,
+            },
+            mutations: {
+                retry: 1,
+            },
         },
-        mutations: {
-            retry: 1,
-        },
-    },
-});
+    });
+    return client;
+};
+
+const queryClient = createQueryClient();
 
 export const RootProvider = ({ children }: { children: React.ReactNode }) => {
     const [fontsLoaded, fontsError] = useFonts({

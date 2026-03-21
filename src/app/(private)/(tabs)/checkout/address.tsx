@@ -75,7 +75,6 @@ function AddressItem({
 export default function CheckoutAddressScreen() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
-    const { goBack } = useSafeBack();
 
     const { data: addresses, isPending } = useListAddresses();
 
@@ -114,7 +113,7 @@ export default function CheckoutAddressScreen() {
             <StatusBar barStyle="dark-content" />
             <Box className='flex-1' style={{paddingBottom: insets.bottom}}>
                 <HStack className="items-center justify-between px-5 py-3">
-                    <Pressable onPress={() => goBack()}>
+                    <Pressable onPress={() => router.push('/checkout')}>
                         <ArrowLeft size={22} color="#272727" />
                     </Pressable>
                     <Text className="text-lg font-fredoka-semibold text-secondary">

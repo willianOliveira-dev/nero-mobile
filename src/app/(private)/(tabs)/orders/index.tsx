@@ -67,9 +67,7 @@ function OrderStatusBadge({ status }: { status: string }) {
 
 export default function OrdersListScreen() {
     const router = useRouter();
-    const { goBack } = useSafeBack();
-
- 
+    
     const { data: ordersResponse, isPending, refetch, isRefetching } = useListOrders();
 
     const orders = useMemo(() => {
@@ -96,7 +94,7 @@ export default function OrdersListScreen() {
             <VStack className="flex-1 px-6">
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => goBack()}
+                        onPress={() => router.push('/profile')}
                         className="w-10 h-10 items-center justify-center bg-surface-muted rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />

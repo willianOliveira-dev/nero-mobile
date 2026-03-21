@@ -27,7 +27,7 @@ import { maskCep } from '@/src/utils/masks';
 import { extractApiError } from '@/src/utils/error-handler';
 
 export default function EditAddressScreen() {
-    const { goBack } = useSafeBack();
+    const router = useRouter();
     const queryClient = useQueryClient();
     const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -78,7 +78,7 @@ export default function EditAddressScreen() {
 
             await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
 
-            goBack();
+            router.push('/address')
         } catch (error) {
             console.log('Erro ao atualizar endereço:', error);
             const errorMessage = extractApiError(error, 'Erro ao atualizar o endereço. Tente novamente.');
@@ -98,7 +98,7 @@ export default function EditAddressScreen() {
             await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
             setShowDeleteModal(false);
 
-            goBack();
+            router.push('/address')
         } catch (error) {
             console.log('Erro ao excluir:', error);
             const errorMessage = extractApiError(error, 'Erro ao excluir endereço.');
@@ -120,7 +120,7 @@ export default function EditAddressScreen() {
             <VStack className="flex-1 px-6">
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => goBack()}
+                        onPress={() => router.push('/address')}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />

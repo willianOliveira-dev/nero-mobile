@@ -7,7 +7,7 @@ import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ChevronLeft, Copy, CreditCard, MapPin } from 'lucide-react-native';
 
 import React from 'react';
@@ -40,6 +40,7 @@ function SummaryRow({ label, value, bold }: { label: string; value?: string; bol
 
 export default function OrderDetailsScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
+    const router = useRouter()
     const { goBack } = useSafeBack();
 
     const { data: orderResponse, isPending } = useGetOrder(id as string, {
@@ -108,7 +109,7 @@ export default function OrderDetailsScreen() {
           
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => goBack()}
+                        onPress={() => router.push('/orders')}
                         className="w-10 h-10 items-center justify-center bg-surface-muted rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />

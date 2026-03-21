@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router';
+import { useRouter, type Href } from 'expo-router';
 import { Heart, ShoppingBag, Star, Truck } from 'lucide-react-native';
 import React from 'react';
 import { Box } from '../gluestack/ui/box';
@@ -61,12 +61,7 @@ export function ProductCard({
 
     return (
         <Pressable
-            onPress={() =>
-                router.push({
-                    pathname: '/product/[slug]',
-                    params: { slug: product.slug },
-                })
-            }
+            onPress={() => router.push(`/product/${product.slug}` as Href)}
             className="w-40 bg-white rounded-xl overflow-hidden border border-gray-100"
         >
             <Box className="w-full h-56 relative bg-gray-100">

@@ -11,7 +11,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function WishlistScreen() {
-    const queryClient = useQueryClient();
     const { data: wishlistData, isLoading, refetch } = useGetWishlist();
 
     const products = wishlistData?.items ?? [];

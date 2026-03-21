@@ -8,7 +8,6 @@ import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { FormControl, FormControlError, FormControlErrorText } from '@/src/components/gluestack/ui/form-control';
-import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft } from 'lucide-react-native';
 import React from 'react';
 import { ActivityIndicator, ScrollView, TextInput, Switch } from 'react-native';
@@ -17,10 +16,11 @@ import { AddressFormData } from '@/src/schemas/addresses/address.schema';
 import { useAddressForm } from '@/src/hooks/addresses/use-address-form';
 import { maskCep } from '@/src/utils/masks';
 import { extractApiError } from '@/src/utils/error-handler';
+import { useRouter } from 'expo-router';
 
 
 export default function NewAddressScreen() {
-    const { goBack } = useSafeBack();
+    const router = useRouter();
     const queryClient = useQueryClient();
     const { mutateAsync: createAddress, isPending: isCreating } = useCreateAddress();
     const { mutateAsync: setDefaultAddress } = useSetDefaultAddress();
@@ -49,7 +49,8 @@ export default function NewAddressScreen() {
 
             await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
 
-            goBack();
+            router.push('/address')
+
         } catch (error) {
             console.log('Erro ao adicionar endereço:', error);
             const errorMessage = extractApiError(error, 'Erro ao criar endereço. Tente novamente.');
@@ -62,7 +63,7 @@ export default function NewAddressScreen() {
             <VStack className="flex-1 px-6">
                 <HStack className="items-center justify-between py-6">
                     <Pressable
-                        onPress={() => goBack()}
+                        onPress={() => router.push('/address')}
                         className="w-10 h-10 items-center justify-center bg-[#f4f4f4] rounded-full"
                     >
                         <ChevronLeft size={20} color="#272727" />
