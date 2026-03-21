@@ -28,13 +28,13 @@ function AddressItem({
         <Pressable
             onPress={onSelect}
             className={`rounded-2xl p-4 mb-3 border ${
-                isSelected ? 'border-primary bg-primary-muted' : 'border-border bg-white'
+                isSelected ? 'border-sky-500 bg-sky-50' : 'border-border bg-white'
             }`}
         >
             <HStack className="items-start gap-3">
                 <Box
                     className={`w-10 h-10 rounded-full items-center justify-center ${
-                        isSelected ? 'bg-primary' : 'bg-surface-muted'
+                        isSelected ? 'bg-sky-500' : 'bg-surface-muted'
                     }`}
                 >
                     <MapPin size={18} color={isSelected ? '#FFFFFF' : '#9CA3AF'} />
@@ -46,8 +46,8 @@ function AddressItem({
                             {address.label || address.recipientName}
                         </Text>
                         {address.isDefault && (
-                            <Box className="bg-primary-muted rounded-full px-2 py-0.5">
-                                <Text className="text-2xs font-fredoka-bold text-primary">
+                            <Box className="bg-sky-50 rounded-full px-2 py-0.5">
+                                <Text className="text-2xs font-fredoka-bold text-sky-500">
                                     Padrão
                                 </Text>
                             </Box>
@@ -63,7 +63,7 @@ function AddressItem({
                 </VStack>
 
                 {isSelected && (
-                    <Box className="w-6 h-6 rounded-full bg-primary items-center justify-center">
+                    <Box className="w-6 h-6 rounded-full bg-sky-500 items-center justify-center">
                         <Check size={14} color="#FFFFFF" />
                     </Box>
                 )}

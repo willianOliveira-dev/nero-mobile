@@ -10,6 +10,7 @@ import { VStack } from '../gluestack/ui/vstack';
 import { useToggleWishlist } from '@/src/hooks/wishlist/use-toggle-wishlist';
 import { imagesPath } from '@/src/constants/images';
 import { GestureResponderEvent } from 'react-native';
+
 export type BaseProductCardData = {
     id: string;
     slug: string;
@@ -20,6 +21,8 @@ export type BaseProductCardData = {
         hasPriceVariation: boolean;
         displayPriceMin: { formatted: string };
     } | null;
+    compareAtPrice?: { formatted: string } | null;
+    discountPercent?: number | null;
     rating: {
         average: number;
         count: number;
@@ -54,6 +57,7 @@ export function ProductCard({
     };
 
     const hasPriceVariation = product.pricing?.hasPriceVariation ?? false;
+    const hasDiscount = !!product.discountPercent && product.discountPercent > 0;
 
     return (
         <Pressable
@@ -76,6 +80,15 @@ export function ProductCard({
                 ) : (
                     <Box className="w-full h-full items-center justify-center">
                         <ShoppingBag size={32} color="#9CA3AF" />
+                    </Box>
+                )}
+
+                {/* Discount badge */}
+                {hasDiscount && (
+                    <Box className="absolute top-2 left-2 bg-primary px-2 py-1 rounded-md z-10">
+                        <Text className="text-white font-fredoka-bold text-xs">
+                            -{product.discountPercent}%
+                        </Text>
                     </Box>
                 )}
 
@@ -129,6 +142,14 @@ export function ProductCard({
                             a partir de
                         </Text>
                     ) : null}
+
+                    {/* Strikethrough old price */}
+                    {hasDiscount && product.compareAtPrice && (
+                        <Text className="text-xs font-fredoka text-gray-400 line-through">
+                            {product.compareAtPrice.formatted}
+                        </Text>
+                    )}
+
                     <Text className="text-lg font-fredoka-semibold text-gray-900">
                         {product.pricing?.displayPriceMin.formatted ?? '—'}
                     </Text>

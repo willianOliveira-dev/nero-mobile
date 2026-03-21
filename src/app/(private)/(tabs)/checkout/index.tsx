@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, FlatList, StatusBar } from 'react-native';
+import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import type { Href } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
@@ -15,7 +15,7 @@ import {
 
 import { useGetCart, getGetCartQueryKey } from '@/src/api/generated/cart/cart';
 import { getListOrdersQueryKey } from '@/src/api/generated/orders/orders';
-import { useGetDefaultAddress } from '@/src/api/generated/addresses/addresses';
+import { useGetDefaultAddress, useListAddresses } from '@/src/api/generated/addresses/addresses';
 import { useListPaymentMethods } from '@/src/api/generated/payment-methods/payment-methods';
 import { useCreatePaymentIntent } from '@/src/api/generated/payments/payments';
 import type { GetCart200ItemsItem } from '@/src/api/generated/model';
@@ -28,6 +28,8 @@ import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { Image } from '@/src/components/gluestack/ui/image';
 import { CardBrandLogo, type CardBrand } from '@/src/components/ui/card-brand-logo';
+import { ConfirmModal } from '@/src/components/ui/confirm-modal';
+
 import { useCartStore } from '@/src/store/use-cart-store';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { imagesPath } from '@/src/constants/images';
@@ -125,24 +127,28 @@ export default function CheckoutScreen() {
     const insets = useSafeAreaInsets();
     const { goBack } = useSafeBack();
     const queryClient = useQueryClient();
+
     const { confirmPayment } = useStripe();
     const params = useLocalSearchParams<{ addressId?: string }>();
     const setItemCount = useCartStore((s) => s.setItemCount);
 
     const { data: cart, isPending: isCartLoading } = useGetCart();
     const { data: defaultAddress, isPending: isAddressLoading } = useGetDefaultAddress();
+    const { data: addresses } = useListAddresses();
     const { data: methods, isPending: isMethodsLoading } = useListPaymentMethods();
     const { mutateAsync: createPaymentIntent, isPending: isCreatingPayment } =
         useCreatePaymentIntent();
 
     const [isProcessing, setIsProcessing] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const selectedAddress = useMemo(() => {
-        if (params.addressId && defaultAddress) {
-            return defaultAddress;
+        if (params.addressId && addresses) {
+            const found = addresses.find((a) => a.id === params.addressId);
+            if (found) return found;
         }
         return defaultAddress;
-    }, [params.addressId, defaultAddress]);
+    }, [params.addressId, defaultAddress, addresses]);
 
     const defaultCard = useMemo(() => {
         return methods?.find((m) => m.isDefault) || methods?.[0];
@@ -152,15 +158,12 @@ export default function CheckoutScreen() {
 
     const handleConfirmPayment = async () => {
         if (!selectedAddress) {
-            Alert.alert('Atenção', 'Selecione um endereço de entrega.');
             return;
         }
         if (!defaultCard) {
-            Alert.alert('Atenção', 'Adicione um cartão de pagamento.');
             return;
         }
         if (!cart || cart.items.length === 0) {
-            Alert.alert('Atenção', 'Seu carrinho está vazio.');
             return;
         }
 
@@ -177,30 +180,11 @@ export default function CheckoutScreen() {
             const { error } = await confirmPayment(result.clientSecret);
 
             if (error) {
-                Alert.alert('Erro no Pagamento', error.message);
                 return;
             }
 
-            queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
-            queryClient.invalidateQueries({ queryKey: getListOrdersQueryKey() });
-            setItemCount(0);
-
-            Alert.alert(
-                'Pedido Confirmado! 🎉',
-                'Seu pagamento foi processado com sucesso.',
-                [
-                    {
-                        text: 'Ver Pedidos',
-                        onPress: () => router.replace('/profile'),
-                    },
-                    {
-                        text: 'Continuar Comprando',
-                        onPress: () => router.replace('/home'),
-                    },
-                ],
-            );
+            setShowSuccessModal(true);
         } catch {
-            Alert.alert('Erro', 'Não foi possível processar o pagamento. Tente novamente.');
         } finally {
             setIsProcessing(false);
         }
@@ -267,8 +251,8 @@ export default function CheckoutScreen() {
                                     className="bg-surface-muted rounded-2xl p-4"
                                 >
                                     <HStack className="items-start gap-3">
-                                        <Box className="w-10 h-10 rounded-full bg-primary-muted items-center justify-center">
-                                            <MapPin size={18} color="#d70040" />
+                                        <Box className="w-10 h-10 rounded-full bg-sky-50 items-center justify-center">
+                                            <MapPin size={18} color="#0ea5e9" />
                                         </Box>
                                         <VStack className="flex-1 gap-0.5">
                                             <Text className="text-sm font-fredoka-semibold text-secondary">
@@ -389,6 +373,29 @@ export default function CheckoutScreen() {
                     </Pressable>
                 </Box>
             </Box>
+
+            <ConfirmModal
+                isOpen={showSuccessModal}
+                onClose={() => {
+                    setShowSuccessModal(false);
+                    queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+                    queryClient.invalidateQueries({ queryKey: getListOrdersQueryKey() });
+                    setItemCount(0);
+                    router.replace('/home');
+                }}
+                onConfirm={() => {
+                    setShowSuccessModal(false);
+                    queryClient.invalidateQueries({ queryKey: getGetCartQueryKey() });
+                    queryClient.invalidateQueries({ queryKey: getListOrdersQueryKey() });
+                    setItemCount(0);
+                    router.replace('/profile');
+                }}
+                title="Pedido Confirmado!"
+                message="Seu pagamento foi processado com sucesso."
+                confirmLabel="Ver Pedidos"
+                cancelLabel="Continuar Comprando"
+                confirmVariant="primary"
+            />
         </SafeAreaView>
     );
 }

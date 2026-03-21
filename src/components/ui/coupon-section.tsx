@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { Tag, X } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ActivityIndicator, TextInput } from 'react-native';
+import { AxiosError } from 'axios';
 
 const couponSchema = z.object({
     code: z.string().min(1, 'Insira um código').max(50),
@@ -37,8 +38,9 @@ export function CouponSection({ appliedCoupon }: CouponSectionProps) {
                 reset();
                 invalidateCart();
             },
-            onError: () => {
-                setErrorMessage('Cupom inválido ou expirado');
+            onError: (error: AxiosError<{ message: string }>) => {
+                const serverMessage = error.response?.data?.message;
+                setErrorMessage(serverMessage || 'Cupom inválido ou expirado');
             },
         },
     });
@@ -105,7 +107,7 @@ export function CouponSection({ appliedCoupon }: CouponSectionProps) {
                                 style={{
                                     fontSize: 14,
                                     color: '#171717',
-                                    fontFamily: 'Fredoka_400Regular',
+                                    fontFamily: 'Fredoka-Regular',
                                 }}
                             />
                         </Box>

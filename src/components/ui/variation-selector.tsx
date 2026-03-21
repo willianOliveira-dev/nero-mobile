@@ -12,7 +12,6 @@ import { ScrollView, View } from 'react-native';
 import { SelectOptionSheet } from './select-option-sheet';
 import { imagesPath } from '@/src/constants/images';
 
-// Single variationType item extracted from the nullable array
 type VariationTypeItem = NonNullable<GetProductBySlug200VariationTypes>[number];
 type OptionItem = VariationTypeItem['options'][number];
 
@@ -99,7 +98,6 @@ export function VariationSelector({
     );
 }
 
-// ── Inline Chip ──────────────────────────────────────────────────────────
 
 interface InlineChipProps {
     option: OptionItem;
@@ -144,7 +142,6 @@ function InlineChip({
                 </Box>
             )}
 
-            {/* Diagonal strikeout for unavailable options */}
             {!isAvailable && (
                 <View
                     style={{

@@ -16,8 +16,10 @@ import { FormControl, FormControlError, FormControlErrorText } from '@/src/compo
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft, Trash2 } from 'lucide-react-native';
-import React, { useEffect } from 'react';
-import { ActivityIndicator, ScrollView, TextInput, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, ScrollView, TextInput } from 'react-native';
+import { ConfirmModal } from '@/src/components/ui/confirm-modal';
+
 import { Controller as FormController } from 'react-hook-form';
 import { AddressFormData } from '@/src/schemas/addresses/address.schema';
 import { useAddressForm } from '@/src/hooks/addresses/use-address-form';
@@ -25,7 +27,6 @@ import { maskCep } from '@/src/utils/masks';
 import { extractApiError } from '@/src/utils/error-handler';
 
 export default function EditAddressScreen() {
-    const router = useRouter();
     const { goBack } = useSafeBack();
     const queryClient = useQueryClient();
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -36,6 +37,8 @@ export default function EditAddressScreen() {
 
     const form = useAddressForm();
     const { control, handleSubmit, reset } = form;
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
         if (addresses && id) {
@@ -51,8 +54,6 @@ export default function EditAddressScreen() {
                     complement: addressToEdit.complement || '',
                     isDefault: false,
                 });
-            } else {
-                goBack();
             }
         }
     }, [addresses, id, reset]);
@@ -76,6 +77,7 @@ export default function EditAddressScreen() {
             });
 
             await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
+
             goBack();
         } catch (error) {
             console.log('Erro ao atualizar endereço:', error);
@@ -86,29 +88,23 @@ export default function EditAddressScreen() {
 
     const handleDelete = () => {
         if (!id) return;
+        setShowDeleteModal(true);
+    };
 
-        Alert.alert(
-            'Excluir Endereço',
-            'Tem certeza que deseja excluir este endereço?',
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                {
-                    text: 'Excluir',
-                    style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            await deleteAddress({ id });
-                            await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
-                            goBack();
-                        } catch (error) {
-                            console.log('Erro ao excluir:', error);
-                            const errorMessage = extractApiError(error, 'Erro ao excluir endereço.');
-                            form.setError('root', { message: errorMessage });
-                        }
-                    },
-                },
-            ]
-        );
+    const handleDeleteConfirm = async () => {
+        if (!id) return;
+        try {
+            await deleteAddress({ id });
+            await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
+            setShowDeleteModal(false);
+
+            goBack();
+        } catch (error) {
+            console.log('Erro ao excluir:', error);
+            const errorMessage = extractApiError(error, 'Erro ao excluir endereço.');
+
+            setShowDeleteModal(false);
+        }
     };
 
     if (isFetching) {
@@ -355,6 +351,18 @@ export default function EditAddressScreen() {
                     </Button>
                 </Box>
             </VStack>
+
+            <ConfirmModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDeleteConfirm}
+                title="Excluir Endereço"
+                message="Tem certeza que deseja excluir este endereço?"
+                confirmLabel="Excluir"
+                cancelLabel="Cancelar"
+                confirmVariant="danger"
+                isLoading={isDeleting}
+            />
         </SafeAreaView>
     );
 }

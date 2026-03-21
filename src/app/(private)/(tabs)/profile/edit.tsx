@@ -50,7 +50,6 @@ export default function EditProfileScreen() {
             });
             await refetch();
             
-            // Sync with auth store so other screens react immediately
             if (user) {
                 setUser({
                     ...user,

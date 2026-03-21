@@ -8,7 +8,6 @@ import { SafeAreaView } from '@/src/components/gluestack/ui/safe-area-view';
 import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { FormControl, FormControlError, FormControlErrorText } from '@/src/components/gluestack/ui/form-control';
-import { useRouter } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft } from 'lucide-react-native';
 import React from 'react';
@@ -19,8 +18,8 @@ import { useAddressForm } from '@/src/hooks/addresses/use-address-form';
 import { maskCep } from '@/src/utils/masks';
 import { extractApiError } from '@/src/utils/error-handler';
 
+
 export default function NewAddressScreen() {
-    const router = useRouter();
     const { goBack } = useSafeBack();
     const queryClient = useQueryClient();
     const { mutateAsync: createAddress, isPending: isCreating } = useCreateAddress();
@@ -28,6 +27,7 @@ export default function NewAddressScreen() {
 
     const form = useAddressForm();
     const { control, handleSubmit } = form;
+
 
     const handleSave = async (data: AddressFormData) => {
         try {
@@ -48,6 +48,7 @@ export default function NewAddressScreen() {
             }
 
             await queryClient.invalidateQueries({ queryKey: getListAddressesQueryKey() });
+
             goBack();
         } catch (error) {
             console.log('Erro ao adicionar endereço:', error);

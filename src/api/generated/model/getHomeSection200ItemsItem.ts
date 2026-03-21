@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { GetHomeSection200ItemsItemBrand } from './getHomeSection200ItemsItemBrand';
+import type { GetHomeSection200ItemsItemCompareAtPrice } from './getHomeSection200ItemsItemCompareAtPrice';
 import type { GetHomeSection200ItemsItemPricing } from './getHomeSection200ItemsItemPricing';
 import type { GetHomeSection200ItemsItemRating } from './getHomeSection200ItemsItemRating';
 import type { GetHomeSection200ItemsItemUserContext } from './getHomeSection200ItemsItemUserContext';
@@ -18,6 +19,8 @@ export type GetHomeSection200ItemsItem = {
   thumbnailUrl: string | null;
   hasVariations: boolean;
   pricing: GetHomeSection200ItemsItemPricing;
+  compareAtPrice: GetHomeSection200ItemsItemCompareAtPrice;
+  discountPercent: number | null;
   brand: GetHomeSection200ItemsItemBrand;
   rating: GetHomeSection200ItemsItemRating;
   freeShipping: boolean;

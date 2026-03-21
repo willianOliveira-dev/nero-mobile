@@ -21,7 +21,6 @@ export function ReviewsSection({ rating, reviews }: ReviewsSectionProps) {
                 Avaliações
             </Text>
 
-            {/* Summary */}
             <HStack className="items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl">
                 <Text className="text-3xl font-fredoka-bold text-typography-900">
                     {rating.average.toFixed(1)}
@@ -52,7 +51,6 @@ export function ReviewsSection({ rating, reviews }: ReviewsSectionProps) {
                 </VStack>
             </HStack>
 
-            {/* Reviews list */}
             {reviews.length > 0 ? (
                 <VStack className="gap-5">
                     {reviews.map((review) => (

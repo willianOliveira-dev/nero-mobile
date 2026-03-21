@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { SearchProducts200ItemsItemBrand } from './searchProducts200ItemsItemBrand';
+import type { SearchProducts200ItemsItemCompareAtPrice } from './searchProducts200ItemsItemCompareAtPrice';
 import type { SearchProducts200ItemsItemPricing } from './searchProducts200ItemsItemPricing';
 import type { SearchProducts200ItemsItemRating } from './searchProducts200ItemsItemRating';
 import type { SearchProducts200ItemsItemUserContext } from './searchProducts200ItemsItemUserContext';
@@ -18,6 +19,8 @@ export type SearchProducts200ItemsItem = {
   thumbnailUrl: string | null;
   hasVariations: boolean;
   pricing: SearchProducts200ItemsItemPricing;
+  compareAtPrice: SearchProducts200ItemsItemCompareAtPrice;
+  discountPercent: number | null;
   brand: SearchProducts200ItemsItemBrand;
   rating: SearchProducts200ItemsItemRating;
   freeShipping: boolean;

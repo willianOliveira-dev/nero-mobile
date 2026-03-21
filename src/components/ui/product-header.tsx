@@ -30,24 +30,20 @@ export function ProductHeader({
     priceRange,
     hasSelectedSku,
 }: ProductHeaderProps) {
-    // Show price range when there's variation and no SKU selected yet
     const showPriceRange = hasPriceVariation && !hasSelectedSku;
 
     return (
         <VStack className="gap-3">
-            {/* Brand */}
             {brand && (
                 <Text className="text-xs font-fredoka-medium text-secondary-muted uppercase tracking-widest">
                     {brand.name}
                 </Text>
             )}
 
-            {/* Name */}
             <Text className="text-xl font-fredoka-bold text-typography-900">
                 {name}
             </Text>
 
-            {/* Rating */}
             {rating.count > 0 && (
                 <HStack className="items-center gap-1.5">
                     <HStack className="items-center gap-0.5">
@@ -74,7 +70,6 @@ export function ProductHeader({
                 </HStack>
             )}
 
-            {/* Price Area */}
             <HStack className="items-center gap-2">
                 {showPriceRange && priceRange ? (
                     <Text className="text-2xl font-fredoka-bold text-typography-900">

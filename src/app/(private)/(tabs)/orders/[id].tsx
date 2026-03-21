@@ -9,8 +9,10 @@ import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, Copy, CreditCard, MapPin } from 'lucide-react-native';
+
 import React from 'react';
-import { ActivityIndicator, Alert, ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
 import { imagesPath } from '@/src/constants/images';
 import { OrderProductItem } from '@/src/components/ui/order-product-item';
@@ -46,8 +48,9 @@ export default function OrderDetailsScreen() {
 
     const order = orderResponse;
 
+
     const copyToClipboard = async (text: string) => {
-        Alert.alert('Copiado', 'A função de copiar foi desativada temporariamente.');
+        await Clipboard.setStringAsync(text);
     };
 
     if (isPending) {
@@ -128,14 +131,15 @@ export default function OrderDetailsScreen() {
                             </Text>
                         </HStack>
                         
-                        <HStack className="items-center gap-2 mt-2 bg-white p-2 rounded-lg border border-border">
+                        <Pressable
+                            onPress={() => copyToClipboard(order.id)}
+                            className="flex-row items-center gap-2 mt-2 bg-white p-2 rounded-lg border border-border"
+                        >
                             <Text className="text-xs font-fredoka text-text-muted flex-1" numberOfLines={1}>
                                 {order.id}
                             </Text>
-                            <Pressable onPress={() => copyToClipboard(order.id)}>
-                                <Copy size={16} color="#9ca3af" />
-                            </Pressable>
-                        </HStack>
+                            <Copy size={16} color="#9ca3af" />
+                        </Pressable>
                     </VStack>
 
                    
@@ -163,39 +167,57 @@ export default function OrderDetailsScreen() {
 
                   
                     <SectionHeader title="Entrega" />
-                    <HStack className="bg-surface-muted rounded-2xl p-4 gap-3 items-start">
-                        <Box className="mt-1">
-                            <MapPin size={20} color="#272727" />
-                        </Box>
-                        <VStack className="flex-1 gap-1">
-                            <Text className="text-sm font-fredoka-semibold text-[#272727]">
-                                {order.shippingAddress.recipientName}
-                            </Text>
+                    {order.shippingAddress ? (
+                        <HStack className="bg-surface-muted rounded-2xl p-4 gap-3 items-start">
+                            <Box className="mt-1">
+                                <MapPin size={20} color="#272727" />
+                            </Box>
+                            <VStack className="flex-1 gap-1">
+                                <Text className="text-sm font-fredoka-semibold text-[#272727]">
+                                    {order.shippingAddress.recipientName}
+                                </Text>
+                                <Text className="text-sm font-fredoka text-text-muted">
+                                    {order.shippingAddress.street}
+                                    {order.shippingAddress.complement ? ` - ${order.shippingAddress.complement}` : ''}
+                                </Text>
+                                <Text className="text-sm font-fredoka text-text-muted">
+                                    {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.zipCode}
+                                </Text>
+                            </VStack>
+                        </HStack>
+                    ) : (
+                        <HStack className="bg-surface-muted rounded-2xl p-4 gap-3 items-center">
+                            <MapPin size={20} color="#9CA3AF" />
                             <Text className="text-sm font-fredoka text-text-muted">
-                                {order.shippingAddress.street}
-                                {order.shippingAddress.complement ? ` - ${order.shippingAddress.complement}` : ''}
+                                Endereço removido
                             </Text>
-                            <Text className="text-sm font-fredoka text-text-muted">
-                                {order.shippingAddress.city}, {order.shippingAddress.state} - {order.shippingAddress.zipCode}
-                            </Text>
-                        </VStack>
-                    </HStack>
+                        </HStack>
+                    )}
 
                
-                    {order.paymentMethod && (
-                        <>
-                            <SectionHeader title="Pagamento" />
-                            <HStack className="bg-surface-muted rounded-2xl p-4 gap-3 items-center">
-                                <Box className="w-10 h-6 bg-white border border-border rounded items-center justify-center">
-                                    <CreditCard size={14} color="#272727" />
-                                </Box>
-                                <VStack className="flex-1">
-                                    <Text className="text-sm font-fredoka-semibold text-[#272727] capitalize">
-                                        {order.paymentMethod.brand} terminando em {order.paymentMethod.last4}
-                                    </Text>
-                                </VStack>
-                            </HStack>
-                        </>
+                    <SectionHeader title="Pagamento" />
+                    {order.paymentMethod ? (
+                        <HStack className="bg-surface-muted rounded-2xl p-4 gap-3 items-center">
+                            <Box className="w-10 h-6 bg-white border border-border rounded items-center justify-center">
+                                <CreditCard size={14} color="#272727" />
+                            </Box>
+                            <VStack className="flex-1">
+                                <Text className="text-sm font-fredoka-semibold text-[#272727] capitalize">
+                                    {order.paymentMethod.brand} terminando em {order.paymentMethod.last4}
+                                </Text>
+                            </VStack>
+                        </HStack>
+                    ) : (
+                        <HStack className="bg-surface-muted rounded-2xl p-4 gap-3 items-center">
+                            <Box className="w-10 h-6 bg-surface border border-border rounded items-center justify-center">
+                                <CreditCard size={14} color="#9CA3AF" />
+                            </Box>
+                            <VStack className="flex-1">
+                                <Text className="text-sm font-fredoka text-text-muted">
+                                    Cartão removido
+                                </Text>
+                            </VStack>
+                        </HStack>
                     )}
 
                 

@@ -20,7 +20,8 @@ import { useAuthStore } from '@/src/store/use-auth.store';
 import { useCartStore } from '@/src/store/use-cart-store';
 import { useSearchStore } from '@/src/store/use-search-store';
 import { useRouter } from 'expo-router';
-import { Heart, ShoppingCart } from 'lucide-react-native';
+import { Linking } from 'react-native';
+import {  ShoppingCart } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, ScrollView, StatusBar } from 'react-native';
 import { imagesPath } from '@/src/constants/images';
@@ -108,7 +109,9 @@ export default function HomeScreen() {
 
     const ListHeader = (
         <VStack>
-            <Text className="text-center items-center text-[8px] font-fredoka text-typography-500 mb-3">Feito com <Heart size={8} color="red" fill="red"/> por Willian</Text>
+            <Pressable onPress={() => Linking.openURL('https://github.com/willianOliveira-dev')}>
+                <Text className="text-center items-center text-[8px] font-fredoka text-typography-500 mb-4">Feito com dedicação por <Text className="text-primary text-[8px] font-fredoka-semibold">Willian Oliveira</Text></Text>
+            </Pressable>
             <HStack className="items-center justify-between mb-4">
                 <Pressable onPress={() => router.push('/profile')}>
                     <Avatar size="md" className="rounded-full">
@@ -228,18 +231,18 @@ export default function HomeScreen() {
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={ListHeader}
                 onEndReached={handleLoadMore}
-                onEndReachedThreshold={0.5}
+                onEndReachedThreshold={0.8}
                 ListFooterComponent={
                     isFetchingNextPage ? (
                         <Box className="py-4 items-center">
-                            <ActivityIndicator size="small" color="#272727" />
+                            <ActivityIndicator size="small" color="#d70040" />
                         </Box>
                     ) : null
                 }
                 ListEmptyComponent={
                     isProductsPending ? (
                         <Box className="py-8 items-center">
-                            <ActivityIndicator size="small" color="#272727" />
+                            <ActivityIndicator size="small" color="#d70040" />
                         </Box>
                     ) : null
                 }

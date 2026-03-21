@@ -15,7 +15,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRouter, type Href } from 'expo-router';
 import { ChevronRight,  ImageUpIcon } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
+
 
 export default function ProfileScreen() {
     const router = useRouter();
@@ -26,6 +27,7 @@ export default function ProfileScreen() {
     const { mutateAsync: confirmAvatar } = useConfirmAvatar();
 
     const [isUploading, setIsUploading] = useState(false);
+
 
     const handleSignOut = async () => {
         await signOut();
@@ -89,10 +91,10 @@ export default function ProfileScreen() {
             });
 
             await refetch();
-            Alert.alert('Sucesso', 'Avatar atualizado com sucesso!');
+
         } catch (error: unknown) {
             console.log('Erro upload avatar:', error);
-            Alert.alert('Erro', 'Não foi possível atualizar o avatar. Verifique as credenciais e conexão.');
+
         } finally {
             setIsUploading(false);
         }

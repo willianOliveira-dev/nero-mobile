@@ -16,7 +16,6 @@ import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProductsByCategoryScreen() {
-    const router = useRouter();
     const { goBack } = useSafeBack();
     const { id, name } = useLocalSearchParams<{ id: string; name?: string }>();
     const { filters, setFilters, clearFilters } = useSearchStore();
@@ -117,7 +116,7 @@ export default function ProductsByCategoryScreen() {
                     onEndReached={() => {
                         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
                     }}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                     ListFooterComponent={
                         isFetchingNextPage ? (
                             <Box className="py-4 items-center">

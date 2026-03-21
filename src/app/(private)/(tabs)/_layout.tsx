@@ -57,6 +57,7 @@ export default function TabsLayout() {
                     <Tabs.Screen name="profile" />
                     <Tabs.Screen name="profile/edit" options={{ headerShown: false }} />
                     <Tabs.Screen name="orders/index" options={{ headerShown: false }} />
+                    <Tabs.Screen name="orders/[id]" options={{ headerShown: false }} />
                     <Tabs.Screen name="address" options={{ headerShown: false }} />
                     <Tabs.Screen name="address/new" options={{ headerShown: false }} />
                     <Tabs.Screen name="address/edit" options={{ headerShown: false }} />

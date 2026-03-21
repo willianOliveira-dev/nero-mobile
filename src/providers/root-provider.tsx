@@ -59,7 +59,9 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
                 merchantIdentifier="merchant.com.nero"
             >
                 <QueryClientProvider client={queryClient}>
-                    <AuthProvider>{children}</AuthProvider>
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
                 </QueryClientProvider>
             </StripeProvider>
         </GluestackUIProvider>

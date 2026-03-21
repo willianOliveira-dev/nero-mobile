@@ -2,7 +2,7 @@
 import React, { useEffect, useLayoutEffect } from 'react';
 import { config } from './config';
 import { OverlayProvider } from '@gluestack-ui/core/overlay/creator';
-import { ToastProvider } from '@gluestack-ui/core/toast/creator';
+
 import { setFlushStyles } from '@gluestack-ui/utils/nativewind-utils';
 import { script } from './script';
 
@@ -89,7 +89,7 @@ export function GluestackUIProvider({
         }}
       />
       <OverlayProvider>
-        <ToastProvider>{props.children}</ToastProvider>
+        {props.children}
       </OverlayProvider>
     </>
   );

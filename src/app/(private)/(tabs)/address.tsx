@@ -14,7 +14,8 @@ import { useRouter } from 'expo-router';
 import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { ChevronLeft, Plus } from 'lucide-react-native';
 import React from 'react';
-import { ActivityIndicator, Alert, FlatList } from 'react-native';
+import { ActivityIndicator, FlatList } from 'react-native';
+
 
 export default function AddressListScreen() {
     const router = useRouter();
@@ -33,13 +34,14 @@ export default function AddressListScreen() {
         ? [...addresses].sort((a, b) => (a.isDefault ? -1 : b.isDefault ? 1 : 0))
         : [];
 
+
+
     const handleSetDefault = async (id: string) => {
         try {
             await setDefaultAddress({ id });
             await refetch();
         } catch (error) {
             console.error('Erro ao definir endereço padrão:', error);
-            Alert.alert('Erro', 'Não foi possível atualizar o endereço padrão.');
         }
     };
 

@@ -2,8 +2,8 @@ import { useSafeBack } from '@/src/hooks/use-safe-back';
 import { useStripe } from '@stripe/stripe-react-native';
 import { useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, CreditCard, Plus, Trash2 } from 'lucide-react-native';
-import React from 'react';
-import { ActivityIndicator, Alert, FlatList, StatusBar } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, FlatList, StatusBar } from 'react-native';
 
 import type { ListPaymentMethods200Item } from '@/src/api/generated/model';
 import {
@@ -22,6 +22,8 @@ import { Text } from '@/src/components/gluestack/ui/text';
 import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { CardBrandLogo, type CardBrand } from '@/src/components/ui/card-brand-logo';
 import { PaymentCard } from '@/src/components/ui/payment-card';
+import { ConfirmModal } from '@/src/components/ui/confirm-modal';
+
 import { cn } from '@gluestack-ui/utils/nativewind-utils';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -98,15 +100,18 @@ function PaymentMethodItem({
 }
 
 export default function CheckoutPaymentScreen() {
-  const insets = useSafeAreaInsets();
+    const insets = useSafeAreaInsets();
     const { goBack } = useSafeBack();
     const queryClient = useQueryClient();
+
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
     const { data: methods, isPending } = useListPaymentMethods();
     const { mutateAsync: createSetupIntent, isPending: isCreatingSetup } = useCreateSetupIntent();
     const { mutateAsync: setDefault, isPending: isSettingDefault } = useSetDefaultPaymentMethod();
     const { mutateAsync: deleteMethod, isPending: isDeleting } = useDeletePaymentMethod();
+
+    const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
     const handleAddCard = async () => {
         try {
@@ -121,7 +126,6 @@ export default function CheckoutPaymentScreen() {
             });
 
             if (initError) {
-                Alert.alert('Erro', initError.message);
                 return;
             }
 
@@ -129,7 +133,6 @@ export default function CheckoutPaymentScreen() {
 
             if (presentError) {
                 if (presentError.code !== 'Canceled') {
-                    Alert.alert('Erro', presentError.message);
                 }
                 return;
             }
@@ -140,9 +143,8 @@ export default function CheckoutPaymentScreen() {
                 });
             }, 2000);
 
-            Alert.alert('Sucesso', 'Cartão adicionado com sucesso!');
+
         } catch {
-            Alert.alert('Erro', 'Não foi possível adicionar o cartão. Tente novamente.');
         }
     };
 
@@ -153,32 +155,20 @@ export default function CheckoutPaymentScreen() {
                 queryKey: getListPaymentMethodsQueryKey(),
             });
         } catch {
-            Alert.alert('Erro', 'Não foi possível definir como padrão.');
         }
     };
 
-    const handleDelete = (id: string) => {
-        Alert.alert(
-            'Remover Cartão',
-            'Tem certeza que deseja remover este cartão?',
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                {
-                    text: 'Remover',
-                    style: 'destructive',
-                    onPress: async () => {
-                        try {
-                            await deleteMethod({ id });
-                            queryClient.invalidateQueries({
-                                queryKey: getListPaymentMethodsQueryKey(),
-                            });
-                        } catch {
-                            Alert.alert('Erro', 'Não foi possível remover o cartão.');
-                        }
-                    },
-                },
-            ],
-        );
+    const handleDeleteConfirm = async () => {
+        if (!deleteTarget) return;
+        try {
+            await deleteMethod({ id: deleteTarget });
+            queryClient.invalidateQueries({
+                queryKey: getListPaymentMethodsQueryKey(),
+            });
+        } catch {
+        } finally {
+            setDeleteTarget(null);
+        }
     };
 
     const defaultCard = methods?.find((m) => m.isDefault);
@@ -187,7 +177,7 @@ export default function CheckoutPaymentScreen() {
         <PaymentMethodItem
             method={item}
             onSetDefault={() => handleSetDefault(item.id)}
-            onDelete={() => handleDelete(item.id)}
+            onDelete={() => setDeleteTarget(item.id)}
             isSettingDefault={isSettingDefault}
             isDeleting={isDeleting}
         />
@@ -267,6 +257,17 @@ export default function CheckoutPaymentScreen() {
                         </Pressable>
                     </Box>
             </Box>
+
+            <ConfirmModal
+                isOpen={!!deleteTarget}
+                onClose={() => setDeleteTarget(null)}
+                onConfirm={handleDeleteConfirm}
+                title="Remover Cartão"
+                message="Tem certeza que deseja remover este cartão?"
+                confirmLabel="Remover"
+                cancelLabel="Cancelar"
+                confirmVariant="danger"
+            />
         </SafeAreaView>
     );
 }

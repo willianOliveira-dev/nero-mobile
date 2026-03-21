@@ -77,7 +77,7 @@ export default function SearchScreen() {
                     onEndReached={() => {
                         if (hasNextPage && !isFetchingNextPage) fetchNextPage();
                     }}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                     ListFooterComponent={
                         isFetchingNextPage ? (
                             <Box className="py-4 items-center">
