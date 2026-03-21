@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { authClient } from '../lib/auth-client';
 import { useAuthStore } from '../store/use-auth.store';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const setUser = useAuthStore((state) => state.setUser);
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
 
     const { data: session, isPending } = authClient.useSession();
 
@@ -19,9 +20,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else if (!isPending) {
             setUser(null);
         }
+
+        if (!isPending) {
+            setIsInitialLoad(false);
+        }
     }, [session, setUser, isPending]);
 
-    if (isPending) {
+    if (isInitialLoad) {
         return (
             <View className="flex-1 justify-center items-center bg-primary">
                 <ActivityIndicator size="large" color="#fff" />

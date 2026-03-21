@@ -22,7 +22,7 @@ import type { GetOrder200ItemsItemReview } from '@/src/api/generated/model';
 
 const MAX_IMAGES = 3;
 const MAX_VIDEOS = 1;
-const MAX_VIDEO_DURATION_SECONDS = 90; // 1:30
+const MAX_VIDEO_DURATION_SECONDS = 90; 
 
 type ReviewModalProps = {
     isOpen: boolean;
@@ -63,7 +63,6 @@ export function ReviewModal({
     const [viewerOpen, setViewerOpen] = useState(false);
     const [viewerIndex, setViewerIndex] = useState(0);
 
-    // Sync state when modal opens or review data changes
     useEffect(() => {
         if (isOpen && initialReview) {
             setRating(initialReview.rating);
@@ -114,7 +113,6 @@ export function ReviewModal({
                 return;
             }
 
-            // Extra duration check for videos
             if (isVideo && asset.duration) {
                 const durationInSeconds = asset.duration / 1000;
                 if (durationInSeconds > MAX_VIDEO_DURATION_SECONDS) {
@@ -221,10 +219,9 @@ export function ReviewModal({
                             bounces={false}
                             contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
                         >
-                            {/* Handle */}
+               
                             <Box className="w-12 h-1.5 bg-gray-300 rounded-full self-center mb-6" />
 
-                            {/* Product Info */}
                             <HStack className="items-center gap-4 mb-6">
                                 <Box className="w-14 h-14 rounded-xl overflow-hidden bg-surface-muted">
                                     <Image
@@ -246,7 +243,6 @@ export function ReviewModal({
                                 </VStack>
                             </HStack>
 
-                            {/* Stars */}
                             <Text className="text-sm font-fredoka-semibold text-secondary mb-2">
                                 Sua nota *
                             </Text>
@@ -266,7 +262,6 @@ export function ReviewModal({
                                 ))}
                             </HStack>
 
-                            {/* Title */}
                             <Text className="text-sm font-fredoka-semibold text-secondary mb-2">
                                 Título (opcional)
                             </Text>
@@ -280,7 +275,6 @@ export function ReviewModal({
                                 placeholderTextColor="#9ca3af"
                             />
 
-                            {/* Comment */}
                             <HStack className="justify-between items-center mb-2">
                                 <Text className="text-sm font-fredoka-semibold text-secondary">
                                     Comentário (opcional)
@@ -302,7 +296,6 @@ export function ReviewModal({
                                 placeholderTextColor="#9ca3af"
                             />
 
-                            {/* Media */}
                             <Text className="text-sm font-fredoka-semibold text-secondary mb-2">
                                 Fotos e Vídeos
                             </Text>
@@ -343,14 +336,12 @@ export function ReviewModal({
                                 )}
                             </HStack>
 
-                            {/* Error */}
                             {!isReadOnly && error !== '' && (
                                 <Text className="text-xs font-fredoka text-red-500 mb-3">
                                     {error}
                                 </Text>
                             )}
 
-                            {/* Actions */}
                             {isReadOnly ? (
                                 <Pressable onPress={handleClose} className="rounded-full py-4 items-center mb-3 bg-gray-200">
                                     <Text className="text-base font-fredoka-semibold text-secondary">Fechar</Text>
@@ -386,7 +377,6 @@ export function ReviewModal({
                 </Pressable>
             </Modal>
 
-            {/* Full-screen viewer */}
             <MediaViewerModal
                 isOpen={viewerOpen}
                 onClose={() => setViewerOpen(false)}

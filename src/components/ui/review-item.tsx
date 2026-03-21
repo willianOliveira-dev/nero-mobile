@@ -1,14 +1,14 @@
-import { Box } from '@/src/components/gluestack/ui/box';
-import { HStack } from '@/src/components/gluestack/ui/hstack';
-import { Text } from '@/src/components/gluestack/ui/text';
-import { VStack } from '@/src/components/gluestack/ui/vstack';
-import { Pressable } from '@/src/components/gluestack/ui/pressable';
 import type { ListReviews200ItemsItem } from '@/src/api/generated/model/listReviews200ItemsItem';
 import { useToggleReviewLike } from '@/src/api/generated/reviews/reviews';
-import { Star, CheckCircle2, Play, ThumbsUp } from 'lucide-react-native';
-import { Image } from 'expo-image';
-import React, { useState } from 'react';
+import { Box } from '@/src/components/gluestack/ui/box';
+import { HStack } from '@/src/components/gluestack/ui/hstack';
+import { Pressable } from '@/src/components/gluestack/ui/pressable';
+import { Text } from '@/src/components/gluestack/ui/text';
+import { VStack } from '@/src/components/gluestack/ui/vstack';
 import { imagesPath } from '@/src/constants/images';
+import { Image } from 'expo-image';
+import { CheckCircle2, Play, Star, ThumbsUp } from 'lucide-react-native';
+import React, { useState } from 'react';
 import { MediaViewerModal } from './media-viewer-modal';
 
 interface ReviewItemProps {
@@ -57,21 +57,22 @@ export function ReviewItem({ review }: ReviewItemProps) {
             <VStack className="gap-2">
                 <HStack className="items-center justify-between">
                     <HStack className="items-center gap-3">
-                        {/* Avatar with fallback */}
+
                         <Box className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
                             {review.user?.avatar ? (
                                 <Image
-                                    source={review.user.avatar ? { uri: review.user.avatar } : imagesPath.avatarPlaceholder}
+                                    source={review.user.avatar}
                                     style={{ width: 40, height: 40, borderRadius: 20 }}
                                     contentFit="cover"
                                     transition={200}
                                 />
                             ) : (
-                                <Box className="w-full h-full items-center justify-center">
-                                    <Text className="text-sm font-fredoka-semibold text-gray-400">
-                                        {review.user?.name?.charAt(0).toUpperCase() ?? '?'}
-                                    </Text>
-                                </Box>
+                                <Image
+                                    source={imagesPath.avatarPlaceholder}
+                                    style={{ width: 40, height: 40, borderRadius: 20 }}
+                                    contentFit="cover"
+                                    transition={200}
+                                />
                             )}
                         </Box>
 

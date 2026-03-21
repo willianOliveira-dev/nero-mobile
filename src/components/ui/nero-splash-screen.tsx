@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import AnimatedMaskedText from '../reacticx/ui/molecules/animated-masked-text/AnimatedMaskedText';
+import Animated, { FadeIn, ZoomIn, FadeOut } from 'react-native-reanimated';
 
 interface Props {
     onFinish: () => void;
@@ -10,26 +9,26 @@ interface Props {
 
 export default function NeroSplashScreen({ onFinish }: Props) {
     useEffect(() => {
-        const timer = setTimeout(onFinish, 4000);
-        return () => clearTimeout(timer);
-    }, []);
+        const finishTimer = setTimeout(() => {
+            onFinish();
+        }, 3300);
+
+        return () => clearTimeout(finishTimer);
+    }, [onFinish]);
 
     return (
-        <GestureHandlerRootView style={styles.container}>
+        <View style={styles.container}>
             <StatusBar style="light" />
             <View style={styles.content}>
-                <AnimatedMaskedText
-                    style={{
-                        fontFamily: 'Oughter',
-                        fontSize: 84,
-                        fontWeight: '100',
-                    }}
-                    baseTextColor="#FF6B80"
+                <Animated.Text
+                    entering={FadeIn.duration(1200)}
+                    exiting={FadeOut.duration(400)}
+                    style={styles.text}
                 >
                     nero
-                </AnimatedMaskedText>
+                </Animated.Text>
             </View>
-        </GestureHandlerRootView>
+        </View>
     );
 }
 
@@ -43,4 +42,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    text: {
+        fontFamily: 'Oughter',
+        fontSize: 84,
+        fontWeight: '100', // Restore peso da fonte, pode ser a causa do texto oculto se Oughter normal não existe
+        color: '#FF6B80',
+    }
 });
