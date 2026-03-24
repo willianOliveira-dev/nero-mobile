@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import { env } from '../config/env';
 
 
 /**
@@ -22,7 +21,7 @@ import { env } from '../config/env';
 
 
 export const AXIOS_INSTANCE = axios.create({
-    baseURL: env.EXPO_PUBLIC_API_URL,
+    baseURL: process.env.EXPO_PUBLIC_API_URL,
     headers: {
         'Content-Type': 'application/json',
     },

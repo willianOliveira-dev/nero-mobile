@@ -12,7 +12,6 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner-native';
 import { GluestackUIProvider } from '../components/gluestack/ui/gluestack-ui-provider';
 import NeroSplashScreen from '../components/ui/nero-splash-screen';
-import { env } from '../config/env';
 import '../global.css';
 import { AuthProvider } from './auth-provider';
 
@@ -75,7 +74,7 @@ export const RootProvider = ({ children }: { children: React.ReactNode }) => {
     return (
         <GluestackUIProvider>
             <StripeProvider
-                publishableKey={env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+                publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}
                 merchantIdentifier="merchant.com.nero"
             >
                 <QueryClientProvider client={queryClient}>

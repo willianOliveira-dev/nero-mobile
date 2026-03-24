@@ -1,9 +1,8 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { env } from '../config/env';
 
 export function configureGoogleSignIn() {
     GoogleSignin.configure({
-        webClientId: env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+        webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
     });
 }
 
